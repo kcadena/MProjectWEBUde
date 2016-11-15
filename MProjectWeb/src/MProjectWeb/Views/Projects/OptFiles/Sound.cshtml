@@ -1,0 +1,66 @@
+﻿
+<div style="margin-left:100px">
+
+    <div  style="position:relative;width:70%" class="center-block">
+        <audio id="sou" controls="controls" autoplay="autoplay" style="position:relative;width:100%">
+            <source src="" type="audio/mp3" />
+            <source src="" type="audio/ogg" />
+            <source src="" type="audio/mpeg" />
+            <source src="" type="audio/wav" />
+            
+            Tu navegador no soporta esta caracteristica.  Puedes descargarlo:
+            <a href=""> Descargar</a>
+        </audio>
+    </div>
+
+    <br /><br /><br />
+    <table class="multHover table table-striped" style="width:90%;margin-left:5%">
+        <thead>
+            <tr style="position:relative;width:100%">
+                <th>#</th>
+                <th style="width:20%">Nombre</th>
+                <th style="width:75%">Descripcion</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+            @{
+                List<Lucene.Net.Search.ScoreDoc> lstDoc = ViewBag.lstDoc;
+                foreach (var x in lstDoc)
+                {
+                    Lucene.Net.Documents.Document doc = ViewBag.searcher.Doc(x.Doc);
+                    Dictionary<string, string> inf = new Dictionary<string, string>();
+                    <tr class="goSound"
+                        style="cursor:pointer"
+                        src="@doc.Get("srcServ")"
+                        nom="@doc.Get("nom")">
+
+                        <th scope="row" style="vertical-align:middle">#</th>
+                        <td style="vertical-align:middle">@doc.Get("nom")</td>
+                        <td>@doc.Get("desc")</td>
+                    </tr>
+                }
+            }
+
+
+        </tbody>
+    </table>
+
+</div>
+<script>
+    $(".goSound").click(function () {
+        var src = $(this).attr("src");
+        var source = document.getElementById("sou").children;
+        var player = document.getElementById("sou");
+
+        source[0].src = src;
+        source[1].src = src;
+        source[2].src = src;
+        source[2].src = src;
+
+        player.load();
+        //player.play();
+    });
+</script>

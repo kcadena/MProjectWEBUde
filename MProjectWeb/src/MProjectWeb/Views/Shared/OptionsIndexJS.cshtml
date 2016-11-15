@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNet.Http;
+@using Newtonsoft.Json.Linq;
+@using Newtonsoft.Json;
+@using MProjectWeb.Models.ModelController;
+@using Chsword;
+@using Newtonsoft.Json.Schema;
+@using Newtonsoft.Json;
+
+@{
+    JObject op = JsonConvert.DeserializeObject<JObject>(Context.Session.GetString("op"));
+    dynamic a = JObject.Parse(Context.Session.GetString("op"));
+    foreach (var x in a.menu)
+    {
+        try
+        {
+            String con = (string)x.item.controller;
+            String act = (string)x.item.action;
+                <script>
+                    $("#@act").click(function () {
+                        callOpt("@con", "@act", 1);
+                    });
+                </script>
+                  
+                        foreach (var y in x.items)
+                        {
+                            <script>
+                                $("#@y.action").click(function () {
+                                    callOpt("@con", "@y.action",0);
+                                });
+                            </script>
+                        }
+                    
+
+        }
+        catch (Exception ERR) { }
+    }
+}

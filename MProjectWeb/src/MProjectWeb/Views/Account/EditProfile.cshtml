@@ -1,0 +1,192 @@
+﻿@addTagHelper "*, Microsoft.AspNet.Mvc.TagHelpers"
+
+@using Microsoft.AspNet.Http;
+@model MProjectWeb.ViewModels.usuarios
+
+@{
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+
+<h1>Editar perfil</h1>
+<div style="width:80%;margin-left:10%">
+    <link href="~/css/Modal.css" rel="stylesheet">
+    <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <!-- Modificar Datos -->
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Inoformacion Personal
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <form asp-controller="Account"
+                          asp-action="editProfile"
+                          asp-antiforgery="true"
+                          method="post"
+                          class="form-horizontal">
+
+                        <div class="form-group">
+                            <label asp-for="nombre" class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <input asp-for="nombre" class="form-control" type="text" />
+                                <span asp-validation-for="nombre" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="apellido" class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <input asp-for="apellido" class="form-control" type="text" />
+                                <span asp-validation-for="apellido" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="e_mail" class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <input asp-for="e_mail" class="form-control" type="email" />
+                                <span asp-validation-for="e_mail" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <label asp-for="genero" class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <select asp-for="genero" class="form-control">
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Femenino</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="cargo" class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <input asp-for="cargo" class="form-control" type="text" />
+                                <span asp-validation-for="cargo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="entidad" class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <input asp-for="entidad" class="form-control" type="text" />
+                                <span asp-validation-for="entidad" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="telefono" class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <input asp-for="telefono" class="form-control" required />
+                                <span asp-validation-for="telefono" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="form-control btn btn-success center-block" style="width:300px;" value="Guardar Cambios">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modificar clave -->
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Seguridad
+                    </a>
+                </h4>
+            </div>
+
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+                    <form asp-controller="Account"
+                          asp-action="editProfile"
+                          asp-antiforgery="true"
+                          method="post"
+                          class="form-horizontal">
+
+                        <input asp-for="id_usuario" hidden />
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Clave Actual</label>
+                            <div class="col-sm-8">
+                                <input asp-for="passChan" class="form-control" type="password" required />
+                                <span asp-validation-for="passChan" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Nueva Clave</label>
+                            <div class="col-sm-8">
+                                <input asp-for="newPass" class="form-control" type="password" required />
+                                <span asp-validation-for="newPass" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Confirmar clave</label>
+                            <div class="col-sm-8">
+                                <input asp-for="repeatPass" class="form-control" type="password" required />
+                                <span asp-validation-for="repeatPass" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="form-control btn btn-success center-block" style="width:300px" value="Guardar Cambios">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modificar Imagen -->
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingThree">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTthree" aria-expanded="false" aria-controls="collapseTthree">
+                        Imagen de Perfil
+                    </a>
+                </h4>
+            </div>
+
+            <div id="collapseTthree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body">
+                    
+                    <form asp-controller="Account"
+                          asp-action="editProfile"
+                          asp-antiforgery="true"
+                          method="post"
+                          enctype="multipart/form-data"
+                          class="form-horizontal">
+
+                        <input asp-for="id_usuario" hidden />
+
+                        <div class="form-group">
+                            
+                           @{ 
+                               try
+                               {
+                                   string src=ViewBag.srcImg; 
+                                   if (src.Length>0)
+                                   {
+                                       <img src="@src" class="img-responsive center-block" style="position:relative;width:50%"/>
+                                   }
+                               }
+                               catch { }
+                           }
+
+                            <div class="form-group" style="position:relative">
+                                    <input asp-for="file" class="col-md-5 filestyle" data-input="false" />
+                                    <input type="submit" class="form-control col-md-7 btn btn-success center-block" style="width:300px" value="Guardar Cambios">
+                            </div>
+                      
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- ------------------------------------------------------------------ -->
+</div>

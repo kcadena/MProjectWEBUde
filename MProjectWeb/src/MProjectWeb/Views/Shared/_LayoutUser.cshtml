@@ -1,0 +1,232 @@
+﻿@using Microsoft.AspNet.Http;
+@using Newtonsoft.Json.Linq;
+@using Newtonsoft.Json;
+@using MProjectWeb.Models.ModelController;
+@{
+    JObject ops = JsonConvert.DeserializeObject<JObject>(Context.Session.GetString("op"));
+    string st = ops.ToString().Replace("&#xD;&#xA;", "");
+    string c = st.Substring(1, 2);
+    st = st.Replace(c, "");
+    st = st;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @*<meta http-equiv="Access-Control-Allow-Origin" content="*" />*@
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin - Bootstrap Admin Template</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="~/css/sb-admin.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <link href="~/css/multimedia.css" rel="stylesheet" />
+
+</head>
+
+<body id="kd" onload="dropDownClass(@st)">
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" >SB Admin</a>
+            </div>
+            <!-- Top Menu Items -->
+            <ul class="nav navbar-right top-nav">
+                <li class="dropdown">
+                    <a  class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope"></i> <b class="caret"></b></a>
+                    <ul class="dropdown-menu message-dropdown">
+                        <li class="message-preview">
+                            <a >
+                                <div class="media">
+                                    <span class="pull-left">
+                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                    </span>
+                                    <div class="media-body">
+                                        <h5 class="media-heading">
+                                            <strong>John Smith</strong>
+                                        </h5>
+                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday at 4:32 PM</p>
+                                        <p>Lorem ipsum dolor sit amet, consectetur...</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="message-footer">
+                            <a >Read All New Messages</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a  class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
+                    <ul class="dropdown-menu alert-dropdown">
+                        <li>
+                            <a >Alert Name <span class="label label-default">Alert Badge</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a  class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-user"></i>
+                        @Context.Session.GetString("UsuNam")
+                        @*<script>
+                            function trimString(str, maxLen) {
+                                if (str.length <= maxLen) {
+                                    return str;
+                                }
+                                var trimmed = str.substr(0, maxLen);
+                                return trimmed.substr(0, trimmed.lastIndexOf(' ')) + '…';
+                            }
+
+                            // Let's test it
+
+                            sentenceOne = "too short";
+                            sentencetwo = "more than the max length";
+
+                            alert(trimString(sentenceOne, 15));
+                            alert(trimString(sentencetwo, 15));
+                                                </script>*@
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a asp-controller="account" asp-action="EditProfile"><i class="fa fa-fw fa-user"></i> Profile</a>
+                        </li>
+                        <li>
+                            <a ><i class="fa fa-fw fa-envelope"></i> Inbox</a>
+                        </li>
+                        <li>
+                            <a ><i class="fa fa-fw fa-gear"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a asp-controller="Index" asp-action="LogOut"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse" id="axd">
+                <ul class="nav navbar-nav side-nav" id="kel">
+                    @{
+                        //op => corresponde a las opciones provenientes del archivos JSON WebData
+                        //se arma la estructura de las opciones
+                        JObject op = JsonConvert.DeserializeObject<JObject>(Context.Session.GetString("op"));
+                        dynamic a = JObject.Parse(Context.Session.GetString("op"));
+                        foreach (var x in a.menu)
+                        {
+                            try
+                            {
+                                String con = (string)x.item.controller;
+                                String act = (string)x.item.action;
+                                <li>
+                                    <a style="color:darkgray"
+                                       data-toggle="collapse" data-target="#op_@act"
+                                       id="@act" class="kl">
+                                        @x.item.name
+                                    </a>
+                                    <ul id="op_@act" class="collapse" style="background-color:darkslategrey;">
+                                        @{
+                                            foreach (var y in x.items)
+                                            {
+                                                <li>
+                                                    <a style="color:whitesmoke"
+                                                       id="@y.action">
+                                                        @y.name
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </li>
+                                                }
+                                                catch (Exception ERR) { }
+                                            }
+                    }
+
+
+                    <li>
+                        <a asp-controller="Projects" asp-action="Index" class="abt"><i class="fa fa-fw fa-dashboard"></i> About</a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="index" asp-action="Index" class="abt"><i class="fa fa-fw fa-dashboard"></i>Mproject Web</a>
+                    </li>
+
+                </ul>
+
+
+
+            </div>
+
+            <!-- /.navbar-collapse -->
+        </nav>
+        <div id="page-wrapper" style="margin-top:-50px">
+
+            <div class="container-fluid" id="content-opt" style="min-height:600px">
+
+                @RenderBody()
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+    </div>
+    <br />
+    @*<br />
+    <div class="panel-footer" id="footer-ly">
+        <p class="text-center">
+            Desarrollado por Kelvin Cadena & David Estrada
+            <br />
+            UNIVERSIDAD DE NARIÑO
+        </p>
+    </div>*@
+
+
+</body>
+<!-- /#wrapper -->
+<!-- jQuery -->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="~/lib/bootstrap-filestyle/src/bootstrap-filestyle.min.js"> </script>
+
+<script src="~/js/a.js"></script>
+<script src="~/js/multimedia.js"></script>
+
+<script>
+    $.ajaxSetup({ cache: false });
+</script>
+@Html.Partial("~/Views/Shared/OptionsIndexJS")
+</html>

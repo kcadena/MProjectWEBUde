@@ -1,0 +1,184 @@
+﻿<script src="~/js/multimedia.js"></script>
+<link href="~/css/Index.css" rel="stylesheet" />
+<link href="~/css/multimedia.css" rel="stylesheet" />
+
+@using Microsoft.AspNet.Http;
+@{
+    Layout = null;
+}
+
+@Html.Partial("~/Views/MultiMedia/MapReg.cshtml")
+@Html.Partial("~/Views/MultiMedia/MapSingle.cshtml")
+
+
+@{
+    bool pubFil = false;
+    string tp = "img";
+    try
+    {
+        tp = ViewBag.type;
+        pubFil = ViewBag.pubFil;
+    }
+    catch
+    {
+    }
+
+}
+
+
+<script src="~/js/maps.js"></script>
+<div style="">
+    <div class="row" style="position:relative;margin:0px">
+        <div class="row col-md-7" style="position:relative">
+            <h1 class="page-header col-md-8">
+                <!-- Title of page -->
+                Archivos y Documentos
+
+            </h1>
+            <div class="col-md-4 dropdown" style="position:relative;margin-top:50px;">
+                <div class="btn-group">
+                    <a id="pk1" class="btn dropdown-toggle btn-select" data-toggle="dropdown" >
+                        @ViewBag.op
+                        <span class="caret"></span>
+
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a id="btnImg" >Imagenes</a>
+                        </li>
+                        <li>
+                            <a id="btnVid" >Videos</a>
+                        </li>
+                        <li>
+                            <a id="btnSou" >Sonidos</a>
+                        </li>
+                        <li>
+                            <a id="btnDoc" >Documentos</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 row" style="position:relative">
+
+
+            <div class="" style="position:relative;margin-top:40px;width:100%;padding:5px">
+                <div class="input-group">
+                    <input type="Search" placeholder="Search..." class="form-control" id="inpText" />
+                    <div class="input-group-btn">
+                        <button class="btn btn-info" id="btnSearch">
+                            <span class="glyphicon glyphicon-search" style="margin-top:3px"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br /><br /><br />
+
+    @{
+        if (pubFil)
+        {
+
+            <script>
+            //Acciones que generan los click de los botones de las opciones
+            $("#btnImg").click(function () {
+                publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "img", "");
+            });
+            $("#btnVid").click(function () {
+                publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "vid", "");
+            });
+            $("#btnSou").click(function () {
+                publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "son", "");
+            });
+            $("#btnDoc").click(function () {
+                publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "doc", "");
+            });
+            </script>
+
+        }
+        else
+        {
+
+            <script>
+            //Acciones que generan los click de los botones de las opciones
+            $("#btnImg").click(function () {
+                showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "img", "");
+            });
+            $("#btnVid").click(function () {
+                showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "vid", "");
+            });
+            $("#btnSou").click(function () {
+                showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "son", "");
+            });
+            $("#btnDoc").click(function () {
+                showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "doc", "");
+            });
+            </script>
+
+        }
+    }
+
+    @{
+        if (pubFil)
+        {
+            <script>
+            $("#btnSearch").click(function () {
+                publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "@tp", $("#inpText").val());
+            });
+            </script>
+        }
+        else
+        {
+            <script>
+            $("#btnSearch").click(function () {
+                showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "@tp", $("#inpText").val());
+            });
+            </script>
+        }
+    }
+
+    <div class="row">
+        @{
+            if (ViewBag.st)
+            {
+                List<Lucene.Net.Search.ScoreDoc> lstDoc = ViewBag.lstDoc;
+                if (lstDoc != null)
+                {
+
+                    switch (tp)
+                    {
+
+                        case "img":
+                            @Html.Partial("~/Views/Projects/OptFiles/Picture.cshtml")
+                            break;
+
+                        case "vid":
+                            @Html.Partial("~/Views/Projects/OptFiles/Video.cshtml")
+                            break;
+
+                        case "son":
+                            @Html.Partial("~/Views/Projects/OptFiles/Sound.cshtml")
+                            break;
+
+                        case "doc":
+                            @Html.Partial("~/Views/Projects/OptFiles/Document.cshtml")
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                <div>
+                    <div class="alert alert-danger fade in center-block" style="position:relative;width:100%">
+                        <a  class="close" data-dismiss="alert">&times;</a>
+                        <strong>Error!</strong>
+                        No se han encontrado recursos correspondientes a esta actividad / proyecto.
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+</div>

@@ -1,0 +1,59 @@
+﻿<table class="multHover table table-striped" style="width:90%;margin-left:5%">
+    <thead>
+        <tr style="position:relative;width:100%">
+            <th>#</th>
+            <th style="width:20%">Nombre</th>
+            <th style="width:75%">Descripcion</th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+
+        @{
+            List<Lucene.Net.Search.ScoreDoc> lstDoc = ViewBag.lstDoc;
+            foreach (var x in lstDoc)
+            {
+                Lucene.Net.Documents.Document doc = ViewBag.searcher.Doc(x.Doc);
+                Dictionary<string, string> inf = new Dictionary<string, string>();
+                <tr style="cursor:pointer" class="goDoc" srcDoc="@doc.Get("srcServ")" nom="@doc.Get("nom")">
+                    <th scope="row" style="vertical-align:middle">
+                        <div class="ico">
+                            <script>
+                                var x = '@doc.Get("srcServ")';
+                                var n = src.lastIndexOf(".");
+                                alert(n);
+                                @*var src = '@doc.Get("srcServ")';
+                                var ext = src.substring(src.lastIndexOf(".") + 1);
+                                alert(src);
+                                $(".ico").parent().html(ext);*@
+                            </script>
+                        </div>
+                    </th>
+                    <td style="vertical-align:middle">@doc.Get("nom")</td>
+                    <td>@doc.Get("desc")</td>
+                </tr>
+            }
+        }
+
+
+    </tbody>
+</table>
+
+
+<script>
+    $(".goDoc").click(function () {
+        var src = $(this).attr("srcDoc");
+        var n = src.lastIndexOf(".");
+        var ext = src.substring(n + 1);
+        var nom = $(this).attr("nom");
+
+        if (ext.toLowerCase() == "pdf") {
+            openNewTab(src, nom);
+        }
+        else {
+            document.location = src;
+        }
+
+    });
+</script>

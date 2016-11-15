@@ -1,0 +1,157 @@
+﻿@using MProjectWeb.Models.ModelController
+@using Microsoft.AspNet.Http;
+
+@using Newtonsoft.Json;
+@{
+    Layout = null;
+}
+@{
+    bool st = false;
+    List<ProjectsUsers> ax_lst_prj = null;
+    try
+    {
+        if (ViewBag.projects != null)
+        {
+            try
+            {
+                ax_lst_prj = (List<ProjectsUsers>)ViewBag.projects;
+                st = true;
+            }
+            catch
+            {
+                <script>
+                    alert("No se pueden cargar los proyectos de esta cuenta.");
+                </script>
+            }
+
+        }
+
+    }
+    catch { }
+
+}
+
+<div class="asd">
+    <h1 class="page-header">
+        <!-- Title of page -->
+        Proyectos
+        <small>
+            <!-- SubTitle of page -->
+        </small>
+    </h1>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <p class="lead">
+            En esta seccion mostrara informacion correspondiente a todos los proyectos que posee, ademas de una infomacion general de estos.<br />
+            Por favor seleccione uno de ellos para poder acceder a ver mas detalladamente su informacion.<br />
+
+            <div class="alert alert-warning" id="nota">
+                <strong>NOTA: </strong>Para poder ver informacion con las subopciones de Proyectos, es necesario seleccionar uno de ellos, de lo contrario no podra ver su informacion.
+
+            </div>
+            @{if (!st)
+                {
+                    <div class="alert alert-danger">
+                        <strong>NOTA: </strong>No se han encontrado proyectos relacionados con esta cuenta de usuario.
+                    </div>
+                }
+
+            }
+
+        </p>
+    </div>
+</div>
+<div class="row">
+    @{
+        try
+        {
+            if (ax_lst_prj != null)
+            {
+                var lst_prj = ax_lst_prj.GroupBy(u => new { u.id_pro, u.id_usu }).ToList();
+                foreach (var x in lst_prj)
+                {
+                    <div class="col-lg-4 col-md-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <!--    ---------------------------------   Datos plantilla  --------------------------------                -->
+                                    @{long dat = -1; }
+                                    @foreach (var z in x)
+                                    {
+                                        dat = (long)z.id_car;
+                                        <div class="row" style="margin-left:10px">@z.desc : @z.valor</div>
+                                    }
+                                    <div class="hidden" id="dat_@dat">@dat</div>
+                                </div>
+                            </div>
+                            <a id="prj_@x.First().keym-@x.First().id_car-@x.First().id_usu">
+                                <div class="panel-footer prj_op">
+                                    <span class="pull-left">View Details</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+
+                                                }
+
+                                            }
+
+                                        }
+                                        catch { }
+    }
+
+    <div class="col-lg-4 col-md-4" id="panel_prj">
+    </div>
+
+</div>
+
+
+
+<script>
+
+    $(".prj_op").click(function () {
+        var s = $(this).parent().attr('id');
+        //projectsClick(s);
+        
+        s = s.replace(/prj_/gi, "");
+        
+        var car = s[1];
+        var usu=s[2];
+        
+
+        $.ajax({
+            url: '/Projects/Activity',
+            type: 'POST',
+            data: { id_prj: s, id_car: car },
+            async: true,
+            //cache: false,
+            beforeSend: function () {
+
+                $("#content-opt").html("");
+                $("#content-opt").html('<img src="/img/ajax-loader.gif" style="position:relative;margin-left:50%;margin-top:20%;height:8%;width:8%;">');
+            },
+            success: function succ(data) {
+                if (data != 0) {
+                    $("#content-opt").html("");
+                    $("#content-opt").html(data);
+                }
+                else {
+                    alert("Projects.cshtml: No se encontraron actividaes relacionadas!!!");
+                }
+            }
+        }).fail(
+        function (da) {
+            alert("No se pudo cargar la pagina.");
+        });
+        
+    });
+
+</script>
+
+

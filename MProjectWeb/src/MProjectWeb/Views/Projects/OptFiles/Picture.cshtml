@@ -1,0 +1,100 @@
+﻿@using Microsoft.AspNet.Http;
+@Html.Partial("~/Views/MultiMedia/PlayerPicture.cshtml")
+
+@{ 
+    bool pubFil = true;
+    Lucene.Net.Documents.Document doc = null;
+    try
+    {
+        pubFil = ViewBag.pubFil;
+    }
+    catch { }
+}
+
+<script>
+    $("#po").click(function () {
+        $("#modal_log").modal();
+    });
+</script>
+
+<div style="position:relative">
+    @{
+        /*================================   Imagenes   ================================*/
+        List<Lucene.Net.Search.ScoreDoc> lstDoc = ViewBag.lstDoc;
+        foreach (var x in lstDoc)
+        {
+            doc = ViewBag.searcher.Doc(x.Doc);
+
+            <a  class="goPic">
+                <div class="col-md-3" style="height:302px">
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <h4>@doc.Get("nom")</h4>
+                            <p>@doc.Get("desc")</p>
+                            @{
+                                try
+                                {
+                                    if (doc.Get("location") != null && doc.Get("longitude") != null)
+                                    {
+                                        <img class="mapGeo" loc="@doc.Get("location").ToString()" lon="@doc.Get("longitude").ToString()" src="~/img/SVG/Georreferenciacion.svg" alt="geo" height="30" width="30" />
+                                    }
+                                    else
+                                    {
+                                        string ax = Context.Session.GetString("idUsu");
+
+                                        if ((doc.Get("usuCar").Equals(ax) || doc.Get("usuOwn").Equals(ax)) && pubFil==false)
+                                        {
+                                            <img class="mapReg" inf="@doc.Get("keym")-@doc.Get("idCar")-@doc.Get("usuCar")-@doc.Get("idFile")" src="~/img/SVG/DynamicProject.svg" alt="geo" height="30" width="30" />
+                                        }
+                                    }
+
+                                }
+                                catch { }
+                            }
+                        </div>
+                        <div style="height:250px;padding-bottom:2px">
+                            <img src="@doc.Get("srcServ")" alt="img" class="img img-responsive media-middle" style="vertical-align:middle" />
+                        </div>
+                    </div>
+                </div>
+            </a>
+                                }
+
+    }
+</div>
+
+
+<script>
+
+    $(".mapGeo").click(function (e) {
+        e.stopPropagation();
+        var loc = $(this).attr("loc");
+        var lon = $(this).attr("lon");
+        try {
+            var src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBV4qGNwaDfyRajpVTwVwTTeT12lvuC3RY";
+            document.getElementById("jsMapSin").src = src;
+            
+        } catch (err) { }
+        $("#modalMapSin").modal();
+        showPoint(loc + "", lon + "");
+        //$("#modalMapReg").modal();
+    });
+    $(".mapReg").click(function (e) {
+        e.stopPropagation();
+        try {
+            var src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBV4qGNwaDfyRajpVTwVwTTeT12lvuC3RY&signed_in=true&libraries=drawing";
+            document.getElementById("jsMapReg").src = sr;
+            
+        } catch (err) { }
+        var id = $(this).attr("inf");
+        $("#infMapReg").html(id);
+        $("#modalMapReg").modal();
+        initMapReg();
+    });
+    $(".goPic").click(function (e) {
+        e.stopPropagation();
+        var src = $(this).find(".img").attr("src");
+        document.getElementById("pic").src = src;
+        $("#modalPic").modal();
+    });
+</script>

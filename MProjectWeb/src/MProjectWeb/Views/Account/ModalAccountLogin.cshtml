@@ -1,0 +1,65 @@
+﻿
+@model MProjectWeb.ViewModels.usuarios
+
+
+
+<link href='https://fonts.googleapis.com/css?family=Playfair+Display&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<div class="modal fade" id="modal_log" role="dialog">
+    <div class="modal-dialog md-dl-login">
+        <div class="modal-content">
+            <div class="modal-body" style="padding:5px 5px; min-height:330px;height:auto">
+
+                <div style="margin-top:10px;margin-right:20px">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div style="margin-top:20px;width:auto">
+                    <div class="col-md-7">
+                        <div class="col-md-11">
+
+                            <div style="position:relative;margin-top:15%;color:cadetblue">
+                                <h1 id="mod-log-tit">Mproject</h1>
+                                <p id="mod-log-tit2">Login</p>
+                            </div>
+
+                            <div id="mod-log-desc">
+                                <p class="text-center">Crea una cuenta en MProject para gestionar tus proyectos</p>
+                            </div>
+
+                        </div>
+                        <div class="col-md-1 po">
+                        </div>
+                    </div>
+                    <div class="col-md-5" style="margin-top:70px">
+                        <!-- ------------------------------------------------------------------ -->
+                        <!-- ------------------------------------------------------------------ -->
+                        <form asp-controller="Account" 
+                              asp-action="Login" 
+                              method="post" 
+                              class="form-inline">
+                            <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+                            <div class="grp">
+                                <label asp-for="e_mail" class="lab"></label>
+                                <input asp-for="e_mail" class="reg" />
+                            </div>
+                            <div class="grp">
+                                <label asp-for="pass" class="lab"></label>
+                                <input asp-for="pass" class="reg" />
+                            </div>
+                            <input type="submit" value="Login" class="reg">
+                        </form>
+                        <!-- ------------------------------------------------------------------ -->
+                        <!-- ------------------------------------------------------------------ -->
+                    </div>
+                </div>
+                
+                <div style="position:relative; margin-top:34%;margin-left:20px;text-align:left;font-size:12px">
+                    
+                    <p>No estas registrado? <a  class="btn_reg">Registrate!!</a></p>
+                    <p style="margin-top:-10px">Olvidaste tu <a  class="btn_forget">Contraseña?</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,160 @@
+﻿@using System.Collections.Generic
+@using Microsoft.AspNet.Http
+@using Microsoft.AspNet.Http.Authentication
+
+@model MProjectWeb.ViewModels.usuarios
+<script type="text/javascript" src="~/lib/bootstrap-filestyle/src/bootstrap-filestyle.min.js"> </script>
+<link href='https://fonts.googleapis.com/css?family=Playfair+Display&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<div class="modal fade" id="modal_reg" role="dialog">
+    <div class="modal-dialog" style="width:80%; margin-top:5%; align-items:center;">
+        <div class="modal-content">
+            <div class="modal-body" style="padding:5px 5px; min-height: 330px;height:90%">
+
+                <div style="margin-top:10px;margin-right:20px">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div style="margin-top:20px;width:auto">
+                    <div class="col-md-7">
+                        <div class="col-md-11">
+
+                            <div style="position:relative;margin-top:25%;color:cadetblue">
+                                <h1 style="font-size:60px;">Mproject</h1>
+                            </div>
+
+                            <div style="position:relative;width:300px;margin-left:10%;margin-top:20px;text-align:center">
+                                <p>Crea una cuenta en MProject para gestionar tus proyectos</p>
+                            </div>
+
+                        </div>
+                        <div class="col-md-1 po">
+                        </div>
+                    </div>
+                    <div class="col-md-5" style="margin-top:50px">
+                        <!-- ------------------------------------------------------------------ -->
+                        <!-- ------------------------------------------------------------------ -->
+                        <form asp-controller="Account"
+                              asp-action="Register"
+                              asp-antiforgery="false"
+                              method="post"
+                              enctype="multipart/form-data"
+                              class="form-inline">
+                            
+                            <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
+                           
+                            @*<div class="grp">
+                                <label asp-for="id_usuario" class="lab"></label>
+                                <input asp-for="id_usuario" class="reg" />
+                                <span asp-validation-for="id_usuario" class="text-danger"></span>
+                            </div>*@
+                            <div class="grp">
+                                <label asp-for="nombre" class="lab"></label>
+                                <input asp-for="nombre" class="reg" type="text" required/><br />
+                                @*<span asp-validation-for="nombre" class="text-danger"></span>*@
+                            </div>
+                            <div class="grp">
+                                <label asp-for="apellido" class="lab"></label>
+                                <input asp-for="apellido" class="reg" type="text" required/>
+                                @*<span asp-validation-for="apellido" class="text-danger"></span>*@
+                            </div>
+                            <div class="grp">
+                                <label asp-for="e_mail" class="lab"></label>
+                                <input asp-for="e_mail" class="reg" type="email" required/>
+                                @*<span asp-validation-for="e_mail" class="text-danger"></span>*@
+                            </div>
+                            <div class="grp">
+                                <label asp-for="pass" class="lab"></label>
+                                <input asp-for="pass" class="reg" type="password" required/>
+                                @*<span asp-validation-for="pass" class="text-danger"></span>*@
+                            </div>
+                            <div class="grp">
+
+                                <label asp-for="genero" class="lab"></label>
+                                <select asp-for="genero" class="reg">
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Femenino</option>
+                                </select>
+                            </div>
+                            <div class="grp">
+                                <label asp-for="cargo" class="lab"></label>
+                                <input asp-for="cargo" class="reg" type="text" />
+                                @*<span asp-validation-for="cargo" class="text-danger"></span>*@
+                            </div>
+                            <div class="grp">
+                                <label asp-for="entidad" class="lab"></label>
+                                <input asp-for="entidad" class="reg" type="text"/>
+                                @*<span asp-validation-for="entidad" class="text-danger"></span>*@
+                            </div>
+                            <div class="grp">
+                                <label asp-for="telefono" class="lab"></label>
+                                <input asp-for="telefono" class="reg" type="tel"  />
+                                <br />
+                                @*<span asp-validation-for="telefono" class="text-danger"></span>*@
+                            </div>
+                            @*<div class="grp">
+                                <label asp-for="imagen" class="lab"></label>
+                                <input asp-for="imagen" class="reg" />
+                                <span asp-validation-for="imagen" class="text-danger"></span>
+                            </div>*@
+                            <br />
+                            <div class="grp" style="position:relative">
+                               <input asp-for="file" class="filestyle" data-input="false" style="width:50%"/>
+                               <input type="submit" value="Registrar" class="btn btn-success" style="width:50%" />
+                            </div>
+                            
+                        </form>
+                        <!-- ------------------------------------------------------------------ -->
+                        <!-- ------------------------------------------------------------------ -->
+                    </div>
+                </div>
+                <div style="margin-top:20px;margin-left:20px;text-align:left;font-size:12px">
+                    <p>Ya tienes una cuenta? <a  class="btn_log">Log in</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@{
+    try
+    {
+
+        string blReg = Context.Session.GetString("estReg");
+        string blRegTime = Context.Session.GetString("estRegTime");
+        if (blReg.Length > 1)
+        {
+
+            bool stReg = Convert.ToBoolean(Context.Session.GetString("estReg"));
+            try
+            {
+                if (!stReg)
+                {
+                    <script>
+                   $("#modal_reg").modal();
+                    </script>
+
+                }
+            }
+            catch { }
+        }
+        if (blRegTime.Length > 1)
+        {
+            bool stRegTime = Convert.ToBoolean(Context.Session.GetString("estRegTime"));
+            try
+            {
+                if (!stRegTime && blRegTime.Length > 1)
+                {
+                    <div>
+                        <div class="alert alert-danger fade in center-block" style="position:absolute;width:100%">
+                            <a  class="close" data-dismiss="alert">&times;</a>
+                            <strong>Error!</strong>No se ha realizado el registrado. Intentelo mas tarde.
+                        </div>
+                    </div>
+                }
+            }
+            catch { }
+        }
+    }
+    catch { }
+}

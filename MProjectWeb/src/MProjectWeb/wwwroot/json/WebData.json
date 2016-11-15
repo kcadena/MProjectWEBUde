@@ -1,0 +1,53 @@
+﻿{
+    "menu": [
+        {
+            "item": {
+                "name": "Proyectos",
+                "controller": "Projects",
+                "action": "Projects"
+            },
+            "items": [
+                {
+                    "name": "Actividades",
+                    "controller": "Projects",
+                    "action": "Activity"
+                },
+                {
+
+                    "name": "Archivos/Documentos",
+                    "controller": "Projects",
+                    "action": "Files",
+
+
+                    "types": [
+                        {
+                            "name": "Imagenes",
+                            "op": "img"
+                        },
+                        {
+                            "name": "Videos",
+                            "op": "vid"
+                        },
+                        {
+                            "name": "Sonidos",
+                            "op": "sou"
+                        },
+                        {
+                            "name": "Documentos",
+                            "op": "doc"
+                        }
+                    ]
+
+
+
+                },
+                {
+                    "name": "Estadisticas",
+                    "controller": "Projects",
+                    "action": "Charts"
+                }
+            ]
+        }
+        
+    ]
+}

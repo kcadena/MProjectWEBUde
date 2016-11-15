@@ -1,0 +1,36 @@
+﻿<div>
+    <div class="modal fade" id="modalMapReg" role="dialog">
+        <div class="modal-dialog" style="height:90%;margin-top:15px;top:0px">
+            <div class="modal-content">
+                <div class="modal-body" style="position:relative;height:100%">
+
+                    <div>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div>
+                        <!-- ------------------------------------------------------------------ -->
+                        <!-- ------------------------------------------------------------------ -->
+                        <div id="infMapReg" class="hidden"></div>
+                        <!-- ------------------------------------------------------------------ -->
+
+
+                        <div id="mapReg" style="min-height:400px;min-width:400px;height:100%;width:100%;"></div>
+
+
+                        <script id="jsMapReg"  src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBV4qGNwaDfyRajpVTwVwTTeT12lvuC3RY&signed_in=true&libraries=drawing";
+                                async defer></script>
+
+                        <br />
+                        <div  style="position:relative;">
+                            <a href="#" class="btn btn-success center-block" style="width:300px" onclick="regPoint()">Aceptar</a>
+                        </div>
+
+                        <!-- ------------------------------------------------------------------ -->
+                        <!-- ------------------------------------------------------------------ -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,16 @@
+﻿body {
+}
+.panel-footer{
+    background-color: #222;
+    color:#12b58d;
+    
+}
+
+#blog-sites:hover{
+    cursor:pointer;
+    color:white;
+}
+
+video.loading {
+  background: black url(/images/loader.gif) center center no-repeat;
+}

@@ -1,0 +1,71 @@
+﻿@{ 
+    Layout = null;
+}
+
+    <div id="loadInfo" style="position:relative;width:80%;margin-left:10%">
+        <h1>
+            Links
+        </h1>
+
+        <table class="table table-striped">
+            @{
+                try
+                {
+                    List<string> lst = ViewBag.lst;
+                    List<string> par = new List<string>();
+                    par.Add(lst.ElementAt(0).Split('-')[1]);
+
+                    foreach (var x in lst)
+                    {
+                        string[] cad = x.Split('-');
+                        int n = Convert.ToInt32(cad[5]);
+                        //hay 2 formas: 1=>a traves de public projects y 2=> link directo
+                        string src = "http://localhost:5000/Projects/publicprojects?p=" + cad[1].Replace(',', '-');
+                        //string src = cad[4].Replace(',', '-');
+
+                        <tr>
+                            
+                                @{
+                                    if (cad[0].Equals("Y"))
+                                    {
+                                        try
+                                        {
+                                            string ax = ViewBag.ids;
+                                            if (ax.Equals(cad[1].Replace(',','-')))
+                                            {
+                                                <td style="background-color:#ff6a00;">
+                                                    <a href="@src" style="color:white;margin-left:calc( @n * 50px )">@cad[3]</a>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <a href="@src" style="margin-left:calc( @n * 50px )">@cad[3]</a>
+                                                </td>
+                                            }
+
+                                        }
+                                        catch
+                                        {
+                                            <td>
+                                                <a href="@src" style="margin-left:calc( @n * 50px )">@cad[3]</a>
+                                            </td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <p style="margin-left:calc( @n * 50px )">@cad[3]</p>
+                                        </td>
+                                    }
+                                }
+                                
+                            
+                        </tr>
+
+                    }
+                }
+                catch { }
+            }
+        </table>
+    </div>

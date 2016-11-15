@@ -1,0 +1,105 @@
+﻿
+<h1>Mapa</h1>
+@{
+    bool stf = ViewBag.stFind;
+    if (stf)
+    {
+        <div class="center-block" id="map" style="min-height:410px;min-width:100px;height:80%;width:80%;"></div>
+        <script>
+            var map;
+            function initMap() {
+
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 6,
+                    center: { lat: 5.070477, lng: -75.514064 }
+                });
+
+                setMarkers(map);
+            }
+
+            function setMarkers(map) {
+                @{List<Lucene.Net.Search.ScoreDoc> lstDoc = ViewBag.lstDoc; }
+                @foreach (var x in lstDoc)
+                {
+                    Lucene.Net.Documents.Document doc = ViewBag.searcher.Doc(x.Doc);
+                    <text>
+                        var x = parseFloat(@doc.Get("location").Replace(',', '.'));
+                        var y = parseFloat(@doc.Get("longitude").Replace(',', '.'));
+
+
+                        var nom="";
+                        var des="";
+                        var srp="";
+
+                        
+                            try{
+                                nom = '@doc.Get("nom")';
+                            }catch(r){alert("1");}
+                            try{
+                                des = '@doc.Get("desc")';
+                            }catch(rs){alert("2");}
+                            try{
+                                srp = "src='@doc.Get("srcServ").Replace("\\","/")'";
+                            }catch(rg){alert("2");}
+                
+                
+
+                        var pla = { lat: x, lng: y };
+
+                        var contentString = '<div >' +
+                            '<h4 class="firstHeading" class="firstHeading">' + nom + '</h4>' +
+                            '<img '+srp+' class="img-responsive" style="position:relative;margin-top:10px;width:100%;height:100%">' +
+                            '<p>' + des + '</p>' +
+                            '</div>';
+                        
+                           
+
+                        var infowindow = new google.maps.InfoWindow({
+                            content: contentString,
+                            maxWidth: 300
+                        });
+
+                        var marker = new google.maps.Marker({
+                            position: pla,
+                            map: map,
+                            //icon: image,
+                            //shape: shape,
+                            title: nom,
+                            //zIndex: ,
+                            info: contentString
+                        });
+
+                        // Add a click event to a marker
+                        google.maps.event.addListener(marker, 'click', function () {
+                            infowindow.close(); // Close previously opened infowindow
+                            infowindow.setContent(this.info);
+                            infowindow.open(this.getMap(), this);
+                        });
+                    </text>
+                }
+
+            }
+
+        </script>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBV4qGNwaDfyRajpVTwVwTTeT12lvuC3RY&callback=initMap"
+                async defer>
+           
+        </script>
+        <br />
+        <br />
+
+    }
+    else
+    {
+        <div>
+            <div class="alert alert-danger fade in center-block" style="position:relative;width:100%">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                <strong>Nota!</strong>
+                No se han encontrado imagenes publicas que se puedan mostrar en el mapa
+            </div>
+        </div>
+    }
+}
+
+

@@ -1,0 +1,41 @@
+﻿@Html.Partial("~/Views/MultiMedia/PlayerVideo.cshtml")
+@{
+    List<Lucene.Net.Search.ScoreDoc> lstDoc = ViewBag.lstDoc;
+    foreach (var x in lstDoc)
+    {
+        Lucene.Net.Documents.Document doc = ViewBag.searcher.Doc(x.Doc);
+        Dictionary<string, string> inf = new Dictionary<string, string>();
+
+        <div class="col-md-3 goVid"
+             src="@doc.Get("srcServ")"
+             nom="@doc.Get("nom")"
+             desc="@doc.Get("desc")"
+             type="@doc.Get("type")"
+             keym="@doc.Get("keym")"
+             idUsu="@doc.Get("idUsu")"
+             idFile="@doc.Get("idFile")"
+             idCar="@doc.Get("idCar")"
+             style="height:200px;width:200px">
+            <img src="@doc.Get("srcGifServ")" alt="HTML5 Icon" class="img-responsive"  style="position:relative;height:auto;width:auto"/>
+            <h5 class="text-center">@doc.Get("nom")</h5>
+            @*<img id="example1" src="@doc.Get("srcServ")" rel:animated_src="@doc.Get("srcServ")" rel:auto_play="0" width="467" height="375" />*@
+
+        </div>
+    }
+}
+
+<script>
+    $(".goVid").click(function () {
+        var src = $(this).attr("src");
+        var source = document.getElementById("vid").children;
+        var player = document.getElementById("vid");
+
+        source[0].src = src;
+        source[1].src = src;
+        source[2].src = src;
+        source[3].src = src;
+        player.load();
+        player.play();
+        $("#modalVid").modal();
+    });
+</script>

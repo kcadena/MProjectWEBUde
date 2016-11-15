@@ -1,0 +1,205 @@
+﻿@using MProjectWeb.ViewModels;
+@using Microsoft.AspNet.Http;
+
+@{
+    Layout = null;
+
+}
+
+<div class="row">
+    <h1 class="page-header col-md-11 col-xs-11">
+        <!-- Title of page -->
+        Actividades
+    </h1>
+    @{
+
+        if (ViewBag.prj != ViewBag.idCar && ViewBag.idCar != null)
+        {
+            <div class="col-md-1 col-xs-1"
+                 id="back-folder"
+                 idCar="@ViewBag.idCar"
+                 usuCar="@ViewBag.usuCar">
+
+                <span id="icon-back" class="left fa fa-arrow-circle-left"></span>
+            </div>
+        }
+    }
+</div>
+@{
+    if (ViewBag.id_prj == null)
+    {
+        <div>
+            <div class="alert alert-danger fade in center-block" style="position:relative;width:100%">
+                <a  class="close" data-dismiss="alert">&times;</a>
+                <strong>Error!</strong>
+                No ha seleccionado un proyecto para mostrar detalles,
+                <br />Por favor seleccione un proyecto en la opcion Proyectos
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @{
+                long sd = -1;
+                List<ActivityList> act_lst = ViewBag.act_lst;
+
+                foreach (var x in act_lst)
+                {
+                    if (x.folder == 0)
+                    {
+                        <div class="col-lg-4 col-md-6">
+                            <div class="panel pan-fol">
+                                @{
+                                    if (x.usuCar == ViewBag.usuAct )
+                                    {
+                                        <script>
+                                            $(".pan-fol").addClass('panel-primary');
+                                        </script>
+                                    }
+                                    else
+                                    {
+                                        <script>
+                                            $(".pan-fol").addClass('panel-default');
+                                        </script>
+                                    }
+                                }
+                                <div class="panel-heading open-folder" idCar="@x.idCar" usuCar="@x.usuCar">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <i class="fa fa-folder-open fa-5x"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-right">
+                                            <div style="position:relative; font-size:30px"
+                                                 class="text-right">
+                                                @x.nom
+                                            </div>
+                                            <hr />
+                                            <div class="row" style="margin-right:3px">
+                                                @x.desc
+                                            </div>
+                                            <hr style="width:50%; margin-right:0"/>
+                                            <div class="row" style="margin-right:3px">
+                                                Estado:  @x.sta
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--   footer  -->
+                                <div class="opt_footer dropdown" style="min-height:31px;">
+                                    <button style="position:relative;width:100%;height:30px;border:none;/*background-color:transparent*/" class="btn text-left pull-left dropdown-toggle"
+                                            type="button" id="dropdown_opt_footer" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="true">
+                                        Opciones
+                                        <span class="pull-right"><i class="fa fa-plus-circle"></i></span>
+                                    </button>
+                                    <ul class="dropdown-menu"
+                                        aria-labelledby="dropdown_opt_footer"
+                                        style="position:relative;width:100%"
+                                        idCar="@x.idCar" usuCar="@x.usuCar">
+                                        <li><a class="opt_footer_files">Archivos/Documentos</a></li>
+                                        <li><a class="opt_footer_statistics">Estadisticas</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a class="opt_footer_moreInf">Mas Informacion</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else if (x.folder == 1)
+                    {
+                        <div class="col-lg-4 col-md-6">
+                            <div class="panel col-pan">
+                                @{
+                                    if (x.usuCar == ViewBag.usuAct)
+                                    {
+                                        <script>
+                                            $(".col-pan").addClass('panel-green');
+                                        </script>
+                                    }
+                                    else
+                                    {
+                                        <script>
+                                            $(".col-pan").addClass('panel-yellow');
+                                        </script>
+                                    }
+                                }
+                                <!-- header -->
+                                <div class="panel-heading  open-folder"  
+                                     idCar="@x.idCar" usuCar="@x.usuCar"
+                                     style="height:30px">
+                                    <div class="row">
+                                        <div class="text-center" style="margin-top:-5px">
+                                            @x.nom
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Body -->
+                                <div class="panel-body">
+                                    <div style="margin-left:5px">
+                                        <div class="">
+                                            Descripcion: <span>@x.desc</span>
+                                        </div>
+                                        <hr />
+                                        <div class="">
+                                            Estado: <span>@x.sta</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Footer -->
+                                <div class="opt_footer dropdown" style="min-height:31px;">
+                                    <button style="position:relative;width:100%;height:30px;border:none;/*background-color:transparent*/" class="btn text-left pull-left dropdown-toggle"
+                                            type="button" id="dropdown_opt_footer" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="true">
+                                        Opciones
+                                        <span class="pull-right"><i class="fa fa-plus-circle"></i></span>
+                                    </button>
+                                    <ul class="dropdown-menu"
+                                        aria-labelledby="dropdown_opt_footer"
+                                        style="position:relative;width:100%"
+                                        idCar="@x.idCar" usuCar="@x.usuCar" >
+                                        <li><a class="opt_footer_files">Archivos/Documentos</a></li>
+                                        <li><a class="opt_footer_statistics">Estadisticas</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a class="opt_footer_moreInf">Mas Informacion</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                <script>
+                    $(".opt_footer_files").click(function () {
+                        var car = $(this).parent().parent().attr("idCar");
+                        var usu = $(this).parent().parent().attr("usuCar");
+                        var x = "@Context.Session.GetString("id_prj")";
+                        x = x.split('-');
+                        showFiles(x[0], usu , car, "img", ""); //keym,usu,car,type, text=>palabra o frase a buscar
+                    });
+                    $(".opt_footer_statistics").click(function () {
+                        var car = $(this).parent().parent().attr("idCar");
+                        var usu = $(this).parent().parent().attr("usuCar");
+                        var x = "@Context.Session.GetString("id_prj")";
+                        x = x.split('-');
+                        showCharts(x[0], usu, car);
+                    });
+                    $(".opt_footer_moreInf").click(function () {
+                        var id = $(this).parent().parent().attr("idCar");
+                        optionsActivities(id, "ActMoreInfo")
+                    });
+                    $(".open-folder").click(function () {
+                        var ids = $(this).attr("idCar");
+                        var usu = $(this).attr("usuCar");
+                        openFolder(ids,usu, 1);
+                    });
+                    $("#back-folder").click(function () {
+                        var ids = $(this).attr("idCar");
+                        var usu = $(this).attr("usuCar");
+                        openFolder(ids, usu, 2);
+                    });
+                </script>
+            }
+        </div>
+    }
+}
+

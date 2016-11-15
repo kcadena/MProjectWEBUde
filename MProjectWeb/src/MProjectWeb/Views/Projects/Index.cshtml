@@ -1,0 +1,102 @@
+﻿@using Newtonsoft.Json;
+@using Newtonsoft.Json.Linq;
+@using Newtonsoft.Json.Schema;
+@using System.Linq;
+@using Microsoft.AspNet.Http;
+
+@{
+        Layout = "/views/Shared/_LayoutUser.cshtml";
+    }
+
+@{
+    //cambio exitoso de contraseña
+    try
+    {
+        string cadPass = Context.Session.GetString("estPass");
+        if (cadPass.Length > 0)
+        {
+            bool stR = Convert.ToBoolean(cadPass);
+            if (stR)
+            {
+                <div>
+                    <div class="alert alert-success fade in center-block" style="position:relative;width:100%">
+                        <a  class="close" data-dismiss="alert">&times;</a>
+                        Se ha actualizado con exito tu contraseña.
+                    </div>
+                </div>
+            }
+
+            Context.Session.SetString("estPass", "");
+        }
+    }
+    catch { }
+    try
+    {
+        string cadImg = Context.Session.GetString("estImg");
+        if (cadImg.Length > 0)
+        {
+            bool stR = Convert.ToBoolean(cadImg);
+            if (stR)
+            {
+                <div>
+                    <div class="alert alert-success fade in center-block" style="position:relative;width:100%">
+                        <a  class="close" data-dismiss="alert">&times;</a>
+                        Se ha actualizado con exito tu imagen de perfil.
+                    </div>
+                </div>
+            }
+
+            Context.Session.SetString("estImg", "");
+        }
+    }
+    catch { }
+    try
+    {
+        string cadDat = Context.Session.GetString("estDat");
+        if (cadDat.Length > 0)
+        {
+            bool stR = Convert.ToBoolean(cadDat);
+            if (stR)
+            {
+                <div>
+                    <div class="alert alert-success fade in center-block" style="position:relative;width:100%">
+                        <a  class="close" data-dismiss="alert">&times;</a>
+                        Se ha actualizado con exito tu Informacion.
+                    </div>
+                </div>
+            }
+
+            Context.Session.SetString("estDat", "");
+        }
+    }
+    catch { }
+}
+    
+
+<!-- Page Heading -->
+<div  id="asd">
+    @*<div class="col-lg-12" id="asd">*@
+        <h1 class="page-header" >
+            <!-- Title of page -->
+            MProject
+            
+            <small>
+                <!-- SubTitle of page -->
+                Bienvenido a MProject.
+            </small>
+        </h1>
+
+        <h3>
+          
+        </h3>
+        @*<ol class="breadcrumb">
+                <li>
+                    <i class="fa fa-dashboard"></i>  <a href="index.html">Dashboard</a>
+                </li>
+                <li class="active">
+                    <i class="fa fa-file"></i> Blank Page
+                </li>
+            </ol>*@
+    @*@*</div>*@
+</div>
+

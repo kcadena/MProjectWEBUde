@@ -1,0 +1,148 @@
+﻿@{
+    Layout = null;
+}
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<link href="~/lib/morris.js/morris.css" rel="stylesheet" />
+<script src="~/lib/morris.js/morris.min.js"></script>
+<script src="~/lib/raphael/raphael.min.js"></script>
+<script src="~/lib/angular-morris-chart/build/module/angular-morris/angular-morris.min.js"></script>
+<script src="~/lib/angular/angular.js"></script>
+<div class="asd">
+    <h1 class="page-header">
+        <!-- Title of page -->
+        Graficos
+        <small>
+            <!-- SubTitle of page -->
+        </small>
+    </h1>
+
+</div>
+
+
+
+<div class="row">
+
+    <!-- Porcentaje cunpido del proyecto o actividad actual -->
+    <div class="col-lg-4">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Porcentaje total Cumplido </h3>
+            </div>
+            <div class="panel-body">
+                <div id="chart-comp"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Porcentaje cumplido -->
+    <div class="col-lg-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Porcentaje Asignado a actividades hijas</h3>
+            </div>
+            <div class="panel-body">
+                <div id="chart-perAsig"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Porcentaje tiempos -->
+
+
+</div>
+<div class="row">
+    <!-- Porcentaje cumplido -->
+    <div class="col-lg-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-long-arrow-right"></i> Procentaje Cumplido por actividades hijas</h3>
+            </div>
+            <div class="panel-body">
+                <div id="chart-perComp"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+
+
+<script>
+    //Corresponde a la informacion de porcentaje asignado que tienen los hijos de una caracteristica
+
+    @{
+        string cadPerAsi = ViewBag.percentAsign;
+    }
+    var x = JSON.stringify(eval(@Json.Serialize(cadPerAsi)));
+    
+    Morris.Donut({
+        element: 'chart-perAsig',
+        data: JSON.parse(x),
+        resize: true,
+        formatter: function (x) { return x + "%" },
+        //backgroundColor: '#ccc',
+        labelColor: '#060',
+        colors: [
+          '#0BA470',
+          '#0BA445',
+          '#39B580',
+          '#67C69D',
+          '#95D7BB'
+        ]
+    });
+</script>
+<script>
+    //Porcentaje cumplido de cada una de las caracteristicas hijas
+    @{
+        string cadPerComp = ViewBag.percentComplete;
+    }
+    var x = JSON.stringify(eval(@Json.Serialize(cadPerComp)));
+    
+    Morris.Bar({
+        element: 'chart-perComp',
+        data: JSON.parse(x),
+        axes: true,
+        resize: true,
+        xkey: 'cumplido',
+        ykeys: ['value'],
+        labels: ['cumplido '],
+        ymax: [100],
+        yLabelFormat: function (x) { return x + "%" },
+        xLabelAngle: 75,
+        gridTextColor: '#000000',
+        gridTextSize: 15,
+        barColors: function (row, series, type) {
+            if (type === 'bar') {
+                var red = Math.ceil(200 * row.y / this.ymax);
+                return 'rgb(' + red + ',0,0)';
+            }
+            else {
+                return '#000';
+            }
+        }
+    });
+</script>
+
+<script>
+    //Corresponde al porcentaje de cumplimiento del proyecto o actividad actual
+    @{
+        string cadComp = ViewBag.complete;
+    }
+    var x = JSON.stringify(eval(@Json.Serialize(cadComp)));
+    Morris.Donut({
+        element: 'chart-comp',
+        data: JSON.parse(x),
+        resize: true,
+        formatter: function (x) { return x + "%" },
+        //backgroundColor: '#ccc',
+        labelColor: '#060',
+        
+        //colors: [
+        //  '#0BA470',
+        //  '#0BA445',
+        //  '#39B580',
+        //  '#67C69D',
+        //  '#95D7BB'
+        //]
+    });
+</script>

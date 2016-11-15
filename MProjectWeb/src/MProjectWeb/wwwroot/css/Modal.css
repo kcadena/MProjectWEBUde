@@ -1,0 +1,40 @@
+﻿body {
+}
+
+
+.reg{
+    width:200px;
+    height:30px;
+    margin-top:5px;
+    margin-left:15px;
+}
+.lab{
+    text-align:right;
+    width:45px;
+    height:30px;
+    margin-top:3px;
+    margin-left:-15px;
+    font-family: 'Playfair Display', serif;
+    font-size:10pt
+}
+
+.po{
+    margin-top:80px;
+    border-left:1px solid;
+    width:1px;
+    height:100px;
+
+}
+
+.grp{
+    height:35px;
+}
+
+.btn-close{
+    font-feature-settings:"onum";
+    font-size:10px;
+    width:70px;
+    height:27px;
+}
+
+

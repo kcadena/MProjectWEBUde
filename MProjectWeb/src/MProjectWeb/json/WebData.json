@@ -1,0 +1,80 @@
+﻿{
+    "menu": [
+        {
+            "item": {
+                "name": "Proyectos",
+                "controller": "Projects",
+                "action": "Projects"
+            },
+            "items": [
+                {
+                    "name": "Actividades",
+                    "controller": "Projects",
+                    "action": "Activity"
+                },
+                {
+
+                    "name": "Archivos/Documentos",
+                    "controller": "Projects",
+                    "action": "Files",
+
+
+                    "types": [
+                        {
+                            "name": "Imagenes",
+                            "op": "img"
+                        },
+                        {
+                            "name": "Videos",
+                            "op": "vid"
+                        },
+                        {
+                            "name": "Sonidos",
+                            "op": "sou"
+                        },
+                        {
+                            "name": "Documentos",
+                            "op": "doc"
+                        }
+                    ]
+
+
+
+                },
+                {
+                    "name": "Georreferenciacion",
+                    "controller": "Projects",
+                    "action": "Georeference"
+                },
+                {
+                    "name": "Graficos",
+                    "controller": "Projects",
+                    "action": "Charts"
+                }
+            ]
+        },
+        {
+            "item": {
+                "name": "Mapa Virtual",
+                "controller": "Map",
+                "action": "Map"
+            },
+            "items": [
+                {
+
+                    "name": "Imgenes",
+                    "controller": "Map",
+                    "action": "Image"
+
+                },
+                {
+
+                    "name": "Videos",
+                    "controller": "Map",
+                    "action": "Video"
+
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,96 @@
+﻿{
+    "menu": [
+        {
+            "item": [
+                { "name": "Proyectos" },
+                { "controller": "Projects" },
+                { "action": "Projects" }
+            ],
+            "items": [
+                {
+                    "name": [
+                        { "name": "Actividades" },
+                        { "controller": "Projects" },
+                        { "action": "Activity" }
+                    ]
+                },
+                {
+                    "name": [
+                        { "name": "Archivos/Documentos" },
+                        { "controller": "Projects" },
+                        { "action": "Files" }
+                    ]
+                },
+                {
+                    "name": [
+                        { "name": "Georreferenciacion" },
+                        { "controller": "Projects" },
+                        { "action": "Georeference" }
+                    ]
+                },
+                {
+                    "name": [
+                        { "name": "Graficos" },
+                        { "controller": "Projects" },
+                        { "action": "Charts" }
+                    ]
+                }
+            ]
+        },
+        {
+            "item": [
+                { "name": "Publicaciones" },
+                { "controller": "publishes" },
+                { "action": "Publishes" }
+            ],
+            "items": [
+                {
+                    "name": [
+                        { "name": "Anteriores" },
+                        { "controller": "publish" },
+                        { "action": "Olders" }
+                    ]
+                },
+                {
+                    "name": [
+                        { "name": "Noticias" },
+                        { "controller": "Publish" },
+                        { "action": "Publishes" }
+                    ]
+                }
+            ]
+        },
+        {
+            "item": [
+                { "name": "Seguridad" },
+                { "controller": "Security" },
+                { "action": "Security" }
+            ],
+            "items": [
+                {
+                    "name": [
+                        { "name": "Roles" },
+                        { "controller": "Security" },
+                        { "action": "Roles" }
+                    ]
+                }
+            ]
+        },
+        {
+            "item": [
+                { "name": "Usuarios" },
+                { "controller": "Users" },
+                { "action": "Users" }
+            ],
+            "items": [
+                {
+                    "name": [
+                        { "name": "Buscar" },
+                        { "controller": "Users" },
+                        { "action": "Search" }
+                    ]
+                }
+            ]
+        }
+    ]
+}
