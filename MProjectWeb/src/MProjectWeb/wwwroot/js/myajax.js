@@ -70,7 +70,7 @@ window.addEventListener('popstate', function (e) {
     //$("#area").load(src);
     try {
 
-        document.getElementById("aux").setAttribute("keym", dat[0]);
+        document.getElementById("aux").setAttribute("keym",  dat[0]);
         document.getElementById("aux").setAttribute("idUsu", dat[2]);
         document.getElementById("aux").setAttribute("idCar", dat[1]);
     } catch (err) { }

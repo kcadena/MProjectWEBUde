@@ -65,6 +65,15 @@ namespace MProjectWeb.Controllers
             List<string> lst = getAllLinks();
             ViewBag.lst = lst;
             ViewBag.st = st;
+            DBCConfiguracion conf = new DBCConfiguracion();
+            try
+            {
+                ViewBag.ipPlatServer = conf.getIpPlatServer();
+            }
+            catch
+            {
+                ViewBag.ipServer = "http://localhost:5000";
+            }
             return View();
         }
 

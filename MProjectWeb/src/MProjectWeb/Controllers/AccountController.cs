@@ -88,11 +88,8 @@ namespace MProjectWeb.Controllers
                 usu.cargo = q.cargo;
                 usu.telefono = q.telefono;
                 usu.administrador = false;
-                IFormFile file = q.file;
-                if (file != null)
-                {
-                    usu.imagen = "PicProfile-"+usu.id_usuario + ".jpg";
-                }
+                
+                
                     int i = 0;
                 bool st = false;
                 try
@@ -128,14 +125,15 @@ namespace MProjectWeb.Controllers
                     try
                     {
                         HttpContext.Session.SetString("estReg", "true");
-                        
+                        DBCConfiguracion conf = new DBCConfiguracion();
+                        string act = conf.getIpPlatServer() + "account/userActivate?id=" + usu.id_usuario;
 
                         string cont = "Bienvenido: para confirmar su registro a MProject por favor ingrese a: <br>" +
-                            "<a href='http://190.254.4.6:94/account/userActivate?id=" + usu.id_usuario + "'>Confirmar</a>";
+                            "<a href='"+act+"'>Confirmar</a>";
                         sendEmail(usu.e_mail, cont, "Confirmacion MProject");
 
                         string path = createDirectory(usu.id_usuario.ToString());
-                        
+                        IFormFile file = q.file;
                         if (file != null)
                         {
                             try
@@ -217,8 +215,8 @@ namespace MProjectWeb.Controllers
                 try
                 {
                     string path = usr.path;
-                    if (path != null)
-                        ViewBag.srcImg = path;
+                    if (usr.imagen != null)
+                        ViewBag.srcImg = path+usr.imagen;
                 }
                 catch { }
                 return View(usr);
@@ -299,8 +297,9 @@ namespace MProjectWeb.Controllers
                     {
                         try
                         {
-                            var uploads = Path.Combine(_environment.WebRootPath, @"C:\MP\RepositoriosMProject\user" + usu.id_usuario);
-                            await file.SaveAsAsync(Path.Combine(uploads, usu.id_usuario+".jpg"));
+                            DBCConfiguracion conf = new DBCConfiguracion();
+                            var uploads = Path.Combine(_environment.WebRootPath, conf.getPathServer() +"user" + usu.id_usuario);
+                            await file.SaveAsAsync(Path.Combine(uploads, "PicProfile-"+usu.id_usuario+".jpg"));
                             HttpContext.Session.SetString("estImg", "true");
                         }
                         catch
@@ -345,11 +344,13 @@ namespace MProjectWeb.Controllers
         {
             try
             {
-                string pathString = @"C:\MP\RepositoriosMProject\user" + name;
+                DBCConfiguracion conf = new DBCConfiguracion();
+                string pathString = conf.getPathServer() + "user" + name;
                 System.IO.Directory.CreateDirectory(pathString);//root
                 System.IO.Directory.CreateDirectory(pathString + "/multimedia");//multimedia
-                System.IO.Directory.CreateDirectory(pathString + "/Proyectos");//proyectos
-                System.IO.Directory.CreateDirectory(pathString + "/Log");//log
+                System.IO.Directory.CreateDirectory(pathString + "/proyectos");//proyectos
+                System.IO.Directory.CreateDirectory(pathString + "/log");//log
+                System.IO.Directory.CreateDirectory(pathString + "/chat");
                 return pathString;
             }
             catch

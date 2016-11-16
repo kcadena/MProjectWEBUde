@@ -48,7 +48,7 @@ namespace MProjectWeb.Models.ModelController
                     telefono = x.telefono,
                     imagen = x.imagen,
                     administrador = x.administrador,
-                    path = x.repositorios_usuarios.ruta_repositorio + x.id_usuario + ".jpg",
+                    path = x.repositorios_usuarios.ruta_repositorio ,
                     disponible = x.disponible
                 }).First();
                 return usr;
@@ -104,11 +104,14 @@ namespace MProjectWeb.Models.ModelController
                 long id = getFreeIdUser();
                 if (id != -1)
                 {
+                    DBCConfiguracion conf = new DBCConfiguracion();
+                    
                     repositorios_usuarios rp = new repositorios_usuarios();
                     rp.id_usuario = id;
-                    rp.ruta_repositorio = @"http://190.254.4.6/mp/user" + id+"/";
+                    rp.ruta_repositorio = conf.getIpRepoServer() + "mp/user" + id+"/";
 
                     usu.id_usuario = id;
+                    usu.imagen = "PicProfile-" + id + ".jpg";
                     db.usuarios.Add(usu);
                     db.repositorios_usuarios.Add(rp);
                     db.SaveChanges();

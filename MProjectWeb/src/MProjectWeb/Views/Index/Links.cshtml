@@ -20,7 +20,7 @@
                         string[] cad = x.Split('-');
                         int n = Convert.ToInt32(cad[5]);
                         //hay 2 formas: 1=>a traves de public projects y 2=> link directo
-                        string src = "http://localhost:5000/Projects/publicprojects?p=" + cad[1].Replace(',', '-');
+                        string src = ViewBag.ipPlatServer + "Projects/publicprojects?p=" + cad[1].Replace(',', '-');
                         //string src = cad[4].Replace(',', '-');
 
                         <tr>

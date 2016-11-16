@@ -86,6 +86,21 @@ namespace MProjectWeb.Models.Postgres
                 entity.HasOne(d => d.caracteristicasNavigation).WithMany(p => p.InversecaracteristicasNavigation).HasForeignKey(d => new { d.keym_padre, d.id_caracteristica_padre, d.id_usuario_padre });
             });
 
+            modelBuilder.Entity<configuracion_inicial>(entity =>
+            {
+                entity.Property(e => e.id).ValueGeneratedNever();
+
+                entity.Property(e => e.configuracion)
+                    .IsRequired()
+                    .HasColumnType("varchar");
+
+                entity.Property(e => e.descripcion).HasColumnType("varchar");
+
+                entity.Property(e => e.val_configuracion)
+                    .IsRequired()
+                    .HasColumnType("varchar");
+            });
+
             modelBuilder.Entity<costos>(entity =>
             {
                 entity.HasKey(e => new { e.keym, e.id_costo, e.id_usuario });
@@ -307,6 +322,7 @@ namespace MProjectWeb.Models.Postgres
         public virtual DbSet<actividades> actividades { get; set; }
         public virtual DbSet<archivos> archivos { get; set; }
         public virtual DbSet<caracteristicas> caracteristicas { get; set; }
+        public virtual DbSet<configuracion_inicial> configuracion_inicial { get; set; }
         public virtual DbSet<costos> costos { get; set; }
         public virtual DbSet<meta_datos> meta_datos { get; set; }
         public virtual DbSet<plantillas> plantillas { get; set; }

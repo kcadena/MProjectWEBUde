@@ -28,9 +28,9 @@
             <a  class="goPic">
                 <div class="col-md-3" style="height:302px">
                     <div class="thumbnail">
-                        <div class="caption">
+                        <div class="caption" style="overflow: auto;">
                             <h4>@doc.Get("nom")</h4>
-                            <p>@doc.Get("desc")</p>
+                            <pre style="background-color:none;border:none">@doc.Get("desc")</pre>
                             @{
                                 try
                                 {

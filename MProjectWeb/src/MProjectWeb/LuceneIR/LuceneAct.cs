@@ -20,6 +20,7 @@ using Lucene.Net.Analysis.Snowball;
 using System.IO;
 using SF.Snowball.Ext;
 using Contrib.Regex;
+using MProjectWeb.Models.ModelController;
 
 
 
@@ -39,8 +40,9 @@ namespace MProjectWeb.LuceneIR
         /*opt => 1:write   ;   2:Read */
         public LuceneAct()
         {
+            DBCConfiguracion conf = new DBCConfiguracion();
             //Setup indexer
-            directory = FSDirectory.Open(@"D:\RepositoriosMProject\lucene\");
+            directory = FSDirectory.Open(conf.getPathServer() + @"lucene\");
             analyzer = new SnowballAnalyzer(Lucene.Net.Util.Version.LUCENE_30, "Spanish");
             sp = new SpanishStemmer();
             sp.Stem();
