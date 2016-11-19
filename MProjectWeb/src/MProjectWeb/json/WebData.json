@@ -42,37 +42,9 @@
 
                 },
                 {
-                    "name": "Georreferenciacion",
-                    "controller": "Projects",
-                    "action": "Georeference"
-                },
-                {
                     "name": "Graficos",
                     "controller": "Projects",
                     "action": "Charts"
-                }
-            ]
-        },
-        {
-            "item": {
-                "name": "Mapa Virtual",
-                "controller": "Map",
-                "action": "Map"
-            },
-            "items": [
-                {
-
-                    "name": "Imgenes",
-                    "controller": "Map",
-                    "action": "Image"
-
-                },
-                {
-
-                    "name": "Videos",
-                    "controller": "Map",
-                    "action": "Video"
-
                 }
             ]
         }

@@ -477,16 +477,22 @@ namespace MProjectWeb.LuceneIR
             op => opciones para  1=>adicionar   2=>Actualizar
 
             idFile
+            longitude
+            location
             usuCar =>caracterisitca
             usuOwn =>Dueño
             idCar
             keym
+            vis
+            srcServ
             type
             nom
+            nom2
             src
             desc
             cont
             srcGif
+            srcGifServ
             */
 
             try

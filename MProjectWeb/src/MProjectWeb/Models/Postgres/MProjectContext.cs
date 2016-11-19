@@ -33,17 +33,25 @@ namespace MProjectWeb.Models.Postgres
 
             modelBuilder.Entity<archivos>(entity =>
             {
-                entity.HasKey(e => new { e.keym, e.id_archivo, e.id_usuario_own });
+                entity.HasKey(e => new { e.keym_arc, e.id_archivo, e.id_usuario_arc });
 
                 entity.Property(e => e.descripcion).HasColumnType("varchar");
 
-                entity.Property(e => e.fecha_carga).HasColumnType("date");
-
-                entity.Property(e => e.fecha_ultima_modificacion).HasColumnType("date");
-
-                entity.Property(e => e.nombre)
+                entity.Property(e => e.fecha_creacion)
                     .IsRequired()
                     .HasColumnType("varchar");
+
+                entity.Property(e => e.fecha_ultima_modificacion)
+                    .IsRequired()
+                    .HasColumnType("varchar");
+
+                entity.Property(e => e.nombre_archivo)
+                    .IsRequired()
+                    .HasColumnType("varchar");
+
+                entity.Property(e => e.srcGifServ).HasColumnType("varchar");
+
+                entity.Property(e => e.srcServ).HasColumnType("varchar");
 
                 entity.Property(e => e.subtitulo).HasColumnType("varchar");
 
