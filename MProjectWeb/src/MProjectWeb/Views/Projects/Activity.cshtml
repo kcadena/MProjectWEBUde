@@ -170,30 +170,30 @@
                 }
                 <script>
                     $(".opt_footer_files").click(function () {
-                        var car = $(this).parent().parent().attr("id_caracteristica");
+                        var car = $(this).parent().parent().attr("idCar");
                         var usu = $(this).parent().parent().attr("usuCar");
                         var x = "@Context.Session.GetString("id_prj")";
                         x = x.split('-');
                         showFiles(x[0], usu , car, "img", ""); //keym,usu,car,type, text=>palabra o frase a buscar
                     });
                     $(".opt_footer_statistics").click(function () {
-                        var car = $(this).parent().parent().attr("id_caracteristica");
+                        var car = $(this).parent().parent().attr("idCar");
                         var usu = $(this).parent().parent().attr("usuCar");
                         var x = "@Context.Session.GetString("id_prj")";
                         x = x.split('-');
                         showCharts(x[0], usu, car);
                     });
                     $(".opt_footer_moreInf").click(function () {
-                        var id = $(this).parent().parent().attr("id_caracteristica");
+                        var id = $(this).parent().parent().attr("idCar");
                         optionsActivities(id, "ActMoreInfo")
                     });
                     $(".open-folder").click(function () {
-                        var ids = $(this).attr("id_caracteristica");
+                        var ids = $(this).attr("idCar");
                         var usu = $(this).attr("usuCar");
                         openFolder(ids,usu, 1);
                     });
                     $("#back-folder").click(function () {
-                        var ids = $(this).attr("id_caracteristica");
+                        var ids = $(this).attr("idCar");
                         var usu = $(this).attr("usuCar");
                         openFolder(ids, usu, 2);
                     });

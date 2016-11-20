@@ -5,7 +5,7 @@
 
     $.ajax({
         url: '/Projects/getLinks',
-        data: { "key": key, "id_caracteristica": idcar, "usu": usu },
+        data: { "key": key, "idCar": idcar, "usu": usu },
         type: 'GET',
         dataType: "json",
         crossDomain: true,
@@ -16,7 +16,7 @@
 
                 document.getElementById("aux").setAttribute("keym", key);
                 document.getElementById("aux").setAttribute("idUsu", usu);
-                document.getElementById("aux").setAttribute("id_caracteristica", idcar); 
+                document.getElementById("aux").setAttribute("idCar", idcar); 
             } catch (err) { }
             //alert(e);
             //alert(e);
@@ -72,7 +72,7 @@ window.addEventListener('popstate', function (e) {
 
         document.getElementById("aux").setAttribute("keym",  dat[0]);
         document.getElementById("aux").setAttribute("idUsu", dat[2]);
-        document.getElementById("aux").setAttribute("id_caracteristica", dat[1]);
+        document.getElementById("aux").setAttribute("idCar", dat[1]);
     } catch (err) { }
 
     myajax(dat[0],dat[1],dat[2]);
