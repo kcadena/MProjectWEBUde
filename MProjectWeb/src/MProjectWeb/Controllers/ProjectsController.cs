@@ -214,7 +214,7 @@ namespace MProjectWeb.Controllers
                             idCar = Convert.ToInt64(prj[1]);// prj   -->   [0]=>keym   [1]=>idCarProject
                             DBCActivities actx = new DBCActivities();
                             List<ActivityList> act_lstx = actx.getActivityList(idCar, idUsu, keym, 1);
-                            HttpContext.Session.SetString("infAct", act_lstx.First().keyM + "-" + act_lstx.First().parCar + "-" + act_lstx.First().parUsu);
+                            HttpContext.Session.SetString("infAct", act_lstx.First().keym + "-" + act_lstx.First().parCar + "-" + act_lstx.First().parUsu);
                             ViewBag.act_lst = act_lstx;
                             return View();
                         }
@@ -230,7 +230,7 @@ namespace MProjectWeb.Controllers
                     {
                         ViewBag.idCar = act_lst.First().parCar;
                         ViewBag.usuCar = act_lst.First().parUsu;
-                        HttpContext.Session.SetString("infAct", act_lst.First().keyM+"-"+ act_lst.First().parCar+"-"+ act_lst.First().parUsu);
+                        HttpContext.Session.SetString("infAct", act_lst.First().keym+"-"+ act_lst.First().parCar+"-"+ act_lst.First().parUsu);
                     }
                     catch
                     {

@@ -90,7 +90,7 @@ namespace MProjectWeb.Models.ModelController
                     idCar = x.id_caracteristica,
                     usuCar = x.id_usuario,
                     //p//usuCar = x.caracteristicas.usuario_asignado,
-                    keyM = x.keym.ToString(),
+                    keym = x.keym.ToString(),
                     nom = x.nombre,
                     pos = x.pos,
                     parCar = idCar,
