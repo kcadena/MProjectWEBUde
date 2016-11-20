@@ -1,6 +1,7 @@
 ﻿function myajax(key, idcar, usu) {
 
-    var src="http://localhost:5000/Projects/publicprojects?p=" + key + "-" + idcar + "-" + usu;
+    var src = "http://localhost:5000/Projects/publicprojects?p=" + key + "-" + idcar + "-" + usu;
+    //alert(src);
     history.pushState(src,src,src );
 
     $.ajax({
@@ -14,9 +15,9 @@
             //alert("OK");
             try { 
 
-                document.getElementById("aux").setAttribute("keym", key);
-                document.getElementById("aux").setAttribute("idUsu", usu);
-                document.getElementById("aux").setAttribute("idCar", idcar); 
+                //document.getElementById("aux").setAttribute("keym", key);
+                //document.getElementById("aux").setAttribute("idUsu", usu);
+                //document.getElementById("aux").setAttribute("idCar", idcar); 
             } catch (err) { }
             //alert(e);
             //alert(e);
@@ -63,17 +64,24 @@
 
 window.addEventListener('popstate', function (e) {
     // e.state is equal to the data-attribute of the last image we clicked
+    
+    alert(e.CAPTURING_PHASE);
+    alert(e.currentTarget);
+    alert(e.returnValue);
+
     var src = e.state;
     var dat = src.split("=");
+    //alert(dat[1]);
     dat = dat[1].split("-");
-    window.open(e.state, "_self");
+    //window.open(e.state, "_self");
     //$("#area").load(src);
-    try {
-
-        document.getElementById("aux").setAttribute("keym",  dat[0]);
-        document.getElementById("aux").setAttribute("idUsu", dat[2]);
-        document.getElementById("aux").setAttribute("idCar", dat[1]);
-    } catch (err) { }
-
-    myajax(dat[0],dat[1],dat[2]);
+    history.go(src);
+    //try {
+    //    document.getElementById("aux").setAttribute("keym", dat[0]);
+    //    document.getElementById("aux").setAttribute("idUsu", dat[2]);
+    //    document.getElementById("aux").setAttribute("idCar", dat[1]);
+    //} catch (err) { }
+        
+    
+   
 });

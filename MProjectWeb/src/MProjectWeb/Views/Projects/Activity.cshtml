@@ -26,14 +26,14 @@
     }
 </div>
 @{
-    if (ViewBag.id_prj == null)
-    {
+                bool st = Convert.ToBoolean(ViewBag.st);
+                if (!st)
+                {
         <div>
-            <div class="alert alert-danger fade in center-block" style="position:relative;width:100%">
+            <div class="alert alert-info fade in center-block" style="position:relative;width:100%">
                 <a  class="close" data-dismiss="alert">&times;</a>
-                <strong>Error!</strong>
-                No ha seleccionado un proyecto para mostrar detalles,
-                <br />Por favor seleccione un proyecto en la opcion Proyectos
+                <strong>Nota!</strong>
+                No hay actividades para mostrar correspondientes a este proyecto.
             </div>
         </div>
     }
@@ -42,7 +42,7 @@
         <div class="row">
             @{
                 long sd = -1;
-                List<ActivityList> act_lst = ViewBag.act_lst;
+        List<ActivityList> act_lst = ViewBag.act_lst;
 
                 foreach (var x in act_lst)
                 {
@@ -170,33 +170,33 @@
                 }
                 <script>
                     $(".opt_footer_files").click(function () {
-                        var car = $(this).parent().parent().attr("idCar");
-                        var usu = $(this).parent().parent().attr("usuCar");
-                        var x = "@Context.Session.GetString("id_prj")";
-                        x = x.split('-');
-                        showFiles(x[0], usu , car, "img", ""); //keym,usu,car,type, text=>palabra o frase a buscar
-                    });
+        var car = $(this).parent().parent().attr("idCar");
+        var usu = $(this).parent().parent().attr("usuCar");
+        var x = "@Context.Session.GetString("id_prj")";
+        x = x.split('-');
+        showFiles(x[0], usu , car, "img", ""); //keym,usu,car,type, text=>palabra o frase a buscar
+    });
                     $(".opt_footer_statistics").click(function () {
-                        var car = $(this).parent().parent().attr("idCar");
-                        var usu = $(this).parent().parent().attr("usuCar");
-                        var x = "@Context.Session.GetString("id_prj")";
-                        x = x.split('-');
-                        showCharts(x[0], usu, car);
-                    });
+        var car = $(this).parent().parent().attr("idCar");
+        var usu = $(this).parent().parent().attr("usuCar");
+        var x = "@Context.Session.GetString("id_prj")";
+        x = x.split('-');
+        showCharts(x[0], usu, car);
+    });
                     $(".opt_footer_moreInf").click(function () {
-                        var id = $(this).parent().parent().attr("idCar");
-                        optionsActivities(id, "ActMoreInfo")
+        var id = $(this).parent().parent().attr("idCar");
+        optionsActivities(id, "ActMoreInfo")
                     });
                     $(".open-folder").click(function () {
-                        var ids = $(this).attr("idCar");
-                        var usu = $(this).attr("usuCar");
-                        openFolder(ids,usu, 1);
-                    });
+        var ids = $(this).attr("idCar");
+        var usu = $(this).attr("usuCar");
+        openFolder(ids,usu, 1);
+    });
                     $("#back-folder").click(function () {
-                        var ids = $(this).attr("idCar");
-                        var usu = $(this).attr("usuCar");
-                        openFolder(ids, usu, 2);
-                    });
+        var ids = $(this).attr("idCar");
+        var usu = $(this).attr("usuCar");
+        openFolder(ids, usu, 2);
+    });
                 </script>
             }
         </div>

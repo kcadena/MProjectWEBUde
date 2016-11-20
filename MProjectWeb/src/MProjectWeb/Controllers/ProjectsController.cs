@@ -158,6 +158,7 @@ namespace MProjectWeb.Controllers
         {
             try
             {
+                ViewBag.st = true;
                 ViewBag.usuAct = Convert.ToInt64(HttpContext.Session.GetString("idUsu"));
                 string ax="";
                 dynamic dat;
@@ -214,8 +215,13 @@ namespace MProjectWeb.Controllers
                             idCar = Convert.ToInt64(prj[1]);// prj   -->   [0]=>keym   [1]=>idCarProject
                             DBCActivities actx = new DBCActivities();
                             List<ActivityList> act_lstx = actx.getActivityList(idCar, idUsu, keym, 1);
-                            HttpContext.Session.SetString("infAct", act_lstx.First().keym + "-" + act_lstx.First().parCar + "-" + act_lstx.First().parUsu);
-                            ViewBag.act_lst = act_lstx;
+                            if (act_lstx.Count > 0)
+                            {
+                                HttpContext.Session.SetString("infAct", act_lstx.First().keym + "-" + act_lstx.First().parCar + "-" + act_lstx.First().parUsu);
+                                ViewBag.act_lst = act_lstx;
+                            }
+                            else
+                                ViewBag.st = false;
                             return View();
                         }
                     }

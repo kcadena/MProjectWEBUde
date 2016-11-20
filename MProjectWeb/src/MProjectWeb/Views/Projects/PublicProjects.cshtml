@@ -9,6 +9,7 @@
 <link href="~/css/Index.css" rel="stylesheet" />
 <div id="aux" keym="" idUsu="" idCar="">
 </div>
+
 <div id="area" class="row" style="margin-left:0px;margin-right:0px">
 
 
@@ -118,7 +119,6 @@
         </div>
     </div>
     <script>
-
         $(".prj_op").click(function () {
             var s = $(this).parent().attr('id').replace(/prj_/gi, "").split('-');
             var keym = s[0];
@@ -159,3 +159,14 @@
     </script>
 }
 
+<script>
+    var src = document.URL;
+    var dat = src.split("=");
+    dat = dat[1].split("-");
+    try {
+        document.getElementById("aux").setAttribute("keym", dat[0]);
+        document.getElementById("aux").setAttribute("idUsu", dat[2]);
+        document.getElementById("aux").setAttribute("idCar", dat[1]);
+    } catch (err) { }
+    //window.onload = myajax(dat[0],dat[1],dat[2]);
+</script>
