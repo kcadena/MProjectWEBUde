@@ -4,20 +4,22 @@
     foreach (var x in lstDoc)
     {
         Lucene.Net.Documents.Document doc = ViewBag.searcher.Doc(x.Doc);
+
+        string srcGif = doc.Get("gif");
+        srcGif = srcGif.Replace("190.254.4.6", "localhost:82");
+        string src = doc.Get("srcServ");
+        src = src.Replace("190.254.4.6", "localhost:82");
+
         Dictionary<string, string> inf = new Dictionary<string, string>();
 
         <div class="col-md-3 goVid"
-             src="@doc.Get("srcServ")"
-             nom="@doc.Get("nom")"
-             desc="@doc.Get("desc")"
-             type="@doc.Get("type")"
-             keym="@doc.Get("keym")"
-             idUsu="@doc.Get("idUsu")"
-             idFile="@doc.Get("idFile")"
-             idCar="@doc.Get("idCar")"
+             src="@src"
+             nom="@doc.Get("titulo")"
+             desc="@doc.Get("descripcion")"
              style="height:200px;width:200px">
-            <img src="@doc.Get("srcGifServ")" alt="HTML5 Icon" class="img-responsive"  style="position:relative;height:auto;width:auto"/>
-            <h5 class="text-center">@doc.Get("nom")</h5>
+
+            <img src="@srcGif" alt="HTML5 Icon" class="img-responsive"  style="position:relative;height:auto;width:auto"/>
+            <h5 class="text-center">@doc.Get("titulo")</h5>
             @*<img id="example1" src="@doc.Get("srcServ")" rel:animated_src="@doc.Get("srcServ")" rel:auto_play="0" width="467" height="375" />*@
 
         </div>

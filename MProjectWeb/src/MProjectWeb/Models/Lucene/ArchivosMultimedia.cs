@@ -32,7 +32,7 @@ namespace MProjectWeb.Models.Lucene
                     while (car != null)
                     {
                         if (car.usuario_asignado != null)
-                            cadUsr = cadUsr + " OR ( usuOwn:" + car.usuario_asignado + " ) ";
+                            cadUsr = cadUsr + " OR ( id_usuario_car:" + car.usuario_asignado + " ) ";
 
                         car = db.caracteristicas.Where(x =>
                         x.keym == car.keym_padre &&
@@ -44,7 +44,7 @@ namespace MProjectWeb.Models.Lucene
                 catch
                 {
                     if (car.tipo_caracteristica.Equals("p"))
-                        cadUsr = cadUsr + " OR ( usuOwn:" + car.id_usuario + " ) ";
+                        cadUsr = cadUsr + " OR ( id_usuario_car:" + car.id_usuario + " ) ";
                 }
 
                 if (cadUsr.Length > 0)
@@ -67,7 +67,7 @@ namespace MProjectWeb.Models.Lucene
             //         x.id_usuario == usu &&
             //         x.id_caracteristica == idCar
             //    ).First();
-            //cadCar = "( idCar:" + car.id_caracteristica;
+            //cadCar = "( id_caracteristica:" + car.id_caracteristica;
             getCaracteriscas(keym, usu, idCar);
             //getCaracteriscas(car.keym,car.id_usuario,car.id_caracteristica);
             cadCar = cadCar.Remove(0, 3);
@@ -95,7 +95,7 @@ namespace MProjectWeb.Models.Lucene
                     st = true;
                 }
                 catch { }
-                cadCar = cadCar + " OR ( idCar:" + idCar + " AND usuCar:" + usu + " ) ";
+                cadCar = cadCar + " OR ( keym_car:"+keym+" AND id_caracteristica:" + idCar + " AND id_usuario_car:" + usu + " ) ";
             }
             catch (Exception err) { return; }
         }

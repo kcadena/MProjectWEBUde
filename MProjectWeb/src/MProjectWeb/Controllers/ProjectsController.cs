@@ -314,7 +314,7 @@ namespace MProjectWeb.Controllers
                 {
                     dynamic dat = Request.Form;//Obtiene los datos que llegan desde la llamada AJAX
                     keym = Convert.ToInt64(dat["keym"]);
-                    idCar = Convert.ToInt64(dat["idCar"]);
+                    idCar = Convert.ToInt64(dat["id_caracteristica"]);
                     idUsu = Convert.ToInt64(dat["idUsu"]);
                     type = dat["type"];
                     pubFil = Convert.ToBoolean(dat["publicFile"]);
@@ -427,7 +427,7 @@ namespace MProjectWeb.Controllers
             {
                 dynamic dat = Request.Form;//Obtiene los datos que llegan desde la llamada AJAX
                 keym = Convert.ToInt64(dat["keym"]);
-                idCar = Convert.ToInt64(dat["idCar"]);
+                idCar = Convert.ToInt64(dat["id_caracteristica"]);
                 idUsu = Convert.ToInt64(dat["idUsu"]);
 
                 ViewBag.keym = keym;
@@ -486,7 +486,7 @@ namespace MProjectWeb.Controllers
             {
                 //dynamic dat = Request.Form;
                 //long keym = Convert.ToInt64(dat["key"]);
-                //long idCar = Convert.ToInt64(dat["idcar"]);
+                //long idCar = Convert.ToInt64(dat["id_caracteristica"]);
                 //long idUsu = Convert.ToInt64(dat["usu"]);
 
                 DBCActivities act = new DBCActivities();

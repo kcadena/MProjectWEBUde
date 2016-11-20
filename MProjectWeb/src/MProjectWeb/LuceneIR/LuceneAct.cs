@@ -50,14 +50,9 @@ namespace MProjectWeb.LuceneIR
 
         public List<ScoreDoc> search(Dictionary<string, string> dat, string text, string typ, string cars,string usr)
         {
-            //string req = " (  keym: " + dat["keym"] + " AND idUsu:" + dat["idUsu"] + "  ";
-            //dat["idUsu"] = "2";
-            //System.Windows.MessageBox.Show(dat["idCar"]);
-            //string req = " (  idUsu:" + dat["idUsu"]+" ) ";
-            typ = " ( type:" + typ + ") ";
+            typ = " ( tipo:" + typ + ") ";
             totSear = 0;
             bool est = true;
-            //Setup searcher
             try
             {
                 searcher = new IndexSearcher(directory);
@@ -68,17 +63,14 @@ namespace MProjectWeb.LuceneIR
             {
                 MultiFieldQueryParser parser = new MultiFieldQueryParser(
                                Lucene.Net.Util.Version.LUCENE_30,
-                               new string[] { "nom", "desc", "cont" },
+                               new string[] { "titulo", "descripcion", "contenido" },
                                analyzer
                                );
-                //QueryParser parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "<default field>", analyzer);
-
                 IndexReader rea = IndexReader.Open(directory, false);
                 totDocs = rea.MaxDoc;
                 rea.Dispose();
                 //Supply conditions
                 parser.AllowLeadingWildcard = true;
-
                 //Do the search
                 Query query;
                 if (totDocs > 0)
@@ -86,9 +78,9 @@ namespace MProjectWeb.LuceneIR
                     if (text.Equals(""))
                     {
                         if (usr.Length > 0)
-                            query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (vis:1 || vis:2 || vis:3) AND usuOwn:" + dat["usuAct"] + ") OR ( ( vis:2 || vis:3 ) AND NOT usuOwn:" + dat["usuAct"] + ") OR ( vis:1 AND (" + usr + ")) )");
+                            query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ") OR ( publicacion:1 AND (" + usr + ")) )");
                         else
-                            query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (vis:1 || vis:2 || vis:3) AND usuOwn:" + dat["usuAct"] + ") OR ( ( vis:2 || vis:3 ) AND NOT usuOwn:" + dat["usuAct"] + ") )");
+                            query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ") )");
                     }
 
                     else
@@ -125,14 +117,10 @@ namespace MProjectWeb.LuceneIR
                             }
                         }
                         parser.FuzzyMinSim = (float)0.9;
-                        //if (cars.Length > 0)
                         if(usr.Length>0)
-                            query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (vis:1 || vis:2 || vis:3) AND usuOwn:" + dat["usuAct"] + ") OR ( ( vis:2 || vis:3 ) AND NOT usuOwn:" + dat["usuAct"] + ") OR ( vis:1 AND (" + usr + ")) )" + " AND  (\"" + text + "\"~)");
+                            query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ") OR ( publicacion:1 AND (" + usr + ")) )" + " AND  (\"" + text + "\"~)");
                         else
-                            query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (vis:1 || vis:2 || vis:3) AND usuOwn:" + dat["usuAct"] + ") OR ( ( vis:2 || vis:3 ) AND NOT usuOwn:" + dat["usuAct"] + ")  )" + " AND  (\"" + text + "\"~)");
-                        //query = parser.Parse("( "+cars + " ) AND " +typ + " AND " + "(\"" + text + "\"~)" + " AND (( (vis:1 || vis:2 || vis:3) AND own:2) OR ( ( vis:2 || vis:3 ) AND NOT own:2))");
-                        //else
-                        //    query = parser.Parse(typ + " AND " + "(\"" + text + "\"~)");
+                            query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ")  )" + " AND  (\"" + text + "\"~)");
 
                     }
                     try
@@ -143,20 +131,13 @@ namespace MProjectWeb.LuceneIR
                             parser.FuzzyMinSim = (float)0.8;
                             text = text + "~";
                             text = text.Replace(" ", "~ ");
-
-                            //System.Windows.MessageBox.Show(text + "    " + text.Length);
-
                             if (text.Length > 1)
                             {
                                 if(usr.Length>0)
-                                    query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (vis:1 || vis:2 || vis:3) AND usuOwn:" + dat["usuAct"] + ") OR ( ( vis:2 || vis:3 ) AND NOT usuOwn:" + dat["usuAct"] + ") OR ( vis:1 AND (" + usr + ")) )" + " AND (" + text + ")");
+                                    query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ") OR ( publicacion:1 AND (" + usr + ")) )" + " AND (" + text + ")");
                                 else
-                                    query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (vis:1 || vis:2 || vis:3) AND usuOwn:" + dat["usuAct"] + ") OR ( ( vis:2 || vis:3 ) AND NOT usuOwn:" + dat["usuAct"] + ")  )" + " AND (" + text + ")");
+                                    query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ")  )" + " AND (" + text + ")");
                             }
-                                
-                            //query = parser.Parse("( "+cars + " ) AND " +typ + " AND " + "(" + text + ")" + " AND " + cars + " AND (( (vis:1 || vis:2 || vis:3) AND own:2) OR ( ( vis:2 || vis:3 ) AND NOT own:2))");
-                            // else
-                            //     query = parser.Parse(req + " AND " + typ + " AND "+ cars);
                             hits = searcher.Search(query, totDocs);
                         }
 
@@ -166,7 +147,6 @@ namespace MProjectWeb.LuceneIR
                     }
                     catch (Exception err)
                     {
-                        //System.Windows.MessageBox.Show(err.ToString());
                     }
                 }
 
@@ -176,11 +156,7 @@ namespace MProjectWeb.LuceneIR
 
         public List<ScoreDoc> publicSearch(string text, string typ, string cars)
         {
-            //string req = " (  keym: " + dat["keym"] + " AND idUsu:" + dat["idUsu"] + "  ";
-            //dat["idUsu"] = "2";
-            //System.Windows.MessageBox.Show(dat["idCar"]);
-            //string req = " (  idUsu:" + dat["idUsu"]+" ) ";
-            typ = " ( type:" + typ + ") ";
+            typ = " ( tipo:" + typ + ") ";
             totSear = 0;
             bool est = true;
             //Setup searcher
@@ -194,10 +170,9 @@ namespace MProjectWeb.LuceneIR
             {
                 MultiFieldQueryParser parser = new MultiFieldQueryParser(
                                Lucene.Net.Util.Version.LUCENE_30,
-                               new string[] { "nom", "desc", "cont" },
+                               new string[] { "titulo", "descripcion", "contenido" },
                                analyzer
                                );
-                //QueryParser parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "<default field>", analyzer);
 
                 IndexReader rea = IndexReader.Open(directory, false);
                 totDocs = rea.MaxDoc;
@@ -211,7 +186,7 @@ namespace MProjectWeb.LuceneIR
                 {
                     if (text.Equals(""))
                     {
-                        query = parser.Parse("( " + cars + " ) AND " + typ + " AND vis:3 ");
+                        query = parser.Parse("( " + cars + " ) AND " + typ + " AND publicacion:3 ");
                     }
 
                     else
@@ -248,12 +223,7 @@ namespace MProjectWeb.LuceneIR
                             }
                         }
                         parser.FuzzyMinSim = (float)0.9;
-                        //if (cars.Length > 0)
-                        query = parser.Parse("( " + cars + " ) AND " + typ + " AND vis:3 " + " AND  (\"" + text + "\"~)");
-                        //query = parser.Parse("( "+cars + " ) AND " +typ + " AND " + "(\"" + text + "\"~)" + " AND (( (vis:1 || vis:2 || vis:3) AND own:2) OR ( ( vis:2 || vis:3 ) AND NOT own:2))");
-                        //else
-                        //    query = parser.Parse(typ + " AND " + "(\"" + text + "\"~)");
-
+                        query = parser.Parse("( " + cars + " ) AND " + typ + " AND publicacion:3 " + " AND  (\"" + text + "\"~)");
                     }
                     try
                     {
@@ -264,13 +234,8 @@ namespace MProjectWeb.LuceneIR
                             text = text + "~";
                             text = text.Replace(" ", "~ ");
 
-                            //System.Windows.MessageBox.Show(text + "    " + text.Length);
-
                             if (text.Length > 1)
-                                query = parser.Parse("( " + cars + " ) AND " + typ + " AND vis:3 " + " AND (" + text + ")");
-                            //query = parser.Parse("( "+cars + " ) AND " +typ + " AND " + "(" + text + ")" + " AND " + cars + " AND (( (vis:1 || vis:2 || vis:3) AND own:2) OR ( ( vis:2 || vis:3 ) AND NOT own:2))");
-                            // else
-                            //     query = parser.Parse(req + " AND " + typ + " AND "+ cars);
+                                query = parser.Parse("( " + cars + " ) AND " + typ + " AND publicacion:3 " + " AND (" + text + ")");
                             hits = searcher.Search(query, totDocs);
                         }
 
@@ -280,7 +245,6 @@ namespace MProjectWeb.LuceneIR
                     }
                     catch (Exception err)
                     {
-                        //System.Windows.MessageBox.Show(err.ToString());
                     }
                 }
 
@@ -290,7 +254,7 @@ namespace MProjectWeb.LuceneIR
 
         public List<ScoreDoc> publicSearchPosition()
         {
-            string typ = " ( type:img ) ";
+            string typ = " ( tipo:img ) ";
             totSear = 0;
             bool est = true;
             //Setup searcher
@@ -304,7 +268,7 @@ namespace MProjectWeb.LuceneIR
             {
                 MultiFieldQueryParser parser = new MultiFieldQueryParser(
                                Lucene.Net.Util.Version.LUCENE_30,
-                               new string[] { "location", "longitude" },
+                               new string[] { "localizacion", "longitud" },
                                analyzer
                                );
                 IndexReader rea = IndexReader.Open(directory, false);
@@ -317,11 +281,13 @@ namespace MProjectWeb.LuceneIR
                 Query query;
                 if (totDocs > 0)
                 {
-                    query = parser.Parse(typ + " AND vis:3 AND location:* AND longitude:* ");
+                    query = parser.Parse(typ + " AND publicacion:3 AND localizacion:* AND longitud:* ");
 
                     try
                     {
                         TopDocs hits = searcher.Search(query, totDocs);
+                        //p//
+                        Lucene.Net.Documents.Document doc = searcher.Doc(hits.ScoreDocs.ElementAt(0).Doc);
 
                         List<ScoreDoc> sc = hits.ScoreDocs.ToList<ScoreDoc>();
                         totSear = sc.Count;
@@ -337,7 +303,7 @@ namespace MProjectWeb.LuceneIR
         }
         public List<ScoreDoc> publicFileSearch(string text, string typ)
         {
-            typ = " ( type: " + typ + " ) ";
+            typ = " ( tipo: " + typ + " ) ";
             totSear = 0;
             bool est = true;
             //Setup searcher
@@ -351,7 +317,7 @@ namespace MProjectWeb.LuceneIR
             {
                 MultiFieldQueryParser parser = new MultiFieldQueryParser(
                                Lucene.Net.Util.Version.LUCENE_30,
-                               new string[] { "nom", "desc", "cont" },
+                               new string[] { "titulo", "descripcion", "contenido" },
                                analyzer
                                );
                 IndexReader rea = IndexReader.Open(directory, false);
@@ -366,7 +332,8 @@ namespace MProjectWeb.LuceneIR
                 {
                     if (text.Equals(""))
                     {
-                        query = parser.Parse(typ + " AND vis:3 ");
+                        query = parser.Parse(typ );
+                        //query = parser.Parse(typ + " AND publicacion:3 ");
                     }
 
                     else
@@ -403,11 +370,14 @@ namespace MProjectWeb.LuceneIR
                             }
                         }
                         parser.FuzzyMinSim = (float)0.9;
-                        query = parser.Parse(typ + " AND vis:3 " + " AND  (\"" + text + "\"~)");
+                        query = parser.Parse(typ + " AND publicacion:3 " + " AND  (\"" + text + "\"~)");
                     }
                     try
                     {
                         TopDocs hits = searcher.Search(query, totDocs);
+                        //p//
+                        Lucene.Net.Documents.Document doc = searcher.Doc(hits.ScoreDocs.ElementAt(0).Doc);
+
                         if (hits.TotalHits == 0)
                         {
                             parser.FuzzyMinSim = (float)0.8;
@@ -415,7 +385,7 @@ namespace MProjectWeb.LuceneIR
                             text = text.Replace(" ", "~ ");
 
                             if (text.Length > 1)
-                                query = parser.Parse(typ + " AND vis:3 " + " AND (" + text + ")");
+                                query = parser.Parse(typ + " AND publicacion:3 " + " AND (" + text + ")");
                             hits = searcher.Search(query, totDocs);
                         }
 
@@ -425,22 +395,17 @@ namespace MProjectWeb.LuceneIR
                     }
                     catch (Exception err)
                     {
-                        //System.Windows.MessageBox.Show(err.ToString());
                     }
                 }
 
             }
             return null;
         }
+
         public ScoreDoc searchFile(Dictionary<string, string> inf)
         {
-            //string req = " (  keym: " + dat["keym"] + " AND idUsu:" + dat["idUsu"] + "  ";
-            //dat["idUsu"] = "2";
-            //System.Windows.MessageBox.Show(dat["idCar"]);
-            //string req = " (  idUsu:" + dat["idUsu"]+" ) ";
             totSear = 0;
             bool est = true;
-            //Setup searcher
             try
             {
                 searcher = new IndexSearcher(directory);
@@ -454,46 +419,53 @@ namespace MProjectWeb.LuceneIR
                                new string[] { },
                                analyzer
                                );
-                //QueryParser parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "<default field>", analyzer);
-
                 totDocs = 1;
                 //Supply conditions
                 parser.AllowLeadingWildcard = true;
-
                 //Do the search
                 Query query;
-                query = parser.Parse(" idCar:" +inf["idCar"]+ " AND keym:" +inf["keym"]+ " AND usuCar:" + inf["usuCar"] + " AND idFile:"+inf["idFile"]);
+                query = parser.Parse(" id_caracteristica:" + inf["id_caracteristica"]+ " AND keym:" +inf["keym_car"]+ " AND id_cusuario_car:" + inf["id_cusuario_car"] + " AND id_archivo:"+inf["id_archivo"]);
                 TopDocs hits = searcher.Search(query, totDocs);
                 ScoreDoc sc = hits.ScoreDocs.First();
                 return sc;
             }
             return null;
         }
-
-
         public bool luceneAdd(Dictionary<string, string> info)
         {
             /*
-            op => opciones para  1=>adicionar   2=>Actualizar
+             op => opciones para  1=>adicionar   2=>Actualizar
 
-            idFile
-            longitude
-            location
-            usuCar =>caracterisitca
-            usuOwn =>Dueño
-            idCar
-            keym
-            vis
-            srcServ
-            type
-            nom
-            nom2
-            src
-            desc
-            cont
-            srcGif
-            srcGifServ
-            */
+             keym_arc            
+             id_archivo          
+             id_usuario_arc      
+
+             keym_car            
+             id_caracteristica   
+             id_usuario_car      
+
+             nombre_archivo      
+
+             titulo          
+             subtitulo       
+             descripcion     
+             contenido       
+
+             fecha_creacion              
+             fecha_ultima_modificacion   
+
+             publicacion 
+             tipo        
+
+             localizacion    
+             longitud        
+             srcGifServ      
+             srcServ             
+             srcGif          
+             src             
+             */
+
+
 
             try
             {
@@ -508,52 +480,50 @@ namespace MProjectWeb.LuceneIR
                 }
                 //Add documents to the index
                 Document doc = new Document();
-                doc.Add(new Field("idFile", info["idFile"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+
+                doc.Add(new Field("keym_arc", info["keym_arc"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.Add(new Field("id_archivo", info["id_archivo"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.Add(new Field("id_usuario_arc", info["id_usuario_arc"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+
+                doc.Add(new Field("keym_car", info["keym_car"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.Add(new Field("id_caracteristica", info["id_caracteristica"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.Add(new Field("id_usuario_car", info["id_usuario_car"], Field.Store.YES, Field.Index.NOT_ANALYZED));
 
                 try
                 {
                     //datos correspondientes a la ubicacion de la imagen
-                    doc.Add(new Field("location", info["location"], Field.Store.YES, Field.Index.NOT_ANALYZED));
-                    doc.Add(new Field("longitude", info["longitude"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+                    doc.Add(new Field("localizacion", info["localizacion"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+                    doc.Add(new Field("longitud", info["longitud"], Field.Store.YES, Field.Index.NOT_ANALYZED));
                 }
                 catch { }
 
+                doc.Add(new Field("nombre_archivo", info["nomobre_archivo"], Field.Store.YES, Field.Index.ANALYZED));
+
+                doc.Add(new Field("titulo", info["titulo"], Field.Store.YES, Field.Index.ANALYZED));
+                doc.Add(new Field("subtitulo", info["subtitulo"], Field.Store.YES, Field.Index.NOT_ANALYZED));
                 try
                 {
-                    //usuCar => idUsuario   => usuario de la caracteristica
-                    //usuOwn => usuOwn      => Usuario propietario del archivo
-                    doc.Add(new Field("usuCar", info["usuCar"], Field.Store.YES, Field.Index.NOT_ANALYZED));
-                    doc.Add(new Field("usuOwn", info["usuOwn"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+                    if (info["descripcion"].Length != 0)
+                        doc.Add(new Field("descripcion", info["descripcion"], Field.Store.YES, Field.Index.ANALYZED));
                 }
-                catch (Exception err) { }
+                catch { }
+                try
+                {
+                    if (info["contenido"].Length != 0)
+                        doc.Add(new Field("contenido", info["contenido"], Field.Store.YES, Field.Index.ANALYZED));
+                }
+                catch { }
 
-                doc.Add(new Field("idCar", info["idCar"], Field.Store.YES, Field.Index.NOT_ANALYZED));
-                doc.Add(new Field("keym", info["keym"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.Add(new Field("fecha_creacion", info["fecha_creacion"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.Add(new Field("fecha_ultima_modificacion", info["fecha_ultima_modificacion"], Field.Store.YES, Field.Index.NOT_ANALYZED));
 
-                doc.Add(new Field("vis", info["vis"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.Add(new Field("tipo", info["tipo"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.Add(new Field("publicacion", info["publicacion"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+
                 doc.Add(new Field("srcServ", info["srcServ"], Field.Store.YES, Field.Index.NOT_ANALYZED));
-                doc.Add(new Field("nom2", info["nom2"], Field.Store.YES, Field.Index.NOT_ANALYZED));
-
-                doc.Add(new Field("type", info["type"], Field.Store.YES, Field.Index.NOT_ANALYZED));
-                doc.Add(new Field("nom", info["nom"], Field.Store.YES, Field.Index.ANALYZED));
                 doc.Add(new Field("src", info["src"], Field.Store.YES, Field.Index.NOT_ANALYZED));
-
-                try
+                if (info["tipo"].Equals("vid"))
                 {
-                    if (info["desc"].Length != 0)
-                        doc.Add(new Field("desc", info["desc"], Field.Store.YES, Field.Index.ANALYZED));
-                }
-                catch { }
-
-                try
-                {
-                    if (info["cont"].Length != 0)
-                        doc.Add(new Field("cont", info["cont"], Field.Store.YES, Field.Index.ANALYZED));
-                }
-                catch { }
-                if (info["type"].Equals("vid"))
-                {
-
                     try
                     {
                         doc.Add(new Field("srcGif", info["srcGif"], Field.Store.YES, Field.Index.NOT_ANALYZED));
@@ -581,19 +551,14 @@ namespace MProjectWeb.LuceneIR
             {
                  try { writer.Dispose(); } catch { }
                 writer = new IndexWriter(directory, analyzer, false, IndexWriter.MaxFieldLength.UNLIMITED);
-                //MultiFieldQueryParser parser = new MultiFieldQueryParser(
-                //              Lucene.Net.Util.Version.LUCENE_30,
-                //              new string[] { "idCar", "idFile", "idUsu", "keym" },
-                //              analyzer
-                //              );
+                
                 QueryParser parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "<default field>", analyzer);
                 Query query;
 
                 query = parser.Parse(
-                    "idCar:" + info["idCar"] +
-                    " AND idFile:" + info["idFile"] +
-                    " AND usuCar:" + info["usuCar"]
-                    //+" AND keym:M1"
+                    "id_archivo:" + info["id_archivo"] +
+                    " AND keym_arc:" + info["keym_arc"] +
+                    " AND id_usuario_arc:" + info["id_usuario_arc"]
                     );
                 writer.DeleteDocuments(query);
                 writer.Optimize();
@@ -602,7 +567,6 @@ namespace MProjectWeb.LuceneIR
             }
             catch (Exception err)
             {
-                //System.Windows.MessageBox.Show("Error lcnDel:" + err.ToString());
                 return false;
             }
         }
@@ -619,7 +583,6 @@ namespace MProjectWeb.LuceneIR
             }
             catch (Exception err)
             {
-                //System.Windows.MessageBox.Show("Error lcnUpdate:" + err.ToString());
                 return false;
             }
         }
@@ -632,11 +595,3 @@ namespace MProjectWeb.LuceneIR
     }
 }
 
-
-/*
-
-"dependencies": {
-        "Lucene.Net": "3.0.3",
-        "Lucene.Net.Contrib": "3.0.3"
-    }
-*/

@@ -11,16 +11,12 @@ $(document).ready(function () {
         }
     );
 });
-
-
 //Close windows
 $(".btn-close").click(function () {
     var player = document.getElementById("vid");
     //player.load();
     player.pause();
 });
-
-
 //Abrir nueva ventana
 function openNewWindows(url) {
     //alert(url);
@@ -35,8 +31,6 @@ function openNewTab(url, nom) {
     a.href = url;
     a.click();
 }
-
-
 //metodo para obtener los archivos de una caracteristica
 function showFiles(keym, usu, car, type, text) {
     try {
@@ -70,10 +64,6 @@ function showFiles(keym, usu, car, type, text) {
        }
     );
 }
-
-
-
-
 //metodo para obtener los archivos publicos de una caracteristica 
 function publicShowFiles(keym, usu, car, type, text) {
     //alert(keym + " usu: " + usu + "   car: " + car + "     typ: " + type);
@@ -104,11 +94,8 @@ function publicShowFiles(keym, usu, car, type, text) {
        }
     );
 }
-
-
 //Muestra todos los archivos publicos de lucene y la base de datos
 function publicFiles(type, text) {
-    alert(type+"  -  : "+text);
     $.ajax({
         url: '/Projects/PublicFiles',
         type: 'Get',
@@ -136,10 +123,6 @@ function publicFiles(type, text) {
    }
 );
 }
-
-
-
-
 //get data from car usu and keym for get files 
 function getDataFiles() {
     try {
@@ -153,10 +136,7 @@ function getDataFiles() {
         window.location = '/Projects/PublicFiles';
     }
 }
-
-
 //GEnera todos los links de los proyectos que poseen publicacion web
-
 //ajaxAllLinks1 => resalta la publicacion actual
 function ajaxAllLinks1(keym, idCar, idUsu) {
    // alert("YAY");
@@ -216,8 +196,6 @@ function ajaxAllLinks2() {
         alert("No se pudo cargar la pagina.");
     });
 }
-
-
 //Muestra los Graficos estadisticos
 function showCharts(keym, usu, car) {
     

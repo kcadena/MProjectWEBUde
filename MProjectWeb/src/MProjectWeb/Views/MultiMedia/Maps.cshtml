@@ -18,41 +18,43 @@
             }
 
             function setMarkers(map) {
-                @{List<Lucene.Net.Search.ScoreDoc> lstDoc = ViewBag.lstDoc; }
-                @foreach (var x in lstDoc)
-                {
-                    Lucene.Net.Documents.Document doc = ViewBag.searcher.Doc(x.Doc);
+                @{List<Lucene.Net.Search.ScoreDoc> lstDoc = ViewBag.lstDoc;
+                    try
+                    {
+                        foreach (var x in lstDoc)
+                    {
+                        Lucene.Net.Documents.Document doc = ViewBag.searcher.Doc(x.Doc);
                     <text>
-                        var x = parseFloat(@doc.Get("location").Replace(',', '.'));
-                        var y = parseFloat(@doc.Get("longitude").Replace(',', '.'));
+                        var x = parseFloat(@doc.Get("localizacion").Replace(',', '.'));
+                        var y = parseFloat(@doc.Get("longitud").Replace(',', '.'));
 
 
                         var nom="";
                         var des="";
                         var srp="";
 
-                        
+
                             try{
-                                nom = '@doc.Get("nom")';
+                                nom = '@doc.Get("titulo")';
                             }catch(r){alert("1");}
                             try{
-                                des = '@doc.Get("desc")';
+                                des = '@doc.Get("descripcion")';
                             }catch(rs){alert("2");}
                             try{
-                                srp = "src='@doc.Get("srcServ").Replace("\\","/")'";
-                            }catch(rg){alert("2");}
-                
-                
+                                src = "src='@doc.Get("srcServ").Replace("\\", "/").Replace("190.254.4.6", "localhost:82")'";
+                            }catch(rg){alert("3");}
+
+
 
                         var pla = { lat: x, lng: y };
 
                         var contentString = '<div >' +
                             '<h4 class="firstHeading" class="firstHeading">' + nom + '</h4>' +
-                            '<img '+srp+' class="img-responsive" style="position:relative;margin-top:10px;width:100%;height:100%">' +
+                            '<img '+src+' class="img-responsive" style="position:relative;margin-top:10px;width:100%;height:100%">' +
                             '<p>' + des + '</p>' +
                             '</div>';
-                        
-                           
+
+
 
                         var infowindow = new google.maps.InfoWindow({
                             content: contentString,
@@ -76,6 +78,10 @@
                             infowindow.open(this.getMap(), this);
                         });
                     </text>
+                        }
+                    }
+                    catch { }
+
                 }
 
             }

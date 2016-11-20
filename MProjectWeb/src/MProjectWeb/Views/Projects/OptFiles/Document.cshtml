@@ -15,14 +15,19 @@
             foreach (var x in lstDoc)
             {
                 Lucene.Net.Documents.Document doc = ViewBag.searcher.Doc(x.Doc);
+
+                string src = doc.Get("srcServ");
+                src = src.Replace("190.254.4.6", "localhost:82");
+
+
                 Dictionary<string, string> inf = new Dictionary<string, string>();
-                <tr style="cursor:pointer" class="goDoc" srcDoc="@doc.Get("srcServ")" nom="@doc.Get("nom")">
+                <tr style="cursor:pointer" class="goDoc" srcDoc="@src" nom="@doc.Get("titulo")">
                     <th scope="row" style="vertical-align:middle">
                         <div class="ico">
                             <script>
-                                var x = '@doc.Get("srcServ")';
+                                var x = '@src;
                                 var n = src.lastIndexOf(".");
-                                alert(n);
+                                alert(x);
                                 @*var src = '@doc.Get("srcServ")';
                                 var ext = src.substring(src.lastIndexOf(".") + 1);
                                 alert(src);
@@ -30,8 +35,8 @@
                             </script>
                         </div>
                     </th>
-                    <td style="vertical-align:middle">@doc.Get("nom")</td>
-                    <td>@doc.Get("desc")</td>
+                    <td style="vertical-align:middle">@doc.Get("titulo")</td>
+                    <td>@doc.Get("descripcion")</td>
                 </tr>
             }
         }

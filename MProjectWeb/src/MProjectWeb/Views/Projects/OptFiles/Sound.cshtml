@@ -31,15 +31,19 @@
                 foreach (var x in lstDoc)
                 {
                     Lucene.Net.Documents.Document doc = ViewBag.searcher.Doc(x.Doc);
+
+                    string src = doc.Get("srcServ");
+                    src = src.Replace("190.254.4.6", "localhost:82");
+
                     Dictionary<string, string> inf = new Dictionary<string, string>();
                     <tr class="goSound"
                         style="cursor:pointer"
-                        src="@doc.Get("srcServ")"
-                        nom="@doc.Get("nom")">
+                        src="@src"
+                        nom="@doc.Get("titulo")">
 
                         <th scope="row" style="vertical-align:middle">#</th>
-                        <td style="vertical-align:middle">@doc.Get("nom")</td>
-                        <td>@doc.Get("desc")</td>
+                        <td style="vertical-align:middle">@doc.Get("titulo")</td>
+                        <td>@doc.Get("descripcion")</td>
                     </tr>
                 }
             }

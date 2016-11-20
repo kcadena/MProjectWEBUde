@@ -106,7 +106,8 @@ function regPoint() {
     $.ajax({
         url: '/MultiMedia/UpdateRegPosition',
         type: 'POST',
-        data: { idCar: inf[1], usuCar: inf[2], keym: inf[0], idFile: inf[3], loc: xpos.lat(), lng: xpos.lng() },//keym-idCar-usuCar-idFile
+        //  keym_arc    -   id_archivo  -   id_usuario_arc
+        data: { keym_arc: inf[0], id_archivo: inf[1], id_usuario_arc: inf[2], loc: xpos.lat(), lng: xpos.lng() },
         async: true,
         cache: false,
         beforeSend: function () {

@@ -24,27 +24,29 @@
         foreach (var x in lstDoc)
         {
             doc = ViewBag.searcher.Doc(x.Doc);
-
+            string src = doc.Get("srcServ");
+            src = src.Replace("190.254.4.6", "localhost:82");
             <a  class="goPic">
                 <div class="col-md-3" style="height:302px">
                     <div class="thumbnail">
                         <div class="caption" style="overflow: auto;">
-                            <h4>@doc.Get("nom")</h4>
-                            <pre style="background-color:none;border:none">@doc.Get("desc")</pre>
+                            <h4>@doc.Get("titulo")</h4>
+                            <pre style="background-color:none;border:none">@doc.Get("descripcion")</pre>
                             @{
                                 try
                                 {
-                                    if (doc.Get("location") != null && doc.Get("longitude") != null)
+                                    if (doc.Get("localizacion") != null && doc.Get("longitud") != null)
                                     {
-                                        <img class="mapGeo" loc="@doc.Get("location").ToString()" lon="@doc.Get("longitude").ToString()" src="~/img/SVG/Georreferenciacion.svg" alt="geo" height="30" width="30" />
+
+                                        <img class="mapGeo" loc="@doc.Get("localizacion").ToString()" lon="@doc.Get("longitud").ToString()" src="~/img/SVG/Georreferenciacion.svg" alt="geo" height="30" width="30" />
                                     }
                                     else
                                     {
                                         string ax = Context.Session.GetString("idUsu");
 
-                                        if ((doc.Get("usuCar").Equals(ax) || doc.Get("usuOwn").Equals(ax)) && pubFil==false)
+                                        if ((doc.Get("id_usuario_car").Equals(ax) || doc.Get("id_usuario_arc").Equals(ax)) && pubFil==false)
                                         {
-                                            <img class="mapReg" inf="@doc.Get("keym")-@doc.Get("idCar")-@doc.Get("usuCar")-@doc.Get("idFile")" src="~/img/SVG/DynamicProject.svg" alt="geo" height="30" width="30" />
+                                            <img class="mapReg" inf="@doc.Get("keym_arc")-@doc.Get("id_archivo")-@doc.Get("id_usuario_arc")" src="~/img/SVG/DynamicProject.svg" alt="geo" height="30" width="30" />
                                         }
                                     }
 
@@ -53,7 +55,8 @@
                             }
                         </div>
                         <div style="height:250px;padding-bottom:2px">
-                            <img src="@doc.Get("srcServ")" alt="img" class="img img-responsive media-middle" style="vertical-align:middle" />
+                           
+                            <img src="@src" alt="img" class="img img-responsive media-middle" style="vertical-align:middle" />
                         </div>
                     </div>
                 </div>
