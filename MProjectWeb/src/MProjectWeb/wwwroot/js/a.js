@@ -149,12 +149,12 @@ function optionsActivities(id, act) {
 
 ///////////////  Click de los folders  //////////////////////////
 
-function openFolder(car,usu,op) {
+function openFolder(keym,car,usu,op) {
     //alert("car: "+car+"  usu: "+usu);
     $.ajax({
         url: '/Projects/Activity',
         type: 'POST',
-        data: { id_car:car, usu:usu ,opt:op },
+        data: { keym:keym ,id_car:car, usu:usu ,opt:op },
         async: true,
         //cache: false,
         beforeSend: function () {

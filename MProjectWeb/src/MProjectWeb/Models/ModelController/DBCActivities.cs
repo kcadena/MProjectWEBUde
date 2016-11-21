@@ -54,13 +54,13 @@ namespace MProjectWeb.Models.ModelController
                 }
                 else if (op == 2)
                 {
-                    long idPar = (long)db.caracteristicas.Where(x =>
+                    var idPar = db.caracteristicas.Where(x =>
                         x.id_caracteristica == idCar &&
                         x.keym == keym &&
                         x.id_usuario == idUsu
                         //p//x.usuario_asignado == idUsu
-                    ).Select(x => x.id_caracteristica_padre).First();
-                    List<ActivityList> dat = search(idPar, idUsu, keym);
+                    ).First();
+                    List<ActivityList> dat = search((long)idPar.id_caracteristica_padre, (long)idPar.id_usuario_padre, (long)idPar.keym_padre);
                     return dat;
                 }
             }
@@ -84,17 +84,23 @@ namespace MProjectWeb.Models.ModelController
                 //&& y.caracteristicas.visualizar_superior == false
                 ).OrderBy(x => x.pos).Select(x => new ActivityList()
                 {
+                    keym = x.caracteristicas.keym.ToString(),
+                    idCar = x.caracteristicas.id_caracteristica,
+                    usuCar = x.caracteristicas.id_usuario, //p//usuCar = x.caracteristicas.usuario_asignado,
+
+                    parKeym = x.caracteristicas.keym_padre.ToString(),
+                    parCar = x.caracteristicas.id_caracteristica_padre,
+                    parUsu = x.caracteristicas.id_usuario_padre,
+
+                    usuAsign = x.caracteristicas.usuario_asignado,
+
+                    idAct = x.id_actividad,
+
                     desc = x.descripcion,
                     folder = (x.folder == 0 ? 1 : 0),
-                    idAct = x.id_actividad,
-                    idCar = x.id_caracteristica,
-                    usuCar = x.id_usuario,
-                    //p//usuCar = x.caracteristicas.usuario_asignado,
-                    keym = x.keym.ToString(),
+                    
                     nom = x.nombre,
                     pos = x.pos,
-                    parCar = idCar,
-                    parUsu = idUsu,
                     sta = x.caracteristicas.estado
                 }).ToList();
                 return dat;

@@ -196,7 +196,7 @@ namespace MProjectWeb.Controllers
                         HttpContext.Session.SetString("par_car", idCar.ToString());
                         op = 1;
                         usu = Convert.ToInt64(cad[2]);
-                        keym = Convert.ToInt64(cad[0]);
+                        //keym = Convert.ToInt64(cad[0]);
                     }
 
                     try
@@ -207,6 +207,13 @@ namespace MProjectWeb.Controllers
                         HttpContext.Session.SetString("par_car", idCar.ToString());
                         op = Convert.ToInt32(dat["opt"]);
                         usu = Convert.ToInt32(dat["usu"]);
+                        try
+                        {
+                            string sx = dat["keym"];
+                            if (sx.Length>0)
+                                keym = Convert.ToInt32(dat["keym"]);
+                        }
+                        catch { }
                     }
                     catch
                     {
@@ -219,6 +226,7 @@ namespace MProjectWeb.Controllers
                             {
                                 HttpContext.Session.SetString("infAct", act_lstx.First().keym + "-" + act_lstx.First().parCar + "-" + act_lstx.First().parUsu);
                                 ViewBag.act_lst = act_lstx;
+                                ViewBag.keym = act_lstx.First().parKeym;
                             }
                             else
                                 ViewBag.st = false;
@@ -236,6 +244,7 @@ namespace MProjectWeb.Controllers
                     {
                         ViewBag.idCar = act_lst.First().parCar;
                         ViewBag.usuCar = act_lst.First().parUsu;
+                        ViewBag.keym = act_lst.First().parKeym;
                         HttpContext.Session.SetString("infAct", act_lst.First().keym+"-"+ act_lst.First().parCar+"-"+ act_lst.First().parUsu);
                     }
                     catch
