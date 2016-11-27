@@ -158,6 +158,11 @@ namespace MProjectWeb.Controllers
         {
             try
             {
+                string[] cad = null;
+                long idCar = 0;
+                int op = 0;
+                long usu = 0;
+                long keym = 0;
                 ViewBag.st = true;
                 ViewBag.usuAct = Convert.ToInt64(HttpContext.Session.GetString("idUsu"));
                 string ax="";
@@ -167,6 +172,23 @@ namespace MProjectWeb.Controllers
                     dat = Request.Form;
                     ax = dat["id_prj"];
                     HttpContext.Session.SetString("id_prj",ax);
+                    string[] s = ax.Split('-');
+                    idCar = Convert.ToInt64(s[1]);// prj   -->   [0]=>keym   [1]=>idCarProject
+                    usu = Convert.ToInt64(s[2]);
+                    keym = Convert.ToInt64(s[0]);
+                    DBCActivities actx = new DBCActivities();
+                    List<ActivityList> act_lstx = actx.getActivityList(idCar, usu, keym, 1);
+                    try
+                    {
+                        HttpContext.Session.SetString("infAct", act_lstx.First().keym + "-" + act_lstx.First().parCar + "-" + act_lstx.First().parUsu);
+                        ViewBag.act_lst = act_lstx;
+                        ViewBag.keym = act_lstx.First().parKeym;
+                    }
+                    catch
+                    {
+                        ViewBag.st = false;
+                    }
+                    return View();
                 }
                 catch
                 {
@@ -174,13 +196,10 @@ namespace MProjectWeb.Controllers
                 }
                 string[] prj = ax.Split('-'); //[0]=>keym   [1]=>idCarProject     [2]=>idUsuCar
                 long idUsu = Convert.ToInt64(prj[2]);
-                long keym = Convert.ToInt64(prj[0]);
+                keym = Convert.ToInt64(prj[0]);
                 ViewBag.id_prj = ax;
 
-                string[] cad = null;
-                long idCar=0;
-                int op=0;
-                long usu=0;
+               
 
                 try
                 {

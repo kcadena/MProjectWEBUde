@@ -93,7 +93,7 @@ namespace MProjectWeb.Models.ModelController
             }
             catch
             {
-                return -1;
+                return 1;
             }
         }
         //registrar usuario
@@ -112,7 +112,11 @@ namespace MProjectWeb.Models.ModelController
 
                     usu.id_usuario = id;
                     usu.imagen = "PicProfile-" + id + ".jpg";
+
+                    usu.disponible = true;
+
                     db.usuarios.Add(usu);
+                    db.SaveChanges();
                     db.repositorios_usuarios.Add(rp);
                     db.SaveChanges();
                     return id;

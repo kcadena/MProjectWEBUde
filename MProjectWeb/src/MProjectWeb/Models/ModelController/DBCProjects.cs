@@ -38,7 +38,8 @@ namespace MProjectWeb.Models.ModelController
                              id_usu = x.id_usuario_car,
                              id_pro = x.id_proyecto,
                              keym = x.keym_car,
-                             desc = x.descripcion
+                             
+                             desc = x.nombre
                          }
                     );
 

@@ -72,7 +72,7 @@ namespace MProjectWeb.Controllers
             }
             catch
             {
-                ViewBag.ipServer = "http://localhost:5000";
+                
             }
             return View();
         }

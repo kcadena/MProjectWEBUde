@@ -45,6 +45,5 @@ namespace MProjectWeb.Models.Postgres
         public virtual ICollection<proyectos_meta_datos> proyectos_meta_datos { get; set; }
         public virtual ICollection<recursos> recursos { get; set; }
         public virtual repositorios_usuarios repositorios_usuarios { get; set; }
-        public virtual table_sequence table_sequence { get; set; }
     }
 }

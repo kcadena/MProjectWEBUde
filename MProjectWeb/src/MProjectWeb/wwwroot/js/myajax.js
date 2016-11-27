@@ -1,6 +1,6 @@
 ﻿function myajax(key, idcar, usu) {
 
-    var src = "http://localhost:5000/Projects/publicprojects?p=" + key + "-" + idcar + "-" + usu;
+    var src = "http://190.254.4.6:94/Projects/publicprojects?p=" + key + "-" + idcar + "-" + usu;
     //alert(src);
     history.pushState(src,src,src );
 

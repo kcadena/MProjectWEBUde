@@ -7,7 +7,11 @@ namespace MProjectWeb.Models.Postgres
     {
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseNpgsql(@"PORT=5432;TIMEOUT=15;POOLING=True;MINPOOLSIZE=1;MAXPOOLSIZE=20;COMMANDTIMEOUT=20;PASSWORD=123;USERID=postgres;HOST=localhost;DATABASE=MProjectPru");
+            //local
+            options.UseNpgsql(@"PORT=5432;TIMEOUT=15;POOLING=True;MINPOOLSIZE=1;MAXPOOLSIZE=20;COMMANDTIMEOUT=20;PASSWORD=1;USERID=postgres;HOST=192.168.137.1;DATABASE=MProjectPru");
+            //server
+            //options.UseNpgsql(@"PORT=5432;TIMEOUT=15;POOLING=True;MINPOOLSIZE=1;MAXPOOLSIZE=20;COMMANDTIMEOUT=20;PASSWORD=NJpost2016;USERID=postgres;HOST=190.254.4.6;DATABASE=MProjectPru");
+        
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -79,6 +83,8 @@ namespace MProjectWeb.Models.Postgres
                 entity.Property(e => e.porcentaje_asignado).HasDefaultValueSql("0");
 
                 entity.Property(e => e.porcentaje_cumplido).HasDefaultValueSql("0");
+
+                entity.Property(e => e.publicacion_reporte).HasDefaultValueSql("false");
 
                 entity.Property(e => e.publicacion_web).HasDefaultValueSql("false");
 
@@ -252,9 +258,11 @@ namespace MProjectWeb.Models.Postgres
 
             modelBuilder.Entity<table_sequence>(entity =>
             {
-                entity.HasKey(e => e.id_usuario);
+                entity.HasKey(e => e.key);
 
-                entity.Property(e => e.id_usuario).ValueGeneratedNever();
+                entity.Property(e => e.key)
+                    .HasDefaultValueSql("0")
+                    .ValueGeneratedNever();
 
                 entity.Property(e => e.actividades).HasDefaultValueSql("0");
 
@@ -271,8 +279,6 @@ namespace MProjectWeb.Models.Postgres
                 entity.Property(e => e.proyectos_meta_datos).HasDefaultValueSql("0");
 
                 entity.Property(e => e.recursos).HasDefaultValueSql("0");
-
-                entity.HasOne(d => d.id_usuarioNavigation).WithOne(p => p.table_sequence).HasForeignKey<table_sequence>(d => d.id_usuario).OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<tipos_datos>(entity =>
@@ -294,17 +300,13 @@ namespace MProjectWeb.Models.Postgres
 
                 entity.Property(e => e.administrador).HasDefaultValueSql("false");
 
-                entity.Property(e => e.apellido)
-                    .IsRequired()
-                    .HasColumnType("varchar");
+                entity.Property(e => e.apellido).HasColumnType("varchar");
 
                 entity.Property(e => e.cargo).HasColumnType("varchar");
 
                 entity.Property(e => e.disponible).HasDefaultValueSql("false");
 
-                entity.Property(e => e.e_mail)
-                    .IsRequired()
-                    .HasColumnType("varchar");
+                entity.Property(e => e.e_mail).HasColumnType("varchar");
 
                 entity.Property(e => e.entidad).HasColumnType("varchar");
 
@@ -315,9 +317,7 @@ namespace MProjectWeb.Models.Postgres
 
                 entity.Property(e => e.imagen).HasColumnType("varchar");
 
-                entity.Property(e => e.nombre)
-                    .IsRequired()
-                    .HasColumnType("varchar");
+                entity.Property(e => e.nombre).HasColumnType("varchar");
 
                 entity.Property(e => e.pass)
                     .IsRequired()

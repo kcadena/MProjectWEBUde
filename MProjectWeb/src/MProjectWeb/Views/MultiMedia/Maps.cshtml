@@ -41,7 +41,8 @@
                                 des = '@doc.Get("descripcion")';
                             }catch(rs){alert("2");}
                             try{
-                                src = "src='@doc.Get("srcServ").Replace("\\", "/").Replace("190.254.4.6", "localhost:82")'";
+                                //src = "src=' doc.Get("srcServ").Replace("\\", "/").Replace("190.254.4.6", "localhost:82")'";
+                                src = "src='@doc.Get("srcServ").Replace("\\", "/")'";
                             }catch(rg){alert("3");}
 
 

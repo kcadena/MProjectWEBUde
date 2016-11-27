@@ -6,9 +6,9 @@
         Lucene.Net.Documents.Document doc = ViewBag.searcher.Doc(x.Doc);
 
         string srcGif = doc.Get("gif");
-        srcGif = srcGif.Replace("190.254.4.6", "localhost:82");
+        //srcGif = srcGif.Replace("190.254.4.6", "localhost:82");
         string src = doc.Get("srcServ");
-        src = src.Replace("190.254.4.6", "localhost:82");
+        //src = src.Replace("190.254.4.6", "localhost:82");
 
         Dictionary<string, string> inf = new Dictionary<string, string>();
 

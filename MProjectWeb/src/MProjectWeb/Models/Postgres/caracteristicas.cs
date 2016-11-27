@@ -30,6 +30,7 @@ namespace MProjectWeb.Models.Postgres
         public decimal porcentaje_asignado { get; set; }
         public decimal porcentaje_cumplido { get; set; }
         public int? presupuesto { get; set; }
+        public bool publicacion_reporte { get; set; }
         public bool? publicacion_web { get; set; }
         public int? recursos { get; set; }
         public int? recursos_restantes { get; set; }
