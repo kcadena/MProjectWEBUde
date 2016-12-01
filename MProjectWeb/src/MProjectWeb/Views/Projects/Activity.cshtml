@@ -12,9 +12,10 @@
         Actividades
     </h1>
     @{
+            bool back = Convert.ToBoolean(ViewBag.back);
 
-        if (ViewBag.prj != ViewBag.idCar && ViewBag.idCar != null)
-        {
+            if (back)
+            {
             <div class="col-md-1 col-xs-1"
                  id="back-folder"
                  idCar="@ViewBag.idCar"
@@ -52,16 +53,20 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="panel pan-fol">
                                 @{
-                                    if (x.usuCar == ViewBag.usuAct )
+                                    long usuAct = Convert.ToInt64(ViewBag.usuAct);
+                                    long usuCar = x.usuCar;
+                                    if (usuCar ==  usuAct)
                                     {
                                         <script>
                                             $(".pan-fol").addClass('panel-primary');
+                                            $(".pan-fol").removeClass('panel-default');
                                         </script>
                                     }
                                     else
                                     {
                                         <script>
                                             $(".pan-fol").addClass('panel-default');
+                                            $(".pan-fol").removeClass('panel-primary');
                                         </script>
                                     }
                                 }
@@ -113,15 +118,19 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="panel col-pan">
                                 @{
-                                    if (x.usuCar == ViewBag.usuAct)
+                                    long usuAct = Convert.ToInt64(ViewBag.usuAct);
+                                    long usuCar = x.usuCar;
+                                    if (usuCar == usuAct)
                                     {
                                         <script>
+                                            $(".col-pan").removeClass('panel-yellow');
                                             $(".col-pan").addClass('panel-green');
                                         </script>
                                     }
                                     else
                                     {
                                         <script>
+                                            $(".col-pan").removeClass('panel-green');
                                             $(".col-pan").addClass('panel-yellow');
                                         </script>
                                     }
@@ -172,17 +181,17 @@
                 }
                 <script>
                     $(".opt_footer_files").click(function () {
+                        var keym = $(this).parent().parent().attr("keym");
                         var car = $(this).parent().parent().attr("idCar");
                         var usu = $(this).parent().parent().attr("usuCar");
-                        var x = "@Context.Session.GetString("id_prj")";
-                        x = x.split('-');
-                        showFiles(x[0], usu , car, "img", ""); //keym,usu,car,type, text=>palabra o frase a buscar
+
+                        showFiles(keym, usu , car, "img", ""); //keym,usu,car,type, text=>palabra o frase a buscar
                     });
                     $(".opt_footer_statistics").click(function () {
+                        var keym = $(this).parent().parent().attr("keym");
                         var car = $(this).parent().parent().attr("idCar");
                         var usu = $(this).parent().parent().attr("usuCar");
-                        var x = "@Context.Session.GetString("id_prj")";
-                        x = x.split('-');
+                        //var x = "Context.Session.GetString("id_prj")";
                         showCharts(x[0], usu, car);
                     });
                     $(".opt_footer_moreInf").click(function () {

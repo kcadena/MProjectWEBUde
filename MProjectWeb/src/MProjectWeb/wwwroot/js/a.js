@@ -154,7 +154,7 @@ function openFolder(keym,car,usu,op) {
     $.ajax({
         url: '/Projects/Activity',
         type: 'POST',
-        data: { keym:keym ,id_car:car, usu:usu ,opt:op },
+        data: { keym: keym, idCar: car, usu: usu, opt: op },
         async: true,
         //cache: false,
         beforeSend: function () {

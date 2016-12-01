@@ -332,8 +332,8 @@ namespace MProjectWeb.LuceneIR
                 {
                     if (text.Equals(""))
                     {
-                        query = parser.Parse(typ );
-                        //query = parser.Parse(typ + " AND publicacion:3 ");
+                        //query = parser.Parse(typ );
+                        query = parser.Parse(typ + " AND publicacion:3 ");
                     }
 
                     else

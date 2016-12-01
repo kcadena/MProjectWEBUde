@@ -37,23 +37,26 @@
             </h1>
             <div class="col-md-4 dropdown" style="position:relative;margin-top:50px;">
                 <div class="btn-group">
-                    <a id="pk1" class="btn dropdown-toggle btn-select" data-toggle="dropdown" >
+                    <a id="pk1" class="btn dropdown-toggle btn-select" data-toggle="dropdown">
                         @ViewBag.op
                         <span class="caret"></span>
 
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a id="btnImg" >Imagenes</a>
+                            <a id="btnImg">Imagenes</a>
                         </li>
                         <li>
-                            <a id="btnVid" >Videos</a>
+                            <a id="btnVid">Videos</a>
                         </li>
                         <li>
-                            <a id="btnSou" >Sonidos</a>
+                            <a id="btnSou">Sonidos</a>
                         </li>
                         <li>
-                            <a id="btnDoc" >Documentos</a>
+                            <a id="btnDoc">Documentos</a>
+                        </li>
+                        <li>
+                            <a id="btnOth">Otros</a>
                         </li>
                     </ul>
                 </div>
@@ -82,19 +85,23 @@
         {
 
             <script>
-            //Acciones que generan los click de los botones de las opciones
-            $("#btnImg").click(function () {
-                publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "img", "");
-            });
-            $("#btnVid").click(function () {
-                publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "vid", "");
-            });
-            $("#btnSou").click(function () {
-                publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "son", "");
-            });
-            $("#btnDoc").click(function () {
-                publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "doc", "");
-            });
+                //Acciones que generan los click de los botones de las opciones
+                $("#btnImg").click(function () {
+                    publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "img", "");
+                });
+                $("#btnVid").click(function () {
+                    publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "vid", "");
+                });
+                $("#btnSou").click(function () {
+                    publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "son", "");
+                });
+                $("#btnDoc").click(function () {
+                    publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "doc", "");
+                });
+                $("#btnOth").click(function () {
+                    publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "oth", "");
+                });
+
             </script>
 
         }
@@ -102,19 +109,22 @@
         {
 
             <script>
-            //Acciones que generan los click de los botones de las opciones
-            $("#btnImg").click(function () {
-                showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "img", "");
-            });
-            $("#btnVid").click(function () {
-                showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "vid", "");
-            });
-            $("#btnSou").click(function () {
-                showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "son", "");
-            });
-            $("#btnDoc").click(function () {
-                showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "doc", "");
-            });
+                //Acciones que generan los click de los botones de las opciones
+                $("#btnImg").click(function () {
+                    showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "img", "");
+                });
+                $("#btnVid").click(function () {
+                    showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "vid", "");
+                });
+                $("#btnSou").click(function () {
+                    showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "son", "");
+                });
+                $("#btnDoc").click(function () {
+                    showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "doc", "");
+                });
+                $("#btnOth").click(function () {
+                    showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "oth", "");
+                });
             </script>
 
         }
@@ -124,17 +134,17 @@
         if (pubFil)
         {
             <script>
-            $("#btnSearch").click(function () {
-                publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "@tp", $("#inpText").val());
-            });
+                $("#btnSearch").click(function () {
+                    publicShowFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "@tp", $("#inpText").val());
+                });
             </script>
         }
         else
         {
             <script>
-            $("#btnSearch").click(function () {
-                showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "@tp", $("#inpText").val());
-            });
+                $("#btnSearch").click(function () {
+                    showFiles("@ViewBag.keym", "@ViewBag.idUsu", "@ViewBag.idCar", "@tp", $("#inpText").val());
+                });
             </script>
         }
     }
@@ -165,6 +175,10 @@
                         case "doc":
                             @Html.Partial("~/Views/Projects/OptFiles/Document.cshtml")
                             break;
+
+                        case "oth":
+                            @Html.Partial("~/Views/Projects/OptFiles/Others.cshtml")
+                            break;
                     }
                 }
             }
@@ -172,7 +186,7 @@
             {
                 <div>
                     <div class="alert alert-danger fade in center-block" style="position:relative;width:100%">
-                        <a  class="close" data-dismiss="alert">&times;</a>
+                        <a class="close" data-dismiss="alert">&times;</a>
                         <strong>Error!</strong>
                         No se han encontrado recursos correspondientes a esta actividad / proyecto.
                     </div>

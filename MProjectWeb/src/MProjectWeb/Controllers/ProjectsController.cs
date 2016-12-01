@@ -154,35 +154,36 @@ namespace MProjectWeb.Controllers
         }
 
         //==========================================   VISTAS SUBOPCIONES   ===============================================//
-        public IActionResult Activity()
+        public IActionResult Activity(long keym, long idCar, long usu, int opt)
         {
             try
             {
-                string[] cad = null;
-                long idCar = 0;
-                int op = 0;
-                long usu = 0;
-                long keym = 0;
-                ViewBag.st = true;
                 ViewBag.usuAct = Convert.ToInt64(HttpContext.Session.GetString("idUsu"));
-                string ax="";
-                dynamic dat;
-                try
+                ViewBag.back = true;
+                ViewBag.st = true;
+                #region No proviene de proyectos o actividades. solo visualiza la caracteristica actual
+                if(opt == 0)
                 {
-                    dat = Request.Form;
-                    ax = dat["id_prj"];
-                    HttpContext.Session.SetString("id_prj",ax);
-                    string[] s = ax.Split('-');
-                    idCar = Convert.ToInt64(s[1]);// prj   -->   [0]=>keym   [1]=>idCarProject
-                    usu = Convert.ToInt64(s[2]);
-                    keym = Convert.ToInt64(s[0]);
-                    DBCActivities actx = new DBCActivities();
-                    List<ActivityList> act_lstx = actx.getActivityList(idCar, usu, keym, 1);
                     try
                     {
-                        HttpContext.Session.SetString("infAct", act_lstx.First().keym + "-" + act_lstx.First().parCar + "-" + act_lstx.First().parUsu);
-                        ViewBag.act_lst = act_lstx;
+                        string actCarX = HttpContext.Session.GetString("actCar");
+                        string actPrjX = HttpContext.Session.GetString("actPrj");
+                        if (actCarX.Equals(actPrjX))
+                            ViewBag.back = false;
+                        string[] actCar = actCarX.Split('-');
+                        keym = Convert.ToInt64(actCar[0]);
+                        idCar = Convert.ToInt64(actCar[1]);
+                        usu = Convert.ToInt64(actCar[2]);
+
+                        DBCActivities actx = new DBCActivities();
+                        List<ActivityList> act_lstx = actx.getActivityList(keym, idCar, usu, 1);
+
+                        ViewBag.idCar = act_lstx.First().parCar;
+                        ViewBag.usuCar = act_lstx.First().parUsu;
                         ViewBag.keym = act_lstx.First().parKeym;
+                        HttpContext.Session.SetString("infAct", act_lstx.First().keym + "-" + act_lstx.First().parCar + "-" + act_lstx.First().parUsu);
+
+                        ViewBag.act_lst = act_lstx;
                     }
                     catch
                     {
@@ -190,97 +191,64 @@ namespace MProjectWeb.Controllers
                     }
                     return View();
                 }
-                catch
+                #endregion
+                #region Origen Proyectos
+                else if (opt == 3)
                 {
-                    ax = HttpContext.Session.GetString("id_prj");
-                }
-                string[] prj = ax.Split('-'); //[0]=>keym   [1]=>idCarProject     [2]=>idUsuCar
-                long idUsu = Convert.ToInt64(prj[2]);
-                keym = Convert.ToInt64(prj[0]);
-                ViewBag.id_prj = ax;
-
-               
-
-                try
-                {
-                    cad = HttpContext.Session.GetString("infAct").Split('-');
-                }
-                catch { }
-
-                try
-                {
-                    if (cad != null && cad.Count() >= 2 )
-                    {
-                        idCar =Convert.ToInt64(cad[1]);
-                        HttpContext.Session.SetString("par_car", idCar.ToString());
-                        op = 1;
-                        usu = Convert.ToInt64(cad[2]);
-                        //keym = Convert.ToInt64(cad[0]);
-                    }
-
                     try
                     {
-                        //dynamic dat = new JsonArrayAttribute();
-                        dat = Request.Form;
-                        idCar = Convert.ToInt64(dat["id_car"]);
-                        HttpContext.Session.SetString("par_car", idCar.ToString());
-                        op = Convert.ToInt32(dat["opt"]);
-                        usu = Convert.ToInt32(dat["usu"]);
-                        try
-                        {
-                            string sx = dat["keym"];
-                            if (sx.Length>0)
-                                keym = Convert.ToInt32(dat["keym"]);
-                        }
-                        catch { }
+                        ViewBag.back = false;
+                        string actCar = keym + "-" + idCar + "-" + usu;
+                        HttpContext.Session.SetString("actCar", actCar);
+                        HttpContext.Session.SetString("actPrj", actCar);
+
+                        DBCActivities actx = new DBCActivities();
+                        List<ActivityList> act_lstx = actx.getActivityList(keym, idCar, usu, 1);
+
+                        ViewBag.idCar = act_lstx.First().parCar;
+                        ViewBag.usuCar = act_lstx.First().parUsu;
+                        ViewBag.keym = act_lstx.First().parKeym;
+                        HttpContext.Session.SetString("infAct", act_lstx.First().keym + "-" + act_lstx.First().parCar + "-" + act_lstx.First().parUsu);
+
+                        ViewBag.act_lst = act_lstx;
                     }
                     catch
                     {
-                        if (cad == null || cad.Count() <= 2)
-                        {
-                            idCar = Convert.ToInt64(prj[1]);// prj   -->   [0]=>keym   [1]=>idCarProject
-                            DBCActivities actx = new DBCActivities();
-                            List<ActivityList> act_lstx = actx.getActivityList(idCar, idUsu, keym, 1);
-                            if (act_lstx.Count > 0)
-                            {
-                                HttpContext.Session.SetString("infAct", act_lstx.First().keym + "-" + act_lstx.First().parCar + "-" + act_lstx.First().parUsu);
-                                ViewBag.act_lst = act_lstx;
-                                ViewBag.keym = act_lstx.First().parKeym;
-                            }
-                            else
-                                ViewBag.st = false;
-                            return View();
-                        }
+                        ViewBag.st = false;
                     }
-                    
-
-                    
-
+                    return View();
+                }
+                #endregion
+                #region Origen Actividades
+                else 
+                {
                     DBCActivities act = new DBCActivities();
-                    List<ActivityList> act_lst = act.getActivityList(idCar, usu, keym, op);
+                    List<ActivityList> act_lst = act.getActivityList(keym,idCar, usu, opt);
                     ViewBag.act_lst = act_lst;
                     try
                     {
                         ViewBag.idCar = act_lst.First().parCar;
                         ViewBag.usuCar = act_lst.First().parUsu;
                         ViewBag.keym = act_lst.First().parKeym;
-                        HttpContext.Session.SetString("infAct", act_lst.First().keym+"-"+ act_lst.First().parCar+"-"+ act_lst.First().parUsu);
+
+                        string actCar = act_lst.First().parKeym + "-" + act_lst.First().parCar + "-" + act_lst.First().parUsu;
+                        //HttpContext.Session.SetString("actCar", keym + "-" + idCar + "-" + usu);
+                        HttpContext.Session.SetString("actCar", actCar);
+                        string actPrjX = HttpContext.Session.GetString("actPrj");
+
+                        if (actCar.Equals(actPrjX))
+                            ViewBag.back = false;
+
+                        HttpContext.Session.SetString("infAct", act_lst.First().keym + "-" + act_lst.First().parCar + "-" + act_lst.First().parUsu);
                     }
                     catch
                     {
                         return Content("0");
                     }
-                    ViewBag.prj = Convert.ToInt64(prj[1]);
                 }
-                catch
-                {
-                   
-                }
+                #endregion
             }
-            catch
-            {
-                ViewBag.id_prj = null;
-            }
+            catch { }
             return View();
         }
 
@@ -324,6 +292,9 @@ namespace MProjectWeb.Controllers
                         break;
                     case "doc":
                         ViewBag.op = "Documentos";
+                        break;
+                    case "oth":
+                        ViewBag.op = "Otros";
                         break;
                 }
             }
@@ -369,7 +340,7 @@ namespace MProjectWeb.Controllers
                     string[] cad = null;
                     try
                     {
-                        cad = HttpContext.Session.GetString("infAct").Split('-');
+                        cad = HttpContext.Session.GetString("actCar").Split('-');
                     }
                     catch { }
                     keym = Convert.ToInt64(cad[0]); 
@@ -430,6 +401,9 @@ namespace MProjectWeb.Controllers
                         case "doc":
                             ViewBag.op = "Documentos";
                             break;
+                        case "oth":
+                            ViewBag.op = "Otros";
+                            break;
                     }
                 }
                 catch { }
@@ -473,7 +447,7 @@ namespace MProjectWeb.Controllers
                 string[] cad = null;
                 try
                 {
-                    cad = HttpContext.Session.GetString("infAct").Split('-');
+                    cad = HttpContext.Session.GetString("actCar").Split('-');
                 }
                 catch { }
                 keym = Convert.ToInt64(cad[0]);

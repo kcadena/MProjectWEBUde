@@ -120,15 +120,12 @@
         //projectsClick(s);
         
         s = s.replace(/prj_/gi, "");
-        
-        var car = s[1];
-        var usu=s[2];
-        
+        s = s.split("-");
 
         $.ajax({
             url: '/Projects/Activity',
             type: 'POST',
-            data: { id_prj: s, id_car: car },
+            data: { keym: s[0], idCar: s[1],usu:s[2], opt:3 },//en este caso opt=3 corresponde que proviene de proyecto en los otros casos corresponde a actividad o boton atras
             async: true,
             //cache: false,
             beforeSend: function () {

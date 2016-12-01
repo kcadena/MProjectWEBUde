@@ -58,7 +58,10 @@
                             <a id="btnSou"  >Sonidos</a>
                         </li>
                         <li>
-                            <a id="btnDoc"  >Documentos</a>
+                            <a id="btnDoc">Documentos</a>
+                        </li>
+                        <li>
+                            <a id="btnOth">Otros</a>
                         </li>
                     </ul>
                 </div>
@@ -96,7 +99,10 @@
                 publicFiles("son","");
             });
             $("#btnDoc").click(function () {
-                publicFiles("doc","");
+                publicFiles("doc", "");
+            });
+            $("#btnOth").click(function () {
+                publicFiles("oth", "");
             });
             </script>
 
@@ -136,6 +142,10 @@
 
                         case "doc":
                             @Html.Partial("~/Views/Projects/OptFiles/Document.cshtml")
+                            break;
+
+                        case "oth":
+                            @Html.Partial("~/Views/Projects/OptFiles/Others.cshtml")
                             break;
                     }
                 }
