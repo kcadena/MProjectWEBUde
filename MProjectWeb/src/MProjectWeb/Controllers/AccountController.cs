@@ -33,14 +33,23 @@ namespace MProjectWeb.Controllers
     {
         protected DBCUsuarios dbu;
         private MProjectContext db = new MProjectContext();
+        private IHostingEnvironment _environment;
+
+        /// <summary>
+        /// Constructor de AccountController
+        /// </summary>
+        /// <param name="environment">Variable que permite obtener la ruta en donde ubicar la imagen de perfil</param>
         public AccountController(IHostingEnvironment environment)
         {
             dbu = new DBCUsuarios();
             _environment = environment;
         }
-        private IHostingEnvironment _environment;
-
-        //realiza el inicio de cession si el usuario es valido
+        
+        /// <summary>
+        /// realiza el inicio de cession si el usuario es valido
+        /// </summary>
+        /// <param name="q">Clase de ViewModels que almacena informacion necesaria del usuario</param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Login(usuarios q)
         {
@@ -50,35 +59,44 @@ namespace MProjectWeb.Controllers
             q = dbu.loginUsuario(dat);
             if (q != null)
             {
+                #region Variables Globales UsuNam: Nombres y apellidos del usuario;  idUsu: ID del usuario logeado
                 HttpContext.Session.SetString("UsuNam", q.nombre + " " + q.apellido);
                 HttpContext.Session.SetString("idUsu", q.id_usuario.ToString());
+                #endregion
                 return RedirectToAction("Index", "Projects");
             }
             TempData["err"] = true;
             return RedirectToAction("Index", "Index");
         }
-        //Registro de usuarios       
+      
+        /// <summary>
+        /// Registro de usuarios
+        /// </summary>
+        /// <param name="q"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Register(ViewModels.usuarios q)
         {
-            //variables de session permiten mostrar mensajes
+            #region variables de session permiten mostrar mensajes
             HttpContext.Session.SetString("estReg", "");
             HttpContext.Session.SetString("estRegTime", "");
+            #endregion
 
-            //validar password viewmodel => no genera error
+            #region validar password viewmodel => no genera error
             if (q.passChan == null)
             {
                 ModelState.ClearValidationState("passChan");
                 ModelState.MarkFieldValid("passChan");
             }
+            #endregion
 
             DBCUsuarios dbUsu = new DBCUsuarios();
-            //verificar que el modelo es valido
-            bool stEmail= !dbUsu.verifyEmail(q.e_mail);//revisa que el email no este repetido
+            #region Verifica que el modelo es valido
+            bool stEmail = !dbUsu.verifyEmail(q.e_mail); //Verifica que el email no este repetido
             if (ModelState.IsValid && stEmail)
             {
+                #region Asignar contenido del ViewModels Usuarios a la variable usu de DB.Usuarios
                 usuarios usu = new usuarios();
-
                 usu.nombre = q.nombre;
                 usu.apellido = q.apellido;
                 usu.e_mail = q.e_mail;
@@ -88,13 +106,18 @@ namespace MProjectWeb.Controllers
                 usu.cargo = q.cargo;
                 usu.telefono = q.telefono;
                 usu.administrador = false;
+                #endregion
+
+                bool st = false; //Variable que permite saber si se realizo exitosamente el registro del usuario
+
+                #region Proceso que se realiza para el registro del usuario
+                int i = 0;
                 
-                
-                    int i = 0;
-                bool st = false;
                 try
                 {
-                    for (i = 0; i < 5; i++)//realiza 5 veces el registro de generarse error por algun inconveniente de lo contrario muestra mensaje de no registro
+                    //realiza 5 veces el registro cuando genere error por algun inconveniente 
+                    //de lo contrario muestra mensaje de no registro
+                    for (i = 0; i < 5; i++)
                     {
                         usu.id_usuario = dbUsu.regUser(usu);
                         if (usu.id_usuario != -1)
@@ -111,6 +134,7 @@ namespace MProjectWeb.Controllers
                     HttpContext.Session.SetString("estReg", "false");
                     return RedirectToAction("Index", "Index", q);
                 }
+                #endregion
 
                 if (!st)
                 {
@@ -129,18 +153,18 @@ namespace MProjectWeb.Controllers
                         string act = conf.getIpPlatServer() + "account/userActivate?id=" + usu.id_usuario;
 
                         string cont = "Bienvenido: para confirmar su registro a MProject por favor ingrese a: <br>" +
-                            "<a href='"+act+"'>Confirmar</a>";
+                            "<a href='" + act + "'>Confirmar</a>";
                         sendEmail(usu.e_mail, cont, "Confirmacion MProject");
 
-                        string path = createDirectory(usu.id_usuario.ToString());
+                        #region Permite cargar la imagen de perfil del usuario a su respectivo repositorio en el servidor
                         IFormFile file = q.file;
                         if (file != null)
                         {
                             try
                             {
+                                string path = createDirectory(usu.id_usuario.ToString());
                                 var uploads = Path.Combine(_environment.WebRootPath, path);
                                 await file.SaveAsAsync(Path.Combine(uploads, usu.imagen));
-
                             }
                             catch
                             {
@@ -148,6 +172,7 @@ namespace MProjectWeb.Controllers
                             }
 
                         }
+                        #endregion
 
 
                     }
@@ -165,13 +190,19 @@ namespace MProjectWeb.Controllers
                     ModelState.AddModelError(string.Empty, "El correo ya existe, intenta con otro.");
                 }
                 ModelState.AddModelError(string.Empty, "Error al registrar usuario.");
-                
+
                 HttpContext.Session.SetString("estReg", "false");
                 HttpContext.Session.SetString("estRegTime", "false");
                 return View(q);
             }
+            #endregion
         }
-        //permite activar el usuario despues de haberse logeado => este es llamado desde el correo
+
+        /// <summary>
+        /// permite activar el usuario despues de haberse logeado => este es llamado desde el correo
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult userActivate(long id)
         {
             DBCUsuarios us = new DBCUsuarios();
@@ -192,7 +223,12 @@ namespace MProjectWeb.Controllers
                 return RedirectToAction("Index", "Index");
             }
         }
-        //permite recuperar una contraseña
+
+        /// <summary>
+        /// permite recuperar una contraseña
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult fogetPassword(string email)
         {
@@ -203,7 +239,11 @@ namespace MProjectWeb.Controllers
             HttpContext.Session.SetString("estPass", "true");
             return Redirect("/Index/Index");
         }
-        //muestra los datos del usuario a modificar
+
+        /// <summary>
+        /// muestra los datos del usuario a modificar
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult EditProfile()
         {
@@ -216,7 +256,7 @@ namespace MProjectWeb.Controllers
                 {
                     string path = usr.path;
                     if (usr.imagen != null)
-                        ViewBag.srcImg = path+usr.imagen;
+                        ViewBag.srcImg = path + usr.imagen;
                 }
                 catch { }
                 return View(usr);
@@ -226,7 +266,12 @@ namespace MProjectWeb.Controllers
                 return RedirectToAction("Index", "Index");
             }
         }
-        //muestra y aplica la actualizacion de los datos del usuario
+
+        /// <summary>
+        /// muestra y aplica la actualizacion de los datos del usuario
+        /// </summary>
+        /// <param name="usu"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> EditProfile(ViewModels.usuarios usu)
         {
@@ -234,17 +279,21 @@ namespace MProjectWeb.Controllers
             long idUsu = Convert.ToInt64(HttpContext.Session.GetString("idUsu"));
             ViewModels.usuarios usr = dbUsr.getUser(idUsu);
 
+            #region Verifica que sean iguales los password para marcarlo como valido y no generar error en el modelState
             if (usu.passChan == usr.pass)
             {
                 ModelState.ClearValidationState("passChan");
                 ModelState.MarkFieldValid("passChan");
             }
+            #endregion
             if (ModelState.IsValid)
             {
                 usuarios axUsu = new usuarios();
-                //actualiza informacion de la cuenta
+                #region actualiza informacion de la cuenta
                 if (usu.e_mail != null)
                 {
+                    #region Se asignan los valores a la clase Usuarios del Modelo segun la base de datos provenientes del ViewModel/Usuarios
+
                     //id del usuario
                     axUsu.id_usuario = usr.id_usuario;
                     //datos actualizables
@@ -262,14 +311,18 @@ namespace MProjectWeb.Controllers
                     axUsu.imagen = usr.imagen;
                     axUsu.disponible = usr.disponible;
 
+                    #endregion
+
                     if (dbUsr.updateUserData(axUsu))
                         HttpContext.Session.SetString("UsuNam", axUsu.nombre + " " + axUsu.apellido);
                     HttpContext.Session.SetString("estDat", "true");
 
                 }
-                //actualiza contraseña de usuario
+                #endregion
+                #region actualiza contraseña de usuario
                 else if (usu.passChan != null)
                 {
+                    #region Se asignan los valores a la clase Usuarios del Modelo segun la base de datos provenientes del ViewModel/Usuarios
                     //id del usuario
                     axUsu.id_usuario = usr.id_usuario;
                     //datos actualizables
@@ -285,10 +338,12 @@ namespace MProjectWeb.Controllers
                     axUsu.administrador = usr.administrador;
                     axUsu.imagen = usr.imagen;
                     axUsu.disponible = usr.disponible;
+                    #endregion
                     dbUsr.updateUserData(axUsu);
                     HttpContext.Session.SetString("estPass", "true");
                 }
-                //actualiza imagen de perfil
+                #endregion
+                #region actualiza imagen de perfil
                 else if (usu.file != null)
                 {
                     IFormFile file = usu.file;
@@ -297,9 +352,11 @@ namespace MProjectWeb.Controllers
                     {
                         try
                         {
+                            #region Realiza la copia de la imagen al respectivo repositorio del usuario en el servidor 
                             DBCConfiguracion conf = new DBCConfiguracion();
-                            var uploads = Path.Combine(_environment.WebRootPath, conf.getPathServer() +"user" + usu.id_usuario);
-                            await file.SaveAsAsync(Path.Combine(uploads, "PicProfile-"+usu.id_usuario+".jpg"));
+                            var uploads = Path.Combine(_environment.WebRootPath, conf.getPathServer() + "user" + usu.id_usuario);
+                            await file.SaveAsAsync(Path.Combine(uploads, "PicProfile-" + usu.id_usuario + ".jpg"));
+                            #endregion
                             HttpContext.Session.SetString("estImg", "true");
                         }
                         catch
@@ -308,7 +365,8 @@ namespace MProjectWeb.Controllers
                         }
 
                     }
-                } 
+                }
+                #endregion
                 return RedirectToAction("Index", "Projects");
             }
 
@@ -317,11 +375,16 @@ namespace MProjectWeb.Controllers
         }
 
 
-
         //Metodos auxiliares
 
         //envio de correo electronico
-        private void  sendEmail(string email, string content, string subject)
+        /// <summary>
+        /// Permite enviar correos electronicos
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="content"></param>
+        /// <param name="subject"></param>
+        private void sendEmail(string email, string content, string subject)
         {
             SmtpClient SmtpServer = new SmtpClient("smtp.live.com");
             var mail = new MailMessage();
@@ -339,7 +402,11 @@ namespace MProjectWeb.Controllers
             SmtpServer.Send(mail);
         }
 
-        //crea la carpeta dentron del repositorio de mproject
+        /// <summary>
+        /// Crea las carpetas necesarias dentron del repositorio de mproject
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         private string createDirectory(string name)
         {
             try

@@ -16,17 +16,28 @@ namespace MProjectWeb.Models.ModelController
         public List<string> llink = null;
         public DBCActivities()
         {
-            
+
             db = new MProjectContext();
         }
-        //Obtiene el usuario asignado a una actividad (caracteristica) espesifica
+
+        /*##################################################################################################################*/
+
+        #region Metodos para el manejo de las actividades
+
+        /// <summary>
+        /// Obtiene el ID del usuario asignado a una actividad (caracteristica) espesifica
+        /// </summary>
+        /// <param name="keym"></param>
+        /// <param name="usu"></param>
+        /// <param name="car"></param>
+        /// <returns></returns>
         public long getIdOwnActivity(long keym, long usu, long car)
         {
             caracteristicas ax = db.caracteristicas.Where(x =>
                 x.keym == keym &&
                 x.id_caracteristica == car &&
                 x.id_usuario == usu
-                //p//x.usuario_asignado == usu
+            //p//x.usuario_asignado == usu
             ).First();
             long idUsu = ax.id_usuario;
             //p//long idUsu =(long) ax.usuario_asignado;
@@ -40,29 +51,40 @@ namespace MProjectWeb.Models.ModelController
             }
             catch { return idUsu; }
         }
-        /*##################################################################################################################*/
-        //Obtiene los links de las actividades inclido el boton regresar
-        public List<ActivityList> getActivityList(long keym, long idCar, long idUsu,  int op)
+
+        /// <summary>
+        /// Obtiene los links de las actividades incluido el boton regresar
+        /// </summary>
+        /// <param name="keym">key o id de la maquina</param>
+        /// <param name="idCar">ID de la caracteristica</param>
+        /// <param name="idUsu">ID del Usuario</param>
+        /// <param name="op">Opcion 1=> Abre carpeta de actividades   2=> boton Atras    </param>
+        /// <returns></returns>
+        public List<ActivityList> getActivityList(long keym, long idCar, long idUsu, int op)
         {
             //op opcion  1=>actividades  2=>back
             try
             {
+                #region Realiza la busqueda de las actividades ya sean de caracteristica de proyecto o ingresar en una actividades
                 if (op == 1)
                 {
                     List<ActivityList> dat = search(idCar, idUsu, keym);
                     return dat;
                 }
+                #endregion
+                #region Realiza la busqueda de las actividades cuando se presiona el boton ATRAS
                 else if (op == 2)
                 {
                     var idPar = db.caracteristicas.Where(x =>
                         x.id_caracteristica == idCar &&
                         x.keym == keym &&
                         x.id_usuario == idUsu
-                        //p//x.usuario_asignado == idUsu
+                    //p//x.usuario_asignado == idUsu
                     ).First();
                     List<ActivityList> dat = search((long)idPar.id_caracteristica_padre, (long)idPar.id_usuario_padre, (long)idPar.keym_padre);
                     return dat;
                 }
+                #endregion
             }
             catch (Exception err)
             {
@@ -70,7 +92,14 @@ namespace MProjectWeb.Models.ModelController
             }
             return null;
         }
-        //realiza la busqueda en la base de datos 
+
+        /// <summary>
+        /// realiza la busqueda de las subactividades en la base de datos
+        /// </summary>
+        /// <param name="idCar"></param>
+        /// <param name="idUsu"></param>
+        /// <param name="keym"></param>
+        /// <returns></returns>
         private List<ActivityList> search(long idCar, long idUsu, long keym)
         {
             try
@@ -98,7 +127,7 @@ namespace MProjectWeb.Models.ModelController
 
                     desc = x.descripcion,
                     folder = (x.folder == 0 ? 1 : 0),
-                    
+
                     nom = x.nombre,
                     pos = x.pos,
                     sta = x.caracteristicas.estado
@@ -110,8 +139,18 @@ namespace MProjectWeb.Models.ModelController
                 return null;
             }
         }
+
+        #endregion
+
         /*##################################################################################################################*/
-        //genera los links por publicacion web => 1 nivel
+
+        #region Generacion de links para la navegacion entre los proyectos y actividades publicas
+
+        #region genera los links por publicacion web => 1 nivel
+
+        /// <summary>
+        /// trae todos los proyectos y actividades de la base de datos para generar la lista del 1 priemr nivel de los links
+        /// </summary>
         public List<string> getLinks(long key, long idcar, long usu)
         {
             llink = new List<string>();
@@ -125,13 +164,16 @@ namespace MProjectWeb.Models.ModelController
                 //Crea opcion para retroceder en la navegacion de las caracteristicas que poseen paginaWeb
                 try
                 {
-                    
                     bool st = true;
-                    //segun actividades
+                    #region segun actividades
                     while (st)
                     {
                         var carPar = (from x in db.caracteristicas
-                                      join y in db.actividades on new { A = x.keym, B = x.id_caracteristica, C = x.id_usuario
+                                      join y in db.actividades on new
+                                      {
+                                          A = x.keym,
+                                          B = x.id_caracteristica,
+                                          C = x.id_usuario
                                           //p// C = x.usuario_asignado
                                       } equals new { A = y.keym, B = y.id_caracteristica, C = y.id_usuario }
 
@@ -157,11 +199,11 @@ namespace MProjectWeb.Models.ModelController
                         {
                             string idPadre = carPar.keym + "," + carPar.id_caracteristica + "," + carPar.id_usuario;
                             //p//string rutaPadre = carPar.ruta_repositorio + carPar.nombre + ".html";
-                            string rutaPadre = carPar.ruta_repositorio +"Web"+ idPadre + ".html";
+                            string rutaPadre = carPar.ruta_repositorio + "Web" + idPadre + ".html";
 
                             llink.Add(idPadre + "-" + "Atras" + "-" + rutaPadre);
                             st = false;
-                            
+
                         }
                         else
                         {
@@ -169,13 +211,14 @@ namespace MProjectWeb.Models.ModelController
                             st = true;
                         }
                     }
+                    #endregion
                 }
                 catch
                 {
+                    #region segun proyectos
                     try
                     {
                         car = cx;
-                        //segun proyectos
                         var carPar = (from x in db.caracteristicas
                                       join pro in db.proyectos on new { A = x.keym, B = x.id_caracteristica, C = x.id_usuario } equals new { A = pro.keym, B = pro.id_caracteristica, C = pro.id_usuario }
                                       //p// C = x.usuario_asignado
@@ -208,8 +251,9 @@ namespace MProjectWeb.Models.ModelController
                     {
 
                     }
+                    #endregion
                 }
-
+                //metodo recursivo para obtener los links publicos
                 getLinksRecursive(cx);
 
 
@@ -218,6 +262,11 @@ namespace MProjectWeb.Models.ModelController
 
             return llink;
         }
+
+        /// <summary>
+        /// Metodo recursivo para obtener los links 1 nivel
+        /// </summary>
+        /// <param name="car"></param>
         private void getLinksRecursive(caracteristicas car)
         {
             try
@@ -285,11 +334,17 @@ namespace MProjectWeb.Models.ModelController
             }
             catch { }
         }
-        /*##################################################################################################################*/
-        //GEnera los links de todas las caracteristicas por publicacion web => todos los niveles
+
+        #endregion
+
+        #region GEnera los links de todas las caracteristicas por publicacion web => todos los niveles
         private List<string> allLink;
-        private int pos=0;
-        //trae todos los proyectos y actividades de la base de datos para generar la lista de todos los links
+        private int pos = 0;
+
+
+        /// <summary>
+        /// trae todos los proyectos y actividades de la base de datos para generar la lista de todos los links
+        /// </summary>
         public List<string> getAllLinks()
         {
             allLink = new List<string>();
@@ -325,7 +380,7 @@ namespace MProjectWeb.Models.ModelController
                     string rutaPadre = x.rutaRep + "Web" + id + ".html";
                     //p//string rutaPadre = x.rutaRep + x.nom + ".html";
 
-                    allLink.Add(pubWeb + "-" + id + "-" + idPar + "-" + nombre + "-" + rutaPadre+"-"+pos);
+                    allLink.Add(pubWeb + "-" + id + "-" + idPar + "-" + nombre + "-" + rutaPadre + "-" + pos);
                     getAllLinksRecursive(x.car);
                 }
 
@@ -335,7 +390,9 @@ namespace MProjectWeb.Models.ModelController
             catch { }
             return null;
         }
-        //metodo recursivo para traer las actividades que formara todos los links de la BD
+        /// <summary>
+        /// metodo recursivo para traer las actividades que formara todos los links de la BD
+        /// </summary>
         private void getAllLinksRecursive(caracteristicas car)
         {
             pos++;
@@ -356,14 +413,14 @@ namespace MProjectWeb.Models.ModelController
                         x.id_usuario_padre == car.id_usuario)
 
                     orderby y.pos ascending
-                    
+
                     select new datLinks()
                     {
                         car = x,
                         idKey = x.keym,
                         idAct = y.id_actividad,
                         idCar = x.id_caracteristica,
-                        
+
                         //p// Nota: especial cuidado
                         idUsu = x.id_usuario,
                         //
@@ -374,10 +431,10 @@ namespace MProjectWeb.Models.ModelController
                     );
                 try
                 {
-                   
+
                     foreach (datLinks x in lstCar)
                     {
-                        
+
                         string pubWeb = "";
                         if ((bool)x.pubWeb)
                             pubWeb = "Y";
@@ -391,7 +448,7 @@ namespace MProjectWeb.Models.ModelController
                             string ruta = x.repoUsu.ruta_repositorio + "Web" + id + ".html";
                             //p//string ruta = x.repoUsu.ruta_repositorio + x.nom + ".html";
 
-                            allLink.Add(pubWeb + "-" + id + "-" + idPar + "-" + nombre + "-" + ruta+"-"+pos);
+                            allLink.Add(pubWeb + "-" + id + "-" + idPar + "-" + nombre + "-" + ruta + "-" + pos);
                             getAllLinksRecursive(x.car);
                         }
                         catch
@@ -423,9 +480,21 @@ namespace MProjectWeb.Models.ModelController
             pos--;
             return;
         }
+        #endregion
+
+        #endregion
+
         /*##################################################################################################################*/
-        //Stadistica:  obtine los hijos de una caracteristica y devuelve la cadena json para generar graficas
-        public Dictionary<string,string> getChildPieChart(long keym, long usu, long car)
+
+        #region Estadisticas
+        /// <summary>
+        /// Stadisticas:  obtine los hijos de una caracteristica y devuelve la cadena json para generar graficas
+        /// </summary>
+        /// <param name="keym"></param>
+        /// <param name="usu"></param>
+        /// <param name="car"></param>
+        /// <returns></returns>
+        public Dictionary<string, string> getChildPieChart(long keym, long usu, long car)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
             try
@@ -434,9 +503,9 @@ namespace MProjectWeb.Models.ModelController
                     x => new datPieChar
                     {
                         label = x.nombre,
-                        percent = (double) x.caracteristicas.porcentaje,
-                        perAsig = (double) x.caracteristicas.porcentaje,
-                        perComp = (double) x.caracteristicas.porcentaje_cumplido
+                        percent = (double)x.caracteristicas.porcentaje,
+                        perAsig = (double)x.caracteristicas.porcentaje,
+                        perComp = (double)x.caracteristicas.porcentaje_cumplido
                     }).ToList();
 
                 return convertJsonPieChart(act);
@@ -446,7 +515,12 @@ namespace MProjectWeb.Models.ModelController
                 return null;
             }
         }
-        //genera la cadena en forma de JSON para luego crear las graficas con MORRIS
+
+        /// <summary>
+        /// genera la cadena en forma de JSON para luego crear las graficas con MORRIS
+        /// </summary>
+        /// <param name="lst"></param>
+        /// <returns></returns>
         private Dictionary<string, string> convertJsonPieChart(List<datPieChar> lst)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
@@ -460,29 +534,68 @@ namespace MProjectWeb.Models.ModelController
                 {
                     cadAsig = cadAsig + "{ label:'" + x.label + "' , value:" + x.perAsig.ToString().Replace(',', '.') + "},";
                     cadComp = cadComp + "{ cumplido:'" + x.label + "' , value:" + x.perComp.ToString().Replace(',', '.') + "},";
-                    val = val + (double) x.perAsig;
-                    valComp = valComp + (x.percent*x.perComp/100);
+                    val = val + (double)x.perAsig;
+                    valComp = valComp + (x.percent * x.perComp / 100);
                 }
             }
             catch
             {
-               
+
             }
             val = 100 - val;
             cadAsig = cadAsig + "{ label:'Yo', value:" + val.ToString().Replace(',', '.') + "}]";
 
             cadComp = cadComp.Remove(cadComp.Length - 1) + "]";
-            
-            string comp = "[{ label:'SI' , value:" + valComp.ToString().Replace(',', '.') + "},"+ "{ label: 'NO' , value: " + (100-valComp).ToString().Replace(',', '.') + "}]";
+
+            string comp = "[{ label:'SI' , value:" + valComp.ToString().Replace(',', '.') + "}," + "{ label: 'NO' , value: " + (100 - valComp).ToString().Replace(',', '.') + "}]";
 
             dic["perAsig"] = cadAsig;
             dic["perComp"] = cadComp;
             dic["comp"] = comp;
 
-            return dic;   
+            return dic;
         }
+        #endregion
 
+        /*##################################################################################################################*/
+        #region Clases auxiliares que ayudan en el funcionamiento de Project
+        //clase que tiene informacion necesaria para generar los links desde la vista
+        public ActivityInfo getInfoPrj(string[] pro)
+        {
+            ActivityInfo car = (from x in db.caracteristicas
+                                join y in db.proyectos on new { A = x.keym, B = x.id_caracteristica, C = x.id_usuario } equals new { A = y.keym, B = y.id_caracteristica, C = y.id_usuario }
 
+                                where x.keym == Convert.ToInt64(pro[0]) &&
+                                        x.id_caracteristica == Convert.ToInt64(pro[1]) &&
+                                        x.id_usuario == Convert.ToInt64(pro[2])
+                                select new ActivityInfo()
+                                {
+                                    keym = x.keym.ToString(),
+                                    id_caracteristica = x.id_caracteristica,
+                                    id_usuario = x.id_usuario,
+                                    nombre = y.nombre,
+                                    ruta_repositorio = y.id_usuarioNavigation.repositorios_usuarios.ruta_repositorio
+                                }).First();
+            return car;
+        }
+        public ActivityInfo getInfoAct(string[] pro)
+        {
+            ActivityInfo car = (from x in db.caracteristicas
+                                join y in db.actividades on new { A = x.keym, B = x.id_caracteristica, C = x.id_usuario } equals new { A = y.keym, B = y.id_caracteristica, C = y.id_usuario }
+
+                                where x.keym == Convert.ToInt64(pro[0]) &&
+                                     x.id_caracteristica == Convert.ToInt64(pro[1]) &&
+                                     x.id_usuario == Convert.ToInt64(pro[2])
+                                select new ActivityInfo()
+                                {
+                                    keym = x.keym.ToString(),
+                                    id_caracteristica = x.id_caracteristica,
+                                    id_usuario = x.id_usuario,
+                                    nombre = y.nombre,
+                                    ruta_repositorio = y.id_usuarioNavigation.repositorios_usuarios.ruta_repositorio
+                                }).First();
+            return car;
+        }
         /*##################################################################################################################*/
         //clase que tiene informacion necesaria para generar los links desde la vista
         private class datLinks
@@ -496,17 +609,26 @@ namespace MProjectWeb.Models.ModelController
             public bool? pubWeb { get; set; }
             public string nom { get; set; }
             public string rutaRep { get; set; }
-        } 
+        }
         //clase que tiene informacion necesaria para generar las graficas
         private class datPieChar
         {
-            
+
             public string label { get; set; }
             public double percent { get; set; }
             public double perAsig { get; set; }
             public double perComp { get; set; }
 
         }
-
+        //Clase ActivityInfo necesaria para mostrar los proyectos publicos
+        public class ActivityInfo
+        {
+            public string keym { get; set; }
+            public long id_caracteristica { get; set; }
+            public long id_usuario { get; set; }
+            public string nombre { get; set; }
+            public string ruta_repositorio { get; set; }
+        }
+        #endregion
     }
 }

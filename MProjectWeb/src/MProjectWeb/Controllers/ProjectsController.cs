@@ -43,77 +43,56 @@ namespace MProjectWeb.Controllers
             HttpContext.Session.SetString("op", webOptions().ToString());
             return View();
         }
+        
+        /// <summary>
+        /// Llama a la vista que muestra todos los proyectos que posee el usuario
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Projects()
         {
-            HttpContext.Session.Remove("id_prj");
+            //HttpContext.Session.Remove("id_prj");
             DBCProjects h = new DBCProjects();
             long user = Convert.ToInt64(HttpContext.Session.GetString("idUsu"));
             ViewBag.projects = h.listProjectsUsers(user);
             HttpContext.Session.SetString("infAct", "");
             return View();
         }
-
+        
+        /// <summary>
+        /// Llama a la vista que muestra todos los proyectos publicos que exista en la base de datos
+        /// </summary>
+        /// <param name="p">Contiene la informacion de la caracteristica ya sea proyecto o actividad</param>
+        /// <returns></returns>
         public IActionResult PublicProjects(string p)
         {
-            MProjectContext dbMP = new MProjectContext();
+            DBCActivities dbcAct = new DBCActivities();
             try
             {
                 string[] pro = p.Split('-');
-                //caracteristicas car = (from x in dbMP.caracteristicas
-                //                       where x.keym == Convert.ToInt64(pro[0]) &&
-                //                       x.id_usuario == Convert.ToInt64(pro[2]) &&
-                //                       x.id_caracteristica == Convert.ToInt64(pro[1])
-                //                       select x).First();
-
+              
                 try
                 {
-                    var car = (from x in dbMP.caracteristicas
-                               join y in dbMP.proyectos on new { A = x.keym, B = x.id_caracteristica, C = x.id_usuario } equals new { A = y.keym, B = y.id_caracteristica, C = y.id_usuario }
-
-                               where x.keym == Convert.ToInt64(pro[0]) &&
-                                       x.id_caracteristica == Convert.ToInt64(pro[1]) &&
-                                       x.id_usuario == Convert.ToInt64(pro[2])
-                               select new
-                               {
-                                   x.keym,
-                                   x.id_caracteristica,
-                                   x.id_usuario,
-                                   y.nombre,
-                                   y.id_usuarioNavigation.repositorios_usuarios.ruta_repositorio
-                               }).First();
-
-
+                    #region Obtiene la informacion necesaria para mostrar la pagina web basado en proyectos
+                    DBCActivities.ActivityInfo car = dbcAct.getInfoPrj(pro);
                     ViewBag.key = car.keym;
                     ViewBag.idCar = car.id_caracteristica;
                     ViewBag.idUsu = car.id_usuario;
-                    ViewBag.Pagina = car.ruta_repositorio + "Web"+ car.keym +"-"+car.id_caracteristica+"-"+car.id_usuario + ".html";//ruta 
+                    ViewBag.Pagina = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
                     //ViewBag.Pagina = car.ruta_repositorio + car.nombre.ToLower().Replace(" ", "_") + ".html";//ruta 
                     return View();
+                    #endregion
                 }
                 catch
                 {
-                    var car = (from x in dbMP.caracteristicas
-                                  join y in dbMP.actividades on new { A = x.keym, B = x.id_caracteristica, C = x.id_usuario } equals new { A = y.keym, B = y.id_caracteristica, C = y.id_usuario }
-
-                                  where x.keym == Convert.ToInt64(pro[0]) &&
-                                       x.id_caracteristica == Convert.ToInt64(pro[1]) &&
-                                       x.id_usuario == Convert.ToInt64(pro[2])
-                                  select new
-                                  {
-                                      x.keym,
-                                      x.id_caracteristica,
-                                      x.id_usuario,
-                                      y.nombre,
-                                      y.id_usuarioNavigation.repositorios_usuarios.ruta_repositorio
-                                  }).First();
-
+                    #region Obtiene la informacion necesaria para mostrar la pagina web basado en actividades
+                    DBCActivities.ActivityInfo car = dbcAct.getInfoAct(pro);
                     ViewBag.key = car.keym;
                     ViewBag.idCar = car.id_caracteristica;
                     ViewBag.idUsu = car.id_usuario;
                     ViewBag.Pagina = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
                     //ViewBag.Pagina = car.ruta_repositorio + car.nombre.Replace(" ", "_") + ".html";//ruta 
                     return View();
-
+                    #endregion
                 }
                 //ViewBag.Pagina = "http://172.16.10.248/prueba%20web/principal1.html";
             }
@@ -128,6 +107,11 @@ namespace MProjectWeb.Controllers
 
 
         //==========================================       VIEWS HELP       ===============================================//
+        /// <summary>
+        /// Llama a la vista que muestra un panel extra en donde se visualiza informacion adicional del proyecto.
+        /// El llamado se hace a travez de ajax JavaScrip
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult PanelProject()
         {
@@ -143,6 +127,10 @@ namespace MProjectWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Llama a la vista que muestra informacion extra de las actividades
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult ActMoreInfo()
         {
@@ -154,6 +142,14 @@ namespace MProjectWeb.Controllers
         }
 
         //==========================================   VISTAS SUBOPCIONES   ===============================================//
+        /// <summary>
+        /// Llama a la vista que muestra las actividades correspondientes a un proyecto o una actividad padre
+        /// </summary>
+        /// <param name="keym"></param>
+        /// <param name="idCar"></param>
+        /// <param name="usu"></param>
+        /// <param name="opt"></param>
+        /// <returns></returns>
         public IActionResult Activity(long keym, long idCar, long usu, int opt)
         {
             try
@@ -166,17 +162,25 @@ namespace MProjectWeb.Controllers
                 {
                     try
                     {
+                        #region Permite identificar si la caracteristica actual es igual al proyectto para asi no mostrar boton atras de lo contrario lo muestra
+                        //el boton atras es un boton que permite regresar o navegar hacia la caracteristica padre y mostrar sus respectivas subactividades
                         string actCarX = HttpContext.Session.GetString("actCar");
                         string actPrjX = HttpContext.Session.GetString("actPrj");
                         if (actCarX.Equals(actPrjX))
                             ViewBag.back = false;
+                        #endregion
+
+                        #region Asigna el keym, idCar y usu a sus respectivas variables independientes
                         string[] actCar = actCarX.Split('-');
                         keym = Convert.ToInt64(actCar[0]);
                         idCar = Convert.ToInt64(actCar[1]);
                         usu = Convert.ToInt64(actCar[2]);
+                        #endregion
 
+                        #region Obtiene la lista de las actividades correspondientes a la caracteristica
                         DBCActivities actx = new DBCActivities();
                         List<ActivityList> act_lstx = actx.getActivityList(keym, idCar, usu, 1);
+                        #endregion
 
                         ViewBag.idCar = act_lstx.First().parCar;
                         ViewBag.usuCar = act_lstx.First().parUsu;
@@ -192,7 +196,7 @@ namespace MProjectWeb.Controllers
                     return View();
                 }
                 #endregion
-                #region Origen Proyectos
+                #region Origen Proyectos   (  opt = 3  )
                 else if (opt == 3)
                 {
                     try
@@ -219,7 +223,7 @@ namespace MProjectWeb.Controllers
                     return View();
                 }
                 #endregion
-                #region Origen Actividades
+                #region Origen Actividades en este caso    (  opt = 1    o    opt = 2  )
                 else 
                 {
                     DBCActivities act = new DBCActivities();
@@ -246,12 +250,18 @@ namespace MProjectWeb.Controllers
                         return Content("0");
                     }
                 }
-                #endregion
+                #endregion 
             }
             catch { }
             return View();
         }
-
+       
+        /// <summary>
+        /// Llama a la vista que muestra todos los archivos publicos
+        /// </summary>
+        /// <param name="type">Corresponde al tipo de archivo que se mostrara</param>
+        /// <param name="text">Es el texto con el cual se realizara la buequeda de los archivos</param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult PublicFiles(string type,string text)
         {
@@ -303,6 +313,10 @@ namespace MProjectWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Llama a la vista que muestra los archivos correspondiente a una caracteristica perteneciente al usuario logeado
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Files()
         {
@@ -420,10 +434,17 @@ namespace MProjectWeb.Controllers
             }
             return View();
         }
+
+
         public IActionResult Georeference()
         {
             return View();
         }
+
+        /// <summary>
+        /// Llama a la vista que muestra las estadisticas correspondientes al proyecto o actividades que el usuario logeado tenga activa
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Charts()
         {
@@ -471,10 +492,14 @@ namespace MProjectWeb.Controllers
 
             return View();
         }
-       
+
 
 
         //=====================================   METODOS/FUNCIONES AUXILIARES   ==========================================//
+        /// <summary>
+        /// Realiza la consulta a un archivo JSON que posee las opciones que tendra el usuario al momento de ingresar a la plataforma
+        /// </summary>
+        /// <returns></returns>
         private JObject webOptions()
         {
             /*
@@ -486,8 +511,15 @@ namespace MProjectWeb.Controllers
             WebData wd = new WebData();
             return wd.defaultUser();
         }
+
+        /// <summary>
+        /// Obtiene los links (1 nivel) asociados a una caracteristicas segun publicacion web
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="idcar"></param>
+        /// <param name="usu"></param>
+        /// <returns></returns>
         [HttpGet]
-        //Obtiene los links (1 nivel) asociados a una caracteristicas segun publicacion web
         public List<string> getLinks(long key,long idcar,long usu)
         {
             try

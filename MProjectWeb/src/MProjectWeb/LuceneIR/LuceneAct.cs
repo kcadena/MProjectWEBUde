@@ -50,7 +50,7 @@ namespace MProjectWeb.LuceneIR
 
         public List<ScoreDoc> search(Dictionary<string, string> dat, string text, string typ, string cars,string usr)
         {
-            typ = " ( tipo:" + typ + ") ";
+            typ = " ( tipo:" + typ + ") ";//parte del query para tipo
             totSear = 0;
             bool est = true;
             try
@@ -252,6 +252,10 @@ namespace MProjectWeb.LuceneIR
             return null;
         }
 
+        /// <summary>
+        /// Obtiene todas las imagenes publicas que posean informacion georreferenciable
+        /// </summary>
+        /// <returns></returns>
         public List<ScoreDoc> publicSearchPosition()
         {
             string typ = " ( tipo:img ) ";
@@ -570,6 +574,11 @@ namespace MProjectWeb.LuceneIR
                 return false;
             }
         }
+        /// <summary>
+        /// Actualiza la informacion de un archivo
+        /// </summary>
+        /// <param name="info">Diccionario que posee toda la informacion del archivo</param>
+        /// <returns></returns>
         public bool luceneUpdate(Dictionary<string, string> info)
         {
             try

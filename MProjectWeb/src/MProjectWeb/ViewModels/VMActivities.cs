@@ -28,23 +28,5 @@ namespace MProjectWeb.ViewModels
 
     }
 
-    public class ActivityInfo
-    {
-        ulong id_act { get; set; }
-        ulong id_characteristic { get; set; }
-        string name { get; set; }
-        string description { get; set; }
-        ulong id_fol { get; set; }
-        string folder { get; set; }
-        string state { get; set; }
-        float asign_percent { get; set; }
-        float execute_percent { get; set; }
-        int time { get; set; }
-        string type_time { get; set; }
-        DateTime start_date { get; set; }
-        uint sub_act_1_lev { get; set; }
-        uint sub_act_all_lev { get; set; }
-        bool prj_prj { get; set; }
-
-    }
+   
 }

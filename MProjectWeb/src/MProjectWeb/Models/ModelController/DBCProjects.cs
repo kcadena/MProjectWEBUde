@@ -13,7 +13,11 @@ namespace MProjectWeb.Models.ModelController
         {
             db = new MProjectContext();
         }
-        //trae todos los proyectos correspondientes a un usuario
+        /// <summary>
+        /// trae todos los proyectos correspondientes a un usuario
+        /// </summary>
+        /// <param name="id_usu"></param>
+        /// <returns></returns>
         public List<ProjectsUsers> listProjectsUsers(long id_usu)
         {
             try
@@ -52,7 +56,11 @@ namespace MProjectWeb.Models.ModelController
             }
             return null;
         }
-        //trae todos los proyectos publicos existentes  y activos hasta el momento
+
+        /// <summary>
+        /// trae todos los proyectos publicos existentes  y activos hasta el momento
+        /// </summary>
+        /// <returns></returns>
         public List<ProjectsUsers> listPublicProjectsUsers()
         {
             try
@@ -94,6 +102,11 @@ namespace MProjectWeb.Models.ModelController
             return null;
         }
     }
+
+
+    /// <summary>
+    /// Clase auxiliar para el mejor manejo de los proyectos
+    /// </summary>
     public class ProjectsUsers
     {
         public long? id_pro { get; set; }

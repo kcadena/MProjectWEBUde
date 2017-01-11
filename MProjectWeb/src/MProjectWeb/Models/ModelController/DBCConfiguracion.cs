@@ -19,7 +19,10 @@ namespace MProjectWeb.Models.ModelController
             db = new MProjectContext();
         }
 
-        //Trae la ip del repositorio del servidor 
+        /// <summary>
+        /// Trae la ip del repositorio del servidor 
+        /// </summary>
+        /// <returns></returns>
         public string getIpRepoServer()
         {
             try
@@ -29,7 +32,11 @@ namespace MProjectWeb.Models.ModelController
             }
             catch { return ""; }
         }
-        //Trae la ip de la plataforma en el servidor 
+
+        /// <summary>
+        /// Trae la ip de la plataforma en el servidor 
+        /// </summary>
+        /// <returns></returns>
         public string getIpPlatServer()
         {
             try
@@ -39,7 +46,11 @@ namespace MProjectWeb.Models.ModelController
             }
             catch { return ""; }
         }
-        //Trae la ruta fisica donde se encuentran los archivos en el servidor
+
+        /// <summary>
+        /// Trae la ruta fisica donde se encuentran los archivos en el servidor
+        /// </summary>
+        /// <returns></returns>
         public string getPathServer()
         {
             try

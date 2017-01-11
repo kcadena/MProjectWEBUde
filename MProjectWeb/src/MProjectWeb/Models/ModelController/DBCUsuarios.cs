@@ -14,7 +14,11 @@ namespace MProjectWeb.Models.ModelController
             db = new MProjectContext();
         }
 
-        //Inicio de cesion del usuario => disponible: identifica si esta activo o no
+        /// <summary>
+        /// Inicio de cesion del usuario => disponible: identifica si esta activo o no
+        /// </summary>
+        /// <param name="dic"></param>
+        /// <returns></returns>
         public usuarios loginUsuario(Dictionary<string, string> dic)
         {
             try
@@ -30,7 +34,11 @@ namespace MProjectWeb.Models.ModelController
             }
         }
 
-        //Trae el usuario espesificado con su ID
+        /// <summary>
+        /// Obtine el usuario espesificado segun su ID en la clase ViewModels/Usuarios 
+        /// </summary>
+        /// <param name="idUsu"></param>
+        /// <returns></returns>
         public ViewModels.usuarios getUser(long idUsu)
         {
             try
@@ -59,7 +67,11 @@ namespace MProjectWeb.Models.ModelController
             }
         }
 
-        //Actualizar ingformacion del usuario
+        /// <summary>
+        /// Actualiza informacion del usuario
+        /// </summary>
+        /// <param name="usu"></param>
+        /// <returns></returns>
         public bool updateUserData(usuarios usu)
         {
             try
@@ -83,7 +95,10 @@ namespace MProjectWeb.Models.ModelController
             }
         }
 
-        //Otiene el id del usuario libre para luego ser asignado al siguiente
+        /// <summary>
+        /// Otiene el id del usuario libre para luego ser asignado al siguiente
+        /// </summary>
+        /// <returns></returns>
         public long getFreeIdUser()
         {
             try
@@ -96,7 +111,12 @@ namespace MProjectWeb.Models.ModelController
                 return 1;
             }
         }
-        //registrar usuario
+       
+        /// <summary>
+        /// Realiza el registro del usuario
+        /// </summary>
+        /// <param name="usu">Clase Usuarios del modelo segun la base de datos Postgres</param>
+        /// <returns></returns>
         public long regUser(usuarios usu)
         {
             try
@@ -131,7 +151,11 @@ namespace MProjectWeb.Models.ModelController
             }
         }
 
-        //Activa el registro hecho por el usuario => necesario para poder ingresar a la plataforma
+        /// <summary>
+        /// Activa el registro hecho por el usuario => necesario para poder ingresar a la plataforma
+        /// </summary>
+        /// <param name="id">ID del usuario</param>
+        /// <returns></returns>
         public usuarios userActivate(long id)
         {
             try
@@ -144,7 +168,11 @@ namespace MProjectWeb.Models.ModelController
             catch { return null; }
         }
 
-        //Genera y asigna nueva clave al usuario 
+        /// <summary>
+        /// Genera y asigna nueva clave al usuario 
+        /// </summary>
+        /// <param name="email">Correo electronico del usuario</param>
+        /// <returns></returns>
         public string forgetPassword(string email)
         {
             try
@@ -161,7 +189,11 @@ namespace MProjectWeb.Models.ModelController
             }
         }
 
-        //Verifica que el correo electronico no este repido
+        /// <summary>
+        /// Verifica que el correo electronico no este repido
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public bool verifyEmail(string email)
         {
             try
@@ -177,7 +209,11 @@ namespace MProjectWeb.Models.ModelController
                 return false;
             }
         }
-        //crea clave aleatoria
+        
+        /// <summary>
+        /// crea clave aleatoria
+        /// </summary>
+        /// <returns></returns>
         private string newRandomPassword()
         {
             Random obj = new Random();
@@ -193,5 +229,7 @@ namespace MProjectWeb.Models.ModelController
             }
             return newCad;
         }
+
+       
     }
 }

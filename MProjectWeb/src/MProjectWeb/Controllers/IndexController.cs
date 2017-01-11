@@ -13,13 +13,10 @@ namespace MProjectWeb.Controllers
 {
     public class IndexController : Controller
     {
-        // GET: /<controller>/
         public IActionResult Index()
         {
             //MProjectDeskSQLITEContext dbMP = new MProjectDeskSQLITEContext();
-
             ViewBag.errLogin = false;
-
             try
             {
                 bool st = (bool)TempData["err"];
@@ -35,7 +32,6 @@ namespace MProjectWeb.Controllers
 
 
             ViewData["Title"] = "Mproject";
-
            
             //if (project==1)
             //    ViewBag.Pagina = "http://localhost:60395/prueba%20web/principal1.html";
@@ -49,7 +45,11 @@ namespace MProjectWeb.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Index","Index");
         }
-
+        /// <summary>
+        /// Consigue todos los links de todos los proyectos y actividades
+        /// </summary>
+        /// <param name="cad"></param>
+        /// <returns></returns>
         public IActionResult Links(string cad)
         {
             bool st = false;
@@ -77,13 +77,14 @@ namespace MProjectWeb.Controllers
             return View();
         }
 
-        //Obtiene todos los links que existen en la base de datos
+        /// <summary>
+        /// Obtiene todos los links que existen en la base de datos
+        /// </summary>
+        /// <returns></returns>
         public List<string> getAllLinks()
         {
             try
             {
-               
-
                 DBCActivities act = new DBCActivities();
                 List<string> lst = act.getAllLinks();
                 return lst;

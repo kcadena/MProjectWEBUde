@@ -14,7 +14,10 @@ namespace MProjectWeb.Models.ModelController
         {
             db = new MProjectContext();
         }
-        //actualizar informacion georreferenciable
+        /// <summary>
+        /// actualizar informacion georreferenciable
+        /// </summary>
+        /// <param name="dat"></param>
         public void updatePointGEO(Dictionary<string, string> dat)
         {
 
