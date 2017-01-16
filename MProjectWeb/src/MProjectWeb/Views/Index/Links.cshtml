@@ -2,70 +2,173 @@
     Layout = null;
 }
 
-    <div id="loadInfo" style="position:relative;width:80%;margin-left:10%">
-        <h1>
-            Links
-        </h1>
+<script src="~/lib/bootstrap-treeview/dist/bootstrap-treeview.min.js"></script>
 
-        <table class="table table-striped">
-            @{
-                try
-                {
-                    List<string> lst = ViewBag.lst;
-                    List<string> par = new List<string>();
-                    par.Add(lst.ElementAt(0).Split('-')[1]);
+<div id="tree"></div>
 
-                    foreach (var x in lst)
+<script>
+
+    //var x='@ViewBag.json';
+    var s=@Html.Raw(ViewBag.json);
+
+    
+    var  tr=[
+  {
+      text: "PRUEBA WEB",
+      href: "http://localhost:20539/Projects/publicprojects?p=100-1-1",
+      nodes: [
+        {
+            text: "A",
+            enableLinks: false
+        },
+        {
+            text: "B",
+            enableLinks: false,
+            nodes: [
+              {
+                  text: "B1",
+                  enableLinks: false
+              },
+              {
+                  text: "B4 Ub",
+                  enableLinks: false
+              },
+              {
+                  text: "B2",
+                  enableLinks: false,
+                  nodes: [
                     {
-                        string[] cad = x.Split('-');
-                        int n = Convert.ToInt32(cad[5]);
-                        //hay 2 formas: 1=>a traves de public projects y 2=> link directo
-                        string src = ViewBag.ipPlatServer + "Projects/publicprojects?p=" + cad[1].Replace(',', '-');
-                        //string src = cad[4].Replace(',', '-');
-
-                        <tr>
-                            
-                                @{
-                                    if (cad[0].Equals("Y"))
-                                    {
-                                        try
-                                        {
-                                            string ax = ViewBag.ids;
-                                            if (ax.Equals(cad[1].Replace(',','-')))
-                                            {
-                                                <td style="background-color:#ff6a00;">
-                                                    <a href="@src" style="color:white;margin-left:calc( @n * 50px )">@cad[3]</a>
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td>
-                                                    <a href="@src" style="margin-left:calc( @n * 50px )">@cad[3]</a>
-                                                </td>
-                                            }
-
-                                        }
-                                        catch
-                                        {
-                                            <td>
-                                                <a href="@src" style="margin-left:calc( @n * 50px )">@cad[3]</a>
-                                            </td>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <td>
-                                            <p style="margin-left:calc( @n * 50px )">@cad[3]</p>
-                                        </td>
-                                    }
-                                }
-                                
-                            
-                        </tr>
-
+                        text: "B2.1",
+                        enableLinks: false
+                    },
+                    {
+                        text: "B2.A  Ub",
+                        enableLinks: false
+                    },
+                    {
+                        text: "B2.2",
+                        enableLinks: false,
+                        //selectable: false,
+                        state: {
+                            enableLink: false,
+                            //checked: true,
+                            //disabled: true,
+                            expanded: true,
+                            selected: true
+                        },
+                        nodes: [
+                          {
+                              text: "B2.2.A",
+                              enableLinks: false
+                          },
+                          {
+                              text: "B2.2.B",
+                              enableLinks: false
+                          },
+                          {
+                              text: "B2.2.C",
+                              enableLinks: false
+                          }
+                        ]
+                    },
+                    {
+                        text: "B2.3",
+                        enableLinks: false
                     }
-                }
-                catch { }
+                  ]
+              },
+              {
+                  text: "B3",
+                  enableLinks: false
+              }
+            ]
+        },
+        {
+            text: "C",
+            enableLinks: false
+        }
+      ]
+  },
+  {
+      text: "MProject Software de apoyo a la gestion de proyectos en la facultad de ingenieria de la Universidad de Nariño",
+      enableLinks: false,
+      nodes: [
+        {
+            text: "INTRODUCCIÓN",
+            href: "http://localhost:20539/Projects/publicprojects?p=100-18-3",
+            color: "#183691",
+            enableLinks: true,
+        },
+        {
+            text: "PRESENTACION DEL PROYECTO",
+            backColor: "#00FFFF",
+            //selectable: false,
+            state: {
+                enableLink: false,
+                //checked: true,
+                //disabled: true,
+                //expanded: true,
+                selected: true
             }
-        </table>
-    </div>
+        },
+        {
+            text: "MARCO TEÓRICO",
+            enableLink: false
+          
+        },
+        {
+            text: "METODOLOGIA",
+            enableLinks: false
+        },
+        {
+            text: "CONCLUCIONES",
+            enableLinks: false
+        },
+        {
+            text: "RECOMENDACIONES",
+            href: "http://localhost:20539/Projects/publicprojects?p=100-23-3",
+            color: "#183691"
+        },
+        {
+            text: "ANEXOS",
+            enableLinks: false
+        }
+      ]
+  }
+    ];
+
+    var state=true;
+    
+    $('#tree').treeview({
+        data: s,         // data is not optional
+        enableLinks:true,
+    }).click(function(e){
+        state=true;
+       
+    });
+    
+  
+    $(".list-group-item a").click(function (e) {
+        var cad = this + "";
+        var n = cad[cad.length - 1];
+        alert(n);
+        if (n == '#') {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        state = false;
+    });
+
+    $("#tree ul li").click(function (e) {
+        alert("OKI");
+        e.preventDefault();
+        if (state) {
+            e.stopPropagation();
+            state = false;
+        }
+    });
+    
+</script>
+
+<h1>Hope</h1>
+

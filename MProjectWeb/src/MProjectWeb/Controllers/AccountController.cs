@@ -198,6 +198,7 @@ namespace MProjectWeb.Controllers
             #endregion
         }
 
+
         /// <summary>
         /// permite activar el usuario despues de haberse logeado => este es llamado desde el correo
         /// </summary>
@@ -386,9 +387,10 @@ namespace MProjectWeb.Controllers
         /// <param name="subject"></param>
         private void sendEmail(string email, string content, string subject)
         {
-            SmtpClient SmtpServer = new SmtpClient("smtp.live.com");
+            SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+            //SmtpClient SmtpServer = new SmtpClient("smtp.live.com");
             var mail = new MailMessage();
-            mail.From = new MailAddress("aslan310593@hotmail.com");//correo de Mproject
+            mail.From = new MailAddress("mprojectudenar@gmail.com");//correo de Mproject
             mail.To.Add(email);//agrega el correo destinatario
             mail.Subject = subject;//asunto del mensaje
             mail.IsBodyHtml = true;
@@ -397,7 +399,7 @@ namespace MProjectWeb.Controllers
             mail.Body = htmlBody;
             SmtpServer.Port = 587;
             SmtpServer.UseDefaultCredentials = false;
-            SmtpServer.Credentials = new System.Net.NetworkCredential("aslan310593@hotmail.com", "310593LIVE");//correo electronico de MProject con pass
+            SmtpServer.Credentials = new System.Net.NetworkCredential("mprojectudenar@gmail.com", "mproject2017");//correo electronico de MProject con pass
             SmtpServer.EnableSsl = true;
             SmtpServer.Send(mail);
         }

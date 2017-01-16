@@ -8,9 +8,9 @@ namespace MProjectWeb.Models.Postgres
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             //local
-            //options.UseNpgsql(@"PORT=5432;TIMEOUT=15;POOLING=True;MINPOOLSIZE=1;MAXPOOLSIZE=20;COMMANDTIMEOUT=20;PASSWORD=123;USERID=postgres;HOST=localhost;DATABASE=MProjectPru");
+            options.UseNpgsql(@"PORT=5432;TIMEOUT=15;POOLING=True;MINPOOLSIZE=1;MAXPOOLSIZE=20;COMMANDTIMEOUT=20;PASSWORD=123;USERID=postgres;HOST=localhost;DATABASE=MProjectPru");
             //server
-            options.UseNpgsql(@"PORT=5432;TIMEOUT=15;POOLING=True;MINPOOLSIZE=1;MAXPOOLSIZE=20;COMMANDTIMEOUT=20;PASSWORD=NJpost2016;USERID=postgres;HOST=190.254.4.6;DATABASE=MProjectPru");
+            //options.UseNpgsql(@"PORT=5432;TIMEOUT=15;POOLING=True;MINPOOLSIZE=1;MAXPOOLSIZE=20;COMMANDTIMEOUT=20;PASSWORD=NJpost2016;USERID=postgres;HOST=190.254.4.6;DATABASE=MProjectPru");
         
         }
 

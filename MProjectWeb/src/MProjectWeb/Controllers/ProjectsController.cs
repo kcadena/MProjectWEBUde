@@ -65,44 +65,49 @@ namespace MProjectWeb.Controllers
         /// <returns></returns>
         public IActionResult PublicProjects(string p)
         {
-            DBCActivities dbcAct = new DBCActivities();
-            try
+            string carAct = HttpContext.Session.GetString("infAct");
+            if (carAct != p)
             {
-                string[] pro = p.Split('-');
-              
+                DBCActivities dbcAct = new DBCActivities();
                 try
                 {
-                    #region Obtiene la informacion necesaria para mostrar la pagina web basado en proyectos
-                    DBCActivities.ActivityInfo car = dbcAct.getInfoPrj(pro);
-                    ViewBag.key = car.keym;
-                    ViewBag.idCar = car.id_caracteristica;
-                    ViewBag.idUsu = car.id_usuario;
-                    ViewBag.Pagina = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
-                    //ViewBag.Pagina = car.ruta_repositorio + car.nombre.ToLower().Replace(" ", "_") + ".html";//ruta 
-                    return View();
-                    #endregion
+                    string[] pro = p.Split('-');
+
+                    try
+                    {
+                        #region Obtiene la informacion necesaria para mostrar la pagina web basado en proyectos
+                        DBCActivities.ActivityInfo car = dbcAct.getInfoPrj(pro);
+                        ViewBag.key = car.keym;
+                        ViewBag.idCar = car.id_caracteristica;
+                        ViewBag.idUsu = car.id_usuario;
+                        ViewBag.Pagina = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
+                                                                                                                                                //ViewBag.Pagina = car.ruta_repositorio + car.nombre.ToLower().Replace(" ", "_") + ".html";//ruta 
+                        return View();
+                        #endregion
+                    }
+                    catch
+                    {
+                        #region Obtiene la informacion necesaria para mostrar la pagina web basado en actividades
+                        DBCActivities.ActivityInfo car = dbcAct.getInfoAct(pro);
+                        ViewBag.key = car.keym;
+                        ViewBag.idCar = car.id_caracteristica;
+                        ViewBag.idUsu = car.id_usuario;
+                        ViewBag.Pagina = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
+                                                                                                                                                //ViewBag.Pagina = car.ruta_repositorio + car.nombre.Replace(" ", "_") + ".html";//ruta 
+                        return View();
+                        #endregion
+                    }
+                    //ViewBag.Pagina = "http://172.16.10.248/prueba%20web/principal1.html";
                 }
                 catch
                 {
-                    #region Obtiene la informacion necesaria para mostrar la pagina web basado en actividades
-                    DBCActivities.ActivityInfo car = dbcAct.getInfoAct(pro);
-                    ViewBag.key = car.keym;
-                    ViewBag.idCar = car.id_caracteristica;
-                    ViewBag.idUsu = car.id_usuario;
-                    ViewBag.Pagina = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
-                    //ViewBag.Pagina = car.ruta_repositorio + car.nombre.Replace(" ", "_") + ".html";//ruta 
-                    return View();
-                    #endregion
-                }
-                //ViewBag.Pagina = "http://172.16.10.248/prueba%20web/principal1.html";
-            }
-            catch
-            {
 
+                }
+                DBCProjects h = new DBCProjects();
+                ViewBag.projects = h.listPublicProjectsUsers();
+                return View();
             }
-            DBCProjects h = new DBCProjects();
-            ViewBag.projects = h.listPublicProjectsUsers();
-            return View();
+            return null;
         }
 
 
