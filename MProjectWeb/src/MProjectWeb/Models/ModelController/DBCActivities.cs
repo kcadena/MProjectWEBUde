@@ -60,7 +60,7 @@ namespace MProjectWeb.Models.ModelController
         /// <param name="idUsu">ID del Usuario</param>
         /// <param name="op">Opcion 1=> Abre carpeta de actividades   2=> boton Atras    </param>
         /// <returns></returns>
-        public List<ActivityList> getActivityList(long keym, long idCar, long idUsu, int op)
+        public List<ActivityList> getActivityList(long keym, long idCar, long idUsu, int op,long usuAct)
         {
             //op opcion  1=>actividades  2=>back
             try
@@ -68,7 +68,7 @@ namespace MProjectWeb.Models.ModelController
                 #region Realiza la busqueda de las actividades ya sean de caracteristica de proyecto o ingresar en una actividades
                 if (op == 1)
                 {
-                    List<ActivityList> dat = search(idCar, idUsu, keym);
+                    List<ActivityList> dat = search(idCar, idUsu, keym,usuAct);
                     return dat;
                 }
                 #endregion
@@ -81,7 +81,7 @@ namespace MProjectWeb.Models.ModelController
                         x.id_usuario == idUsu
                     //p//x.usuario_asignado == idUsu
                     ).First();
-                    List<ActivityList> dat = search((long)idPar.id_caracteristica_padre, (long)idPar.id_usuario_padre, (long)idPar.keym_padre);
+                    List<ActivityList> dat = search((long)idPar.id_caracteristica_padre, (long)idPar.id_usuario_padre, (long)idPar.keym_padre,usuAct);
                     return dat;
                 }
                 #endregion
@@ -100,7 +100,7 @@ namespace MProjectWeb.Models.ModelController
         /// <param name="idUsu"></param>
         /// <param name="keym"></param>
         /// <returns></returns>
-        private List<ActivityList> search(long idCar, long idUsu, long keym)
+        private List<ActivityList> search(long idCar, long idUsu, long keym,long usuAct)
         {
             try
             {
@@ -110,7 +110,21 @@ namespace MProjectWeb.Models.ModelController
                     y.caracteristicas.id_caracteristica_padre == idCar &&
                     y.caracteristicas.keym_padre == keym &&
                     y.caracteristicas.id_usuario_padre == idUsu
-                //&& y.caracteristicas.visualizar_superior == false
+                    && (
+                    
+                    (
+                    y.caracteristicas.id_usuario == usuAct ||
+                    y.caracteristicas.usuario_asignado == usuAct
+                    )
+                    
+                    ||
+                    
+                    (
+                    y.caracteristicas.id_usuario != usuAct
+                    && y.caracteristicas.visualizar_superior == true
+                    )
+                    
+                    )
                 ).OrderBy(x => x.pos).Select(x => new ActivityList()
                 {
                     keym = x.caracteristicas.keym.ToString(),

@@ -137,36 +137,16 @@
   }
     ];
 
+    tr ='[{"text":"Prueba","href":"http://190.254.4.6:94/Projects/publicprojects?p=100-1-3","nodes":[{"text":"Actividad"},{"text":"Actividad 2"}]},{"text":"Facultad de Ingenieria","nodes":[{"text":"Programas","nodes":[{"text":"Ingenieria Electronica","nodes":[{"text":"Comite Curricular"},{"text":"Comite de Prueba"},{"text":"Secretaria del Programa","nodes":[{"text":"Secretaria espacial"}]}]},{"text":"Ingenieria Civil"},{"text":"Ingenieria de Sistemas","nodes":[{"text":"Comite Curricular"},{"text":"Secretaria de Programa"},{"text":"Direccion del programa"}]}]},{"text":"Concejo de la Facultad"},{"text":"Decanatura"},{"text":"Centro de Investigacion"},{"text":"Unidad Postgrados","nodes":[{"text":"Comite de postgrados"}]}]},{"text":"Prueba de Interfaces","nodes":[{"text":"Prueba Actividad"},{"text":"A2","href":"http://190.254.4.6:94/Projects/publicprojects?p=110-3-2","color":"#183691","nodes":[{"text":"A2.1","href":"http://190.254.4.6:94/Projects/publicprojects?p=110-4-2","color":"#183691"}]}]}]';
+
     var state=true;
-    
+    //alert(JSON.stringify(s));
     $('#tree').treeview({
         data: s,         // data is not optional
-        enableLinks:true,
-    }).click(function(e){
-        state=true;
-       
+        enableLinks:true
     });
     
   
-    $(".list-group-item a").click(function (e) {
-        var cad = this + "";
-        var n = cad[cad.length - 1];
-        alert(n);
-        if (n == '#') {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        state = false;
-    });
-
-    $("#tree ul li").click(function (e) {
-        alert("OKI");
-        e.preventDefault();
-        if (state) {
-            e.stopPropagation();
-            state = false;
-        }
-    });
     
 </script>
 

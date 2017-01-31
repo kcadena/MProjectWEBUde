@@ -159,6 +159,7 @@ namespace MProjectWeb.Controllers
         {
             try
             {
+                long usuAct = Convert.ToInt64(HttpContext.Session.GetString("idUsu"));
                 ViewBag.usuAct = Convert.ToInt64(HttpContext.Session.GetString("idUsu"));
                 ViewBag.back = true;
                 ViewBag.st = true;
@@ -184,7 +185,8 @@ namespace MProjectWeb.Controllers
 
                         #region Obtiene la lista de las actividades correspondientes a la caracteristica
                         DBCActivities actx = new DBCActivities();
-                        List<ActivityList> act_lstx = actx.getActivityList(keym, idCar, usu, 1);
+                        
+                        List<ActivityList> act_lstx = actx.getActivityList(keym, idCar, usu, 1,usuAct);
                         #endregion
 
                         ViewBag.idCar = act_lstx.First().parCar;
@@ -212,7 +214,7 @@ namespace MProjectWeb.Controllers
                         HttpContext.Session.SetString("actPrj", actCar);
 
                         DBCActivities actx = new DBCActivities();
-                        List<ActivityList> act_lstx = actx.getActivityList(keym, idCar, usu, 1);
+                        List<ActivityList> act_lstx = actx.getActivityList(keym, idCar, usu, 1,usuAct);
 
                         ViewBag.idCar = act_lstx.First().parCar;
                         ViewBag.usuCar = act_lstx.First().parUsu;
@@ -232,7 +234,8 @@ namespace MProjectWeb.Controllers
                 else 
                 {
                     DBCActivities act = new DBCActivities();
-                    List<ActivityList> act_lst = act.getActivityList(keym,idCar, usu, opt);
+                    
+                    List<ActivityList> act_lst = act.getActivityList(keym,idCar, usu, opt,usuAct);
                     ViewBag.act_lst = act_lst;
                     try
                     {

@@ -130,13 +130,22 @@ namespace MProjectWeb.Controllers
                     string srcSta= lst[i].Split('-')[0];
                     #endregion
 
+                    if (text.Equals("A2.1"))
+                    {
+                        string sd="";
+                    }
+
                     try
                     {
                         nx = Convert.ToInt32(lst[i + 1].Split('-')[5]);
                     }
                     catch
                     {
-                        json = json + "," + getInfNode(text, src, srcSta) + "}";
+                        char c = json.Last();
+                        if (c != '[')
+                            json = json + ",";
+
+                        json = json + getInfNode(text, src, srcSta) + "}";
                         for (int x = 0; x < n; x++)
                         {
                             json = json + "]}";
@@ -184,6 +193,8 @@ namespace MProjectWeb.Controllers
         {
             string cad = "";
             cad = "{text: \"" + text + "\" , selectable: false, highlightSelected:false, multiSelect:false ";
+            string act = HttpContext.Session.GetString("infAct");
+           
             if (srcSta.Equals("Y"))
             {
                 cad = cad + ", href:\"" + src + "\" , color: \"#183691\" ";

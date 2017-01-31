@@ -65,9 +65,9 @@
 window.addEventListener('popstate', function (e) {
     // e.state is equal to the data-attribute of the last image we clicked
     
-    alert(e.CAPTURING_PHASE);
-    alert(e.currentTarget);
-    alert(e.returnValue);
+    //alert(e.CAPTURING_PHASE);
+    //alert(e.currentTarget);
+    //alert(e.returnValue);
 
     var src = e.state;
     var dat = src.split("=");
