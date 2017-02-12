@@ -70,7 +70,7 @@
         {
             if (ax_lst_prj != null)
             {
-                var lst_prj = ax_lst_prj.GroupBy(u => new { u.id_pro, u.id_usu }).ToList();
+                var lst_prj = ax_lst_prj.ToList();
                 foreach (var x in lst_prj)
                 {
                     <div class="col-lg-4 col-md-6">
@@ -79,15 +79,12 @@
                                 <div class="row">
                                     <!--    ---------------------------------   Datos plantilla  --------------------------------                -->
                                     @{long dat = -1; }
-                                    @foreach (var z in x)
-                                    {
-                                        dat = (long)z.id_car;
-                                        <div class="row" style="margin-left:10px">@z.desc : @z.valor</div>
-                                    }
+                                  
+                                        <div class="row" style="margin-left:10px">@x.desc : @x.valor</div>
                                     <div class="hidden" id="dat_@dat">@dat</div>
                                 </div>
                             </div>
-                            <a id="prj_@x.First().keym-@x.First().id_car-@x.First().id_usu">
+                            <a id="prj_@x.keym-@x.id_car-@x.id_usu">
                                 <div class="panel-footer prj_op">
                                     <span class="pull-left">View Details</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

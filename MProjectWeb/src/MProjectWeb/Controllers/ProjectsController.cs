@@ -23,6 +23,8 @@ using MProjectWeb.Models.Postgres;
 using Microsoft.AspNet.Cors;
 
 
+
+
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MProjectWeb.Controllers
@@ -107,7 +109,7 @@ namespace MProjectWeb.Controllers
                 ViewBag.projects = h.listPublicProjectsUsers();
                 return View();
             }
-            return null;
+            return View();
         }
 
 
@@ -501,7 +503,67 @@ namespace MProjectWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Llama a la vista que muestra el Reporte correspondiente al proyecto o actividades que el usuario logeado tenga activa
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Reports()
+        {
+            return View();
+        }
 
+        /// <summary>
+        /// Llama a la vista que muestra los recursos financieros correspondientes al proyecto o actividades que el usuario logeado tenga activa
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Financial()
+        {
+            try
+            {
+                #region Variables locales referentes a la asignacion de la caracteristica actual del proyecto o actividad
+                //Creacion de variables locales
+                long keym;
+                long idCar;
+                long idUsu;
+
+                //Cad se le asigna el valor de la caracteristica actual proveniente de una variable local
+                string[] cad = null;
+                try
+                {
+                    cad = HttpContext.Session.GetString("actCar").Split('-');
+                }
+                catch { }
+
+                //Asignacion de valores correspondientes a las variables
+                keym = Convert.ToInt64(cad[0]);
+                idCar = Convert.ToInt64(cad[1]);
+                idUsu = Convert.ToInt64(cad[2]);
+
+                ViewBag.keym = keym;
+                ViewBag.idCar = idCar;
+                ViewBag.idUsu = idUsu;
+
+                #endregion
+
+
+
+            }
+            catch (Exception err)
+            {
+                ViewBag.st = false;
+            }
+            
+            return View();
+        }
+
+        /// <summary>
+        /// Llama a la vista que muestra el inventario correspondiente al proyecto o actividades que el usuario logeado tenga activa
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Inventory()
+        {
+            return View();
+        }
 
         //=====================================   METODOS/FUNCIONES AUXILIARES   ==========================================//
         /// <summary>

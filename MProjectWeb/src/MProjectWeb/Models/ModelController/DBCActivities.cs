@@ -215,7 +215,7 @@ namespace MProjectWeb.Models.ModelController
                             //p//string rutaPadre = carPar.ruta_repositorio + carPar.nombre + ".html";
                             string rutaPadre = carPar.ruta_repositorio + "Web" + idPadre + ".html";
 
-                            llink.Add(idPadre + "-" + "Atras" + "-" + rutaPadre);
+                            llink.Add(idPadre + "|" + "Atras" + "|" + rutaPadre);
                             st = false;
 
                         }
@@ -259,7 +259,7 @@ namespace MProjectWeb.Models.ModelController
                         //p//string rutaPadre = carPar.ruta_repositorio + carPar.nombre + ".html";
                         string rutaPadre = carPar.ruta_repositorio + "Web" + idPadre + ".html";
 
-                        llink.Add(idPadre + "-" + "Atras" + "-" + rutaPadre);
+                        llink.Add(idPadre + "|" + "Atras" + "|" + rutaPadre);
                     }
                     catch
                     {
@@ -328,7 +328,7 @@ namespace MProjectWeb.Models.ModelController
                                 //p//string ruta = x.repositorios_usuarios.ruta_repositorio + x.nombre + ".html";
                                 string ruta = x.repositorios_usuarios.ruta_repositorio + "Web" + id + ".html";
 
-                                llink.Add(id + "-" + nombre + "-" + ruta);
+                                llink.Add(id + "|" + nombre + "|" + ruta);
                             }
                             catch
                             {
@@ -394,7 +394,7 @@ namespace MProjectWeb.Models.ModelController
                     string rutaPadre = x.rutaRep + "Web" + id + ".html";
                     //p//string rutaPadre = x.rutaRep + x.nom + ".html";
 
-                    allLink.Add(pubWeb + "-" + id + "-" + idPar + "-" + nombre + "-" + rutaPadre + "-" + pos);
+                    allLink.Add(pubWeb + "|" + id + "|" + idPar + "|" + nombre + "|" + rutaPadre + "|" + pos);
                     getAllLinksRecursive(x.car);
                 }
 
@@ -462,7 +462,7 @@ namespace MProjectWeb.Models.ModelController
                             string ruta = x.repoUsu.ruta_repositorio + "Web" + id + ".html";
                             //p//string ruta = x.repoUsu.ruta_repositorio + x.nom + ".html";
 
-                            allLink.Add(pubWeb + "-" + id + "-" + idPar + "-" + nombre + "-" + ruta + "-" + pos);
+                            allLink.Add(pubWeb + "|" + id + "|" + idPar + "|" + nombre + "|" + ruta + "|" + pos);
                             getAllLinksRecursive(x.car);
                         }
                         catch

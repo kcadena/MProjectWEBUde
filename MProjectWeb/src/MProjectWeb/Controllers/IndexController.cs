@@ -100,85 +100,93 @@ namespace MProjectWeb.Controllers
             string src = "#";
             try
             {
-                src = conf.getIpPlatServer() + "Projects/publicprojects?p=" + lst.First().Split('-')[1].Replace(',', '-');
+                src = conf.getIpPlatServer() + "Projects/publicprojects?p=" + lst.First().Split('|')[1].Replace(',', '-');
             }
             catch { }
             //string json = "[{text: \"" + lst.First().Split('-')[3]+"\" , href:\""+@src+ "\", backColor: \"#ff0000\" }]";
 
             if (lst.Count == 1)
             {
-                json = "[{text: \"" + lst.First().Split('-')[3] + "\" , href:\"" + src + "\" }]";
+                json = "[{text: \"" + lst.First().Split('|')[3] + "\" , href:\"" + src + "\" }]";
             }
             if (lst.Count > 1)
             {
-                json = "[{text: \"" + lst.First().Split('-')[3] + "\" , href:\"" + src + "\"";
+                json = "[{text: \"" + lst.First().Split('|')[3] + "\" , href:\"" + src + "\"";
 
-                if (Convert.ToInt32(lst[0].Split('-')[5]) < Convert.ToInt32(lst[1].Split('-')[5]))
+                if (Convert.ToInt32(lst[0].Split('|')[5]) < Convert.ToInt32(lst[1].Split('|')[5]))
                     json = json + ",nodes:[";
                 else
                     json = json + "}";
 
 
-                for (int i = 1; i < lst.Count; i++)
+                try
                 {
-                    #region Variables de la caracteristica
-                    string[] xcad = lst[i].Split('-');
-
-                    int n = Convert.ToInt32(xcad[5]), nx = -1;
-                    src = conf.getIpPlatServer() + "Projects/publicprojects?p=" + xcad[1].Replace(',', '-');
-                    string text = lst[i].Split('-')[3];
-                    string srcSta= lst[i].Split('-')[0];
-                    #endregion
-
-                    if (text.Equals("A2.1"))
+                    for (int i = 1; i < lst.Count; i++)
                     {
-                        string sd="";
-                    }
-
-                    try
-                    {
-                        nx = Convert.ToInt32(lst[i + 1].Split('-')[5]);
-                    }
-                    catch
-                    {
-                        char c = json.Last();
-                        if (c != '[')
-                            json = json + ",";
-
-                        json = json + getInfNode(text, src, srcSta) + "}";
-                        for (int x = 0; x < n; x++)
+                        if (i == 41)
                         {
-                            json = json + "]}";
+                            int f = 0;
                         }
-                        json = json += "]";
-                    }
-                    if (nx >= 0)
-                    {
-                        int df = n - nx;
-                        char c = json.Last();
+                        #region Variables de la caracteristica
+                        string[] xcad = lst[i].Split('|');
 
-                        if (c != '[')
-                            json = json + ",";
+                        int n = Convert.ToInt32(xcad[5]), nx = -1;
+                        src = conf.getIpPlatServer() + "Projects/publicprojects?p=" + xcad[1].Replace(',', '-');
+                        string text = lst[i].Split('|')[3];
+                        string srcSta = lst[i].Split('|')[0];
+                        #endregion
 
-                        json = json + getInfNode(text, src, srcSta); 
-
-                        if (n < nx)
-                            json = json + ", nodes:[";
-                        else if (n == nx)
-                            json = json + "}";
-                        else if (n > nx)
+                        if (text.Equals("A2.1"))
                         {
-                            json = json + "}";
-                            if (df > 0)
+                            string sd = "";
+                        }
+
+                        try
+                        {
+                            nx = Convert.ToInt32(lst[i + 1].Split('|')[5]);
+                        }
+                        catch
+                        {
+                            char c = json.Last();
+                            if (c != '[')
+                                json = json + ",";
+
+                            json = json + getInfNode(text, src, srcSta) + "}";
+                            for (int x = 0; x < n; x++)
                             {
-                                for (int x = 0; x < df; x++)
+                                json = json + "]}";
+                            }
+                            json = json += "]";
+                        }
+                        if (nx >= 0)
+                        {
+                            int df = n - nx;
+                            char c = json.Last();
+
+                            if (c != '[')
+                                json = json + ",";
+
+                            json = json + getInfNode(text, src, srcSta);
+
+                            if (n < nx)
+                                json = json + ", nodes:[";
+                            else if (n == nx)
+                                json = json + "}";
+                            else if (n > nx)
+                            {
+                                json = json + "}";
+                                if (df > 0)
                                 {
-                                    json = json + "]}";
+                                    for (int x = 0; x < df; x++)
+                                    {
+                                        json = json + "]}";
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                catch { }
             }
             return json;
         }

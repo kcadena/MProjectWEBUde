@@ -42,9 +42,24 @@
 
                 },
                 {
-                    "name": "Graficos",
+                    "name": "Estadisticas",
                     "controller": "Projects",
                     "action": "Charts"
+                },
+                {
+                    "name": "Reporte",
+                    "controller": "Projects",
+                    "action": "Reports"
+                },
+                {
+                    "name": "Recursos Financieros",
+                    "controller": "Projects",
+                    "action": "financial"
+                },
+                {
+                    "name": "Inventario",
+                    "controller": "Projects",
+                    "action": "Inventory"
                 }
             ]
         }
