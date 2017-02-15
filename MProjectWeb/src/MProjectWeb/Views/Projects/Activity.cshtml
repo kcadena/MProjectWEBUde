@@ -41,147 +41,163 @@
     }
     else
     {
-        <div class="row">
+        <div >
             @{
                 long sd = -1;
-        List<ActivityList> act_lst = ViewBag.act_lst;
-
-                foreach (var x in act_lst)
+                List<ActivityList> act_lst = ViewBag.act_lst;
+                int nx=0;
+                while (nx < act_lst.Count)
                 {
-                    if (x.folder == 0)
-                    {
-                        <div class="col-lg-4 col-md-6">
-                            <div class="panel pan-fol">
-                                @{
-                                    long usuAct = Convert.ToInt64(ViewBag.usuAct);
-                                    long usuCar = x.usuCar;
-                                    if (usuCar ==  usuAct)
+                    <div class="row row-act">
+                        @{ 
+                            int n = 0;
+                            for(int i= 0; i < 3; i++)
+                            {
+                                if (nx < act_lst.Count)
+                                {
+                                    ActivityList x = act_lst[nx];
+                                    if (x.folder == 0)
                                     {
-                                        <script>
-                                            $(".pan-fol").addClass('panel-primary');
-                                            $(".pan-fol").removeClass('panel-default');
-                                        </script>
-                                    }
-                                    else
-                                    {
-                                        <script>
-                                            $(".pan-fol").addClass('panel-default');
-                                            $(".pan-fol").removeClass('panel-primary');
-                                        </script>
-                                    }
-                                }
-                                <div class="panel-heading open-folder" 
-                                     idCar="@x.idCar" usuCar="@x.usuCar" keym="@x.keym">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-folder-open fa-5x"></i>
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="panel pan-fol">
+                                                @{
+                                                    long usuAct = Convert.ToInt64(ViewBag.usuAct);
+                                                    long usuCar = x.usuCar;
+                                                    if (usuCar ==  usuAct)
+                                                    {
+                                                        <script>
+                                                            $(".pan-fol").addClass('panel-primary');
+                                                            $(".pan-fol").removeClass('panel-default');
+                                                        </script>
+                                                    }
+                                                    else
+                                                    {
+                                                        <script>
+                                                            $(".pan-fol").addClass('panel-default');
+                                                            $(".pan-fol").removeClass('panel-primary');
+                                                        </script>
+                                                    }
+                                                }
+                                                <div class="panel-heading open-folder" 
+                                                     idCar="@x.idCar" usuCar="@x.usuCar" keym="@x.keym">
+                                                    <div class="row">
+                                                        <div class="col-xs-3">
+                                                            <i class="fa fa-folder-open fa-5x"></i>
+                                                        </div>
+                                                        <div class="col-xs-9 text-right">
+                                                            <div style="position:relative; font-size:30px"
+                                                                 class="text-right">
+                                                                @x.nom
+                                                            </div>
+                                                            <hr />
+                                                            <div class="row" style="margin-right:3px">
+                                                                @x.desc
+                                                            </div>
+                                                            <hr style="width:50%; margin-right:0"/>
+                                                            <div class="row" style="margin-right:3px">
+                                                                Estado:  @x.sta
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--   footer  -->
+                                                <div class="opt_footer dropdown" style="min-height:31px;">
+                                                    <button style="position:relative;width:100%;height:30px;border:none;/*background-color:transparent*/" class="btn text-left pull-left dropdown-toggle"
+                                                            type="button" id="dropdown_opt_footer" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="true">
+                                                        Opciones
+                                                        <span class="pull-right"><i class="fa fa-plus-circle"></i></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu"
+                                                        aria-labelledby="dropdown_opt_footer"
+                                                        style="position:relative;width:100%"
+                                                        idCar="@x.idCar" usuCar="@x.usuCar" keym="@x.keym">
+                                                        <li><a class="opt_footer_files">Archivos/Documentos</a></li>
+                                                        <li><a class="opt_footer_statistics">Estadisticas</a></li>
+                                                        <li role="separator" class="divider"></li>
+                                                        <li><a class="opt_footer_moreInf">Mas Informacion</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div style="position:relative; font-size:30px"
-                                                 class="text-right">
-                                                @x.nom
-                                            </div>
-                                            <hr />
-                                            <div class="row" style="margin-right:3px">
-                                                @x.desc
-                                            </div>
-                                            <hr style="width:50%; margin-right:0"/>
-                                            <div class="row" style="margin-right:3px">
-                                                Estado:  @x.sta
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--   footer  -->
-                                <div class="opt_footer dropdown" style="min-height:31px;">
-                                    <button style="position:relative;width:100%;height:30px;border:none;/*background-color:transparent*/" class="btn text-left pull-left dropdown-toggle"
-                                            type="button" id="dropdown_opt_footer" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="true">
-                                        Opciones
-                                        <span class="pull-right"><i class="fa fa-plus-circle"></i></span>
-                                    </button>
-                                    <ul class="dropdown-menu"
-                                        aria-labelledby="dropdown_opt_footer"
-                                        style="position:relative;width:100%"
-                                        idCar="@x.idCar" usuCar="@x.usuCar" keym="@x.keym">
-                                        <li><a class="opt_footer_files">Archivos/Documentos</a></li>
-                                        <li><a class="opt_footer_statistics">Estadisticas</a></li>
-                                        <li role="separator" class="divider"></li>
-                                        <li><a class="opt_footer_moreInf">Mas Informacion</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else if (x.folder == 1)
-                    {
-                        <div class="col-lg-4 col-md-6">
-                            <div class="panel col-pan" id="panel-@x.keym-@x.idCar-@x.usuCar">
-                                @{
-                                    long usuAct = Convert.ToInt64(ViewBag.usuAct);
-                                    long usuCar = x.usuCar;
-                                    if (usuCar == usuAct)
+                                    }
+                                    else if (x.folder == 1)
                                     {
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="panel col-pan" id="panel-@x.keym-@x.idCar-@x.usuCar">
+                                                @{
+                                                    long usuAct = Convert.ToInt64(ViewBag.usuAct);
+                                                    long usuCar = x.usuCar;
+                                                    if (usuCar == usuAct)
+                                                    {
                                        
-                                        <script>
-                                            //$(".col-pan").removeClass('panel-yellow');
-                                            //$(".col-pan").addClass('panel-green');
-                                            $("#panel-@x.keym-@x.idCar-@x.usuCar").addClass('panel-green');
-                                        </script>
+                                                        <script>
+                                                            //$(".col-pan").removeClass('panel-yellow');
+                                                            //$(".col-pan").addClass('panel-green');
+                                                            $("#panel-@x.keym-@x.idCar-@x.usuCar").addClass('panel-green');
+                                                        </script>
+                                                    }
+                                                    else
+                                                    {
+                                                        <script>
+                                                            //$(".col-pan").removeClass('panel-green');
+                                                            //$(".col-pan").addClass('panel-yellow');
+                                                            $("#panel-@x.keym-@x.idCar-@x.usuCar").addClass('panel-yellow');
+                                                        </script>
+                                                    }
+                                                }
+                                                <!-- header -->
+                                                <div class="panel-heading  open-folder"  
+                                                     idCar="@x.idCar" usuCar="@x.usuCar" keym="@x.keym"
+                                                     style="height:30px">
+                                                    <div class="row">
+                                                        <div class="text-center" style="margin-top:-5px">
+                                                            @x.nom
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Body -->
+                                                <div class="panel-body">
+                                                    <div style="margin-left:5px">
+                                                        <div class="">
+                                                            Descripcion: <span>@x.desc</span>
+                                                        </div>
+                                                        <hr />
+                                                        <div class="">
+                                                            Estado: <span>@x.sta</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Footer -->
+                                                <div class="opt_footer dropdown" style="min-height:31px;">
+                                                    <button style="position:relative;width:100%;height:30px;border:none;/*background-color:transparent*/" class="btn text-left pull-left dropdown-toggle"
+                                                            type="button" id="dropdown_opt_footer" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="true">
+                                                        Opciones
+                                                        <span class="pull-right"><i class="fa fa-plus-circle"></i></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu"
+                                                        aria-labelledby="dropdown_opt_footer"
+                                                        style="position:relative;width:100%"
+                                                        idCar="@x.idCar" usuCar="@x.usuCar" keym="@x.keym">
+                                                        <li><a class="opt_footer_files">Archivos/Documentos</a></li>
+                                                        <li><a class="opt_footer_statistics">Estadisticas</a></li>
+                                                        <li role="separator" class="divider"></li>
+                                                        <li><a class="opt_footer_moreInf">Mas Informacion</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
                                     }
-                                    else
-                                    {
-                                        <script>
-                                            //$(".col-pan").removeClass('panel-green');
-                                            //$(".col-pan").addClass('panel-yellow');
-                                            $("#panel-@x.keym-@x.idCar-@x.usuCar").addClass('panel-yellow');
-                                        </script>
-                                    }
+
                                 }
-                                <!-- header -->
-                                <div class="panel-heading  open-folder"  
-                                     idCar="@x.idCar" usuCar="@x.usuCar" keym="@x.keym"
-                                     style="height:30px">
-                                    <div class="row">
-                                        <div class="text-center" style="margin-top:-5px">
-                                            @x.nom
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Body -->
-                                <div class="panel-body">
-                                    <div style="margin-left:5px">
-                                        <div class="">
-                                            Descripcion: <span>@x.desc</span>
-                                        </div>
-                                        <hr />
-                                        <div class="">
-                                            Estado: <span>@x.sta</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Footer -->
-                                <div class="opt_footer dropdown" style="min-height:31px;">
-                                    <button style="position:relative;width:100%;height:30px;border:none;/*background-color:transparent*/" class="btn text-left pull-left dropdown-toggle"
-                                            type="button" id="dropdown_opt_footer" data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="true">
-                                        Opciones
-                                        <span class="pull-right"><i class="fa fa-plus-circle"></i></span>
-                                    </button>
-                                    <ul class="dropdown-menu"
-                                        aria-labelledby="dropdown_opt_footer"
-                                        style="position:relative;width:100%"
-                                        idCar="@x.idCar" usuCar="@x.usuCar" keym="@x.keym">
-                                        <li><a class="opt_footer_files">Archivos/Documentos</a></li>
-                                        <li><a class="opt_footer_statistics">Estadisticas</a></li>
-                                        <li role="separator" class="divider"></li>
-                                        <li><a class="opt_footer_moreInf">Mas Informacion</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    }
+                                nx++;
+                            }
+                        }
+                    </div>
                 }
+
+              
                 <script>
                     $(".opt_footer_files").click(function () {
                         var keym = $(this).parent().parent().attr("keym");
@@ -218,4 +234,5 @@
         </div>
     }
 }
+
 

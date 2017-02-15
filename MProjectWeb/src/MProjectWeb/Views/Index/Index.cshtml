@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNet.Http;
 
+<div class="bg-image">
     @{
         //error al iniciar cesion
         try
@@ -9,14 +10,14 @@
             {
                 <div>
                     <div class="alert alert-danger fade in center-block" style="position:absolute;width:100%">
-                        <a  class="close" data-dismiss="alert">&times;</a>
+                        <a class="close" data-dismiss="alert">&times;</a>
                         <strong>Error!</strong>No se ha iniciado session. Revise que el usuario y contraseña sean correctos.
                     </div>
                 </div>
             }
         }
         catch { }
-        //Mensaje acerca del registro exitoso=> verificar correo o no se ha registrado 
+        //Mensaje acerca del registro exitoso=> verificar correo o no se ha registrado
         try
         {
             string cad = Context.Session.GetString("estReg");
@@ -27,7 +28,7 @@
                 {
                     <div>
                         <div class="alert alert-success fade in center-block" style="position:absolute;width:100%">
-                            <a  class="close" data-dismiss="alert">&times;</a>
+                            <a class="close" data-dismiss="alert">&times;</a>
                             <strong>Exito!</strong> Se ha registrado existosamente. En su correo electronico se encuentra el link de confirmacion.
                         </div>
                     </div>
@@ -36,7 +37,7 @@
                 {
                     <div>
                         <div class="alert alert-success fade in center-block" style="position:absolute;width:100%">
-                            <a  class="close" data-dismiss="alert">&times;</a>
+                            <a class="close" data-dismiss="alert">&times;</a>
                             <strong>Error!</strong> No se ha registrado. Intentelo mas tarde
                         </div>
                     </div>
@@ -57,7 +58,7 @@
                 {
                     <div>
                         <div class="alert alert-success fade in center-block" style="position:absolute;width:100%">
-                            <a  class="close" data-dismiss="alert">&times;</a>
+                            <a class="close" data-dismiss="alert">&times;</a>
                             <strong>Exito!</strong> En su correo electronico se encuentra su nueva clave de acceso al sistema.
                         </div>
                     </div>
@@ -66,13 +67,13 @@
                 {
                     <div>
                         <div class="alert alert-success fade in center-block" style="position:absolute;width:100%">
-                            <a  class="close" data-dismiss="alert">&times;</a>
+                            <a class="close" data-dismiss="alert">&times;</a>
                             <strong>Error!</strong> No se ha podido recuperar su contraseña. Intentelo mas tarde
                         </div>
                     </div>
 
                 }
-                Context.Session.SetString("estPass","");
+                Context.Session.SetString("estPass", "");
             }
         }
         catch { }
@@ -83,22 +84,23 @@
             {
                 <div>
                     <div class="alert alert-danger fade in center-block" style="position:absolute;width:100%">
-                        <a  class="close" data-dismiss="alert">&times;</a>
+                        <a class="close" data-dismiss="alert">&times;</a>
                         <strong>Error! </strong> No se ha podido realizar el registro, el correo que ha utilizado ya se encuentra registrado.
                     </div>
                 </div>
             }
-            ViewBag.ErrRegister=null;
+            ViewBag.ErrRegister = null;
 
         }
         catch { }
     }
 
-    <div style="background:#333333;">
+    <div id="index-page" style="padding-top:50px">
+        <!--  Logo y texto de MProject Inicial  -->
         <div class="row center-block" style="margin:0px;width:80%;margin-left:10%">
             <div class="col-md-4">
                 <div style="color:white;margin-top:200px">
-                    <h1 id="index-tit" >Mproject</h1>
+                    <h1 id="index-tit">Mproject</h1>
                     <p>Es una plataforma que te permitira administar de una mejor forma tus proyectos.</p>
                 </div>
             </div>
@@ -108,23 +110,28 @@
                  class="col-md-8 center-block" style="position:relative;" />
         </div>
 
+        <br />
+        <br />
+        <!-- Caracteristicas de MProject -->
         <div class="row" style="margin:0px;width:80%;margin-left:10%;color:white;position:relative">
             <!--WEb-->
             <div class="col-md-4 center-block">
                 <img src="/img/SVG/WebPlat.svg" style="width:50%;height:50%" class="center-block" />
                 <div style="width:80%;" class="center-block">
                     <h2 class="text-center">Entorno Web</h2>
-                    <p>Es una plataforma que te permitira administar de una mejor forma tus proyectos.</p>
+                    <p>
+                        Te permitira visualizar todos tus proyectos, actividades, archivos y sitios web.
+
+                    </p>
                 </div>
             </div>
             <!--Desktop-->
             <div class="col-md-4 center-block">
                 <img src="/img/SVG/DeskPlat.svg" style="width:50%;height:50%" class="center-block" />
                 <div class="center-block" style="width:80%;">
-                    <h2 class="text-center">Multimedia</h2>
+                    <h2 class="text-center">Entorno Escritorio</h2>
                     <p>
-                        Permitete administrar mucho mejor tus contenidos multimedia, los cuales estaran disponibles
-                        en la nube para que puedas acceder a ellos desde cualquier lugar en donde te encuentres.
+                        Es un entorno que te permitira administar de una mejor forma tus proyectos, actividades y archivos.
                     </p>
                 </div>
             </div>
@@ -167,9 +174,9 @@
                 <div class="center-block" style="width:80%;">
                     <h2 class="text-center">Georreferenciacion</h2>
                     <p>
-                        Tendras la posibilidad de publicar contenidos como Imgagenes y Videos que se
-                        visulizaran en un mapa virtual, permitiendo que las demas personas las
-                        visualicen a traves de la plataforma web.
+                        Tendras la posibilidad de publicar contenidos como Imgagenes que se
+                        visualizaran en un mapa virtual, permitiendo que las demas personas las
+                        vean a traves de la plataforma web.
                     </p>
 
                 </div>
@@ -181,7 +188,7 @@
                     <h2 class="text-center">Manejo Dinamico</h2>
                     <p>
                         MProject trabaja con un enfoque orientado a proyectos, permitiendo a las personas naturales
-                        u organizaciones hacer uso de este sistema.
+                        u organizaciones hacer uso de esta plataforma.
                         <br />
                         Con dicho enfoque tendras la posibilidad de planear, organizar y controlar las actividades incluidas
                         aquellas que se designen a otras personas.
@@ -190,3 +197,5 @@
             </div>
         </div>
     </div>
+
+</div>

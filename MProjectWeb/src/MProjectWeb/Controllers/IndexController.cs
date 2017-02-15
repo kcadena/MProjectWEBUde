@@ -89,6 +89,11 @@ namespace MProjectWeb.Controllers
             return View();
         }
 
+        public IActionResult Help()
+        {
+            return View();
+        }
+
         /// <summary>
         /// Genera y devuelve la cadena de todos los link en formato JSON para crear el arbol de links
         /// </summary>

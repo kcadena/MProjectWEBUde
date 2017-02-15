@@ -24,7 +24,7 @@
     <link href="~/css/lay-user.css" rel="stylesheet" />
     <link href="~/css/modal.css" rel="stylesheet" />
     <link href="~/css/multimedia.css" rel="stylesheet" />
-    
+    <link href="~/css/index.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="~/img/logomp.png" />
 
     <!-- Custom Fonts -->
@@ -63,18 +63,17 @@
                     }
                     <li><a asp-controller="Index" asp-action="Index">Inicio</a></li>
                     <li><a asp-controller="Projects" asp-action="PublicProjects" >Proyectos</a></li>
-                    <li><a string fecha_inicio onclick="getDataFiles()">Archivos</a></li>
+                    <li><a style="cursor:pointer" string fecha_inicio onclick="getDataFiles()">Archivos</a></li>
                     <li><a asp-controller="MultiMedia" asp-action="Maps">mapa</a></li>
                     @*
                     <li><a href="http://knower.udenar.edu.co/mp/MProject.exe">Aplicacion</a></li>
                     <li><a asp-controller="MultiMedia" asp-action="regMap">regMap</a></li>*@
-                    <li><a id="allLinks" >Links</a></li>
+                    <li><a style="cursor:pointer" id="allLinks" >Links</a></li>
                     <li>
                         <div class="dropdown">
-                            <div class="dropdown-toggle text-center"
+                            <div class="dropdown-toggle text-left"
                                  id="blog-sites"
-                                 data-toggle="dropdown"
-                                 style="margin-top:16px; margin-left:20px;">
+                                 data-toggle="dropdown">
                                 Sitios/Blogs
                                 <span class="caret"></span>
                             </div>
@@ -90,6 +89,7 @@
                             
                         </div>
                     </li>
+                    <li><a asp-controller="Index" asp-action="Help">Ayuda</a></li>
                 </ul>
                 @{
                     if (signIn)

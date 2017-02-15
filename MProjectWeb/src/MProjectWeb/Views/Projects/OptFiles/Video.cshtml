@@ -26,7 +26,7 @@
     }
 }
 
-<script>
+@*<script>
     $(".goVid").click(function () {
         var src = $(this).attr("src");
         var source = document.getElementById("vid").children;
@@ -36,8 +36,26 @@
         source[1].src = src;
         source[2].src = src;
         source[3].src = src;
+        source[4].src = src;
         player.load();
         player.play();
+        $("#modalVid").modal();
+    });
+</script>*@
+
+<script>
+    $(".goVid").click(function () {
+        var src = $(this).attr("src");
+        try{
+            $("#down-vid").attr("href",src);
+            $("video:nth-child(1)").attr("src", src);
+            $("video:nth-child(1)").attr("src", src);
+            $("video:nth-child(1)").attr("src", src);
+            $("video:nth-child(1)").attr("src", src);
+            $("video:nth-child(1)").attr("src", src);
+            $("video:nth-child(1)").attr("src", src);
+        }
+        catch (e) { alert("BAD");};
         $("#modalVid").modal();
     });
 </script>

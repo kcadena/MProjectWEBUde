@@ -104,6 +104,8 @@ namespace MProjectWeb.Controllers
                 try { inf["id_archivo"] = doc.Get("id_archivo"); } catch { }
                 try { inf["id_usuario_arc"] = doc.Get("id_usuario_arc"); } catch { }
 
+                try { inf["nombre_archivo"] = doc.Get("nombre_archivo"); } catch { }
+
                 try { inf["tipo"] = doc.Get("tipo"); } catch { }
                 try { inf["publicacion"] = doc.Get("publicacion"); } catch { }
 
@@ -111,6 +113,9 @@ namespace MProjectWeb.Controllers
                 try { inf["subtitulo"] = doc.Get("subtitulo"); } catch { }
                 try { inf["descripcion"] = doc.Get("descripcion"); } catch { }
                 try { inf["contenido"] = doc.Get("contenido"); } catch { }
+
+                try { inf["fecha_creacion"] = doc.Get("fecha_creacion"); } catch { }
+                try { inf["fecha_ultima_modificacion"] = doc.Get("fecha_ultima_modificacion"); } catch { }
 
                 try { inf["src"] = doc.Get("src"); } catch { }
                 try { inf["srcServ"] = doc.Get("srcServ"); } catch { }

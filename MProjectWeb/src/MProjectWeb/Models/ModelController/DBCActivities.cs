@@ -513,7 +513,7 @@ namespace MProjectWeb.Models.ModelController
             Dictionary<string, string> dic = new Dictionary<string, string>();
             try
             {
-                var act = db.actividades.Where(x => x.caracteristicas.keym_padre == keym && x.caracteristicas.id_usuario_padre == usu && x.caracteristicas.id_caracteristica_padre == car).Select(
+                var carAct = db.actividades.Where(x => x.caracteristicas.keym_padre == keym && x.caracteristicas.id_usuario_padre == usu && x.caracteristicas.id_caracteristica_padre == car).Select(
                     x => new datPieChar
                     {
                         label = x.nombre,
@@ -522,7 +522,16 @@ namespace MProjectWeb.Models.ModelController
                         perComp = (double)x.caracteristicas.porcentaje_cumplido
                     }).ToList();
 
-                return convertJsonPieChart(act);
+                var carChi = db.actividades.Where(x => x.caracteristicas.keym == keym && x.caracteristicas.id_usuario == usu && x.caracteristicas.id_caracteristica == car).Select(
+                    x => new datPieChar
+                    {
+                        label = x.nombre,
+                        percent = (double)x.caracteristicas.porcentaje,
+                        perAsig = (double)x.caracteristicas.porcentaje,
+                        perComp = (double)x.caracteristicas.porcentaje_cumplido
+                    }).First();
+
+                return convertJsonPieChart(carAct,carChi);
             }
             catch
             {
@@ -535,9 +544,10 @@ namespace MProjectWeb.Models.ModelController
         /// </summary>
         /// <param name="lst"></param>
         /// <returns></returns>
-        private Dictionary<string, string> convertJsonPieChart(List<datPieChar> lst)
+        private Dictionary<string, string> convertJsonPieChart(List<datPieChar> lst, datPieChar par)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
+
             string cadAsig = "[";
             string cadComp = "[";
             double val = 0;
@@ -559,9 +569,10 @@ namespace MProjectWeb.Models.ModelController
             val = 100 - val;
             cadAsig = cadAsig + "{ label:'Yo', value:" + val.ToString().Replace(',', '.') + "}]";
 
+
             cadComp = cadComp.Remove(cadComp.Length - 1) + "]";
 
-            string comp = "[{ label:'SI' , value:" + valComp.ToString().Replace(',', '.') + "}," + "{ label: 'NO' , value: " + (100 - valComp).ToString().Replace(',', '.') + "}]";
+            string comp = "[{ label:'SI' , value:" + par.perComp.ToString().Replace(',', '.') + "}," + "{ label: 'NO' , value: " + (100 - par.perComp ).ToString().Replace(',', '.') + "}]";
 
             dic["perAsig"] = cadAsig;
             dic["perComp"] = cadComp;

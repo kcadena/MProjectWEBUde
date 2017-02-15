@@ -116,7 +116,7 @@ namespace MProjectWeb.LuceneIR
                                 }
                             }
                         }
-                        parser.FuzzyMinSim = (float)0.9;
+                        parser.FuzzyMinSim = (float)0.7;
                         if(usr.Length>0)
                             query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ") OR ( publicacion:1 AND (" + usr + ")) )" + " AND  (\"" + text + "\"~)");
                         else
@@ -128,7 +128,7 @@ namespace MProjectWeb.LuceneIR
                         TopDocs hits = searcher.Search(query, totDocs);
                         if (hits.TotalHits == 0)
                         {
-                            parser.FuzzyMinSim = (float)0.8;
+                            parser.FuzzyMinSim = (float)0.6;
                             text = text + "~";
                             text = text.Replace(" ", "~ ");
                             if (text.Length > 1)
@@ -222,7 +222,7 @@ namespace MProjectWeb.LuceneIR
                                 }
                             }
                         }
-                        parser.FuzzyMinSim = (float)0.9;
+                        parser.FuzzyMinSim = (float)0.7;
                         query = parser.Parse("( " + cars + " ) AND " + typ + " AND publicacion:3 " + " AND  (\"" + text + "\"~)");
                     }
                     try
@@ -230,7 +230,7 @@ namespace MProjectWeb.LuceneIR
                         TopDocs hits = searcher.Search(query, totDocs);
                         if (hits.TotalHits == 0)
                         {
-                            parser.FuzzyMinSim = (float)0.8;
+                            parser.FuzzyMinSim = (float)0.6;
                             text = text + "~";
                             text = text.Replace(" ", "~ ");
 
@@ -373,7 +373,7 @@ namespace MProjectWeb.LuceneIR
                                 }
                             }
                         }
-                        parser.FuzzyMinSim = (float)0.9;
+                        parser.FuzzyMinSim = (float)0.7;
                         query = parser.Parse(typ + " AND publicacion:3 " + " AND  (\"" + text + "\"~)");
                     }
                     try
@@ -384,7 +384,7 @@ namespace MProjectWeb.LuceneIR
 
                         if (hits.TotalHits == 0)
                         {
-                            parser.FuzzyMinSim = (float)0.8;
+                            parser.FuzzyMinSim = (float)0.6;
                             text = text + "~";
                             text = text.Replace(" ", "~ ");
 
@@ -428,7 +428,7 @@ namespace MProjectWeb.LuceneIR
                 parser.AllowLeadingWildcard = true;
                 //Do the search
                 Query query;
-                query = parser.Parse(" id_caracteristica:" + inf["id_caracteristica"]+ " AND keym:" +inf["keym_car"]+ " AND id_cusuario_car:" + inf["id_cusuario_car"] + " AND id_archivo:"+inf["id_archivo"]);
+                query = parser.Parse(" keym_arc:" + inf["keym_arc"] + " AND id_usuario_arc" + inf["id_usuario_arc"] + " AND id_archivo:" + inf["id_archivo"]);
                 TopDocs hits = searcher.Search(query, totDocs);
                 ScoreDoc sc = hits.ScoreDocs.First();
                 return sc;
@@ -501,7 +501,7 @@ namespace MProjectWeb.LuceneIR
                 }
                 catch { }
 
-                doc.Add(new Field("nombre_archivo", info["nomobre_archivo"], Field.Store.YES, Field.Index.ANALYZED));
+                doc.Add(new Field("nombre_archivo", info["nombre_archivo"], Field.Store.YES, Field.Index.ANALYZED));
 
                 doc.Add(new Field("titulo", info["titulo"], Field.Store.YES, Field.Index.ANALYZED));
                 doc.Add(new Field("subtitulo", info["subtitulo"], Field.Store.YES, Field.Index.NOT_ANALYZED));
@@ -525,12 +525,12 @@ namespace MProjectWeb.LuceneIR
                 doc.Add(new Field("publicacion", info["publicacion"], Field.Store.YES, Field.Index.NOT_ANALYZED));
 
                 doc.Add(new Field("srcServ", info["srcServ"], Field.Store.YES, Field.Index.NOT_ANALYZED));
-                doc.Add(new Field("src", info["src"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+                try { doc.Add(new Field("src", info["src"], Field.Store.YES, Field.Index.NOT_ANALYZED)); } catch { }
                 if (info["tipo"].Equals("vid"))
                 {
                     try
                     {
-                        doc.Add(new Field("srcGif", info["srcGif"], Field.Store.YES, Field.Index.NOT_ANALYZED));
+                        try { doc.Add(new Field("srcGif", info["srcGif"], Field.Store.YES, Field.Index.NOT_ANALYZED)); } catch { }
                         doc.Add(new Field("srcGifServ", info["srcGifServ"], Field.Store.YES, Field.Index.NOT_ANALYZED));
                     }
                     catch { }
