@@ -2,12 +2,35 @@
 @model MProjectWeb.ViewModels.usuarios
 @{
     bool signIn = false;
+    bool stFile = false;
+    try
+    {
+        if (Context.Session.GetString("stFile").Equals("Y"))
+        {
+            stFile = true;
+        }
+        else
+        {
+            stFile = false;
+        }
+    }
+    catch {  }
+
     try
     {
         string val = Context.Session.GetString("UsuNam");
         if (!val.Equals("")) { signIn = true; }
     }
     catch { }
+
+    bool stCar = false;
+    try
+    {
+        string val = Context.Session.GetString("carAct");
+        if (!val.Equals("")) { stCar = true; }
+    }
+    catch { }
+
 }
 <!DOCTYPE html>
 
@@ -63,32 +86,46 @@
                     }
                     <li><a asp-controller="Index" asp-action="Index">Inicio</a></li>
                     <li><a asp-controller="Projects" asp-action="PublicProjects" >Proyectos</a></li>
-                    <li><a style="cursor:pointer" string fecha_inicio onclick="getDataFiles()">Archivos</a></li>
+                    @{
+                        if (stFile)
+                        {
+                            <li><a style="cursor:pointer" string fecha_inicio onclick="getDataFiles()">Archivos</a></li>
+                        }
+                    }
                     <li><a asp-controller="MultiMedia" asp-action="Maps">mapa</a></li>
                     @*
                     <li><a href="http://knower.udenar.edu.co/mp/MProject.exe">Aplicacion</a></li>
                     <li><a asp-controller="MultiMedia" asp-action="regMap">regMap</a></li>*@
                     <li><a style="cursor:pointer" id="allLinks" >Links</a></li>
-                    <li>
-                        <div class="dropdown">
-                            <div class="dropdown-toggle text-left"
-                                 id="blog-sites"
-                                 data-toggle="dropdown">
-                                Sitios/Blogs
-                                <span class="caret"></span>
-                            </div>
-                            @*<ul class="dropdown-menu" id="kel" aria-labelledby="blog-sites">
+                    
+                    @{
+                       
+                        
+                        if (stCar)
+                        {
+                            <li>
+                                <div class="dropdown">
+                                    <div class="dropdown-toggle text-left"
+                                         id="blog-sites"
+                                         data-toggle="dropdown">
+                                        Paginas Web
+                                        <span class="caret"></span>
+                                    </div>
+                                    @*<ul class="dropdown-menu" id="kel" aria-labelledby="blog-sites">
 
-                                </ul>*@
-                            <ul id="activityList" class="dropdown-menu" aria-labelledby="blog-sites"></ul>
-                                @*<li><a href="http://qhapaqnancolombia.blogspot.com.co/">Blog Colombia</a></li>
-                                    <li><a href="http://www.argentina.travel/es/xp/el-qhapaq-nan-la-ruta-de-los-incas/4433#.V0XW0vl97IV">Qhapaq Ñan Argentina</a></li>
-                                    <li><a href="http://qhapaq-nan.blogspot.com.co/">Catedra Qhapaq Ñan</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="https://www.facebook.com/qhapaqnancolombia/">Facebook Qhapaq Ñan Colombia</a></li>*@
-                            
-                        </div>
-                    </li>
+                                        </ul>*@
+                                    <ul id="activityList" class="dropdown-menu" aria-labelledby="blog-sites"></ul>
+                                    @*<li><a href="http://qhapaqnancolombia.blogspot.com.co/">Blog Colombia</a></li>
+                                        <li><a href="http://www.argentina.travel/es/xp/el-qhapaq-nan-la-ruta-de-los-incas/4433#.V0XW0vl97IV">Qhapaq Ñan Argentina</a></li>
+                                        <li><a href="http://qhapaq-nan.blogspot.com.co/">Catedra Qhapaq Ñan</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="https://www.facebook.com/qhapaqnancolombia/">Facebook Qhapaq Ñan Colombia</a></li>*@
+
+                                </div>
+                            </li>
+                        }
+                    }
+
                     <li><a asp-controller="Index" asp-action="Help">Ayuda</a></li>
                 </ul>
                 @{

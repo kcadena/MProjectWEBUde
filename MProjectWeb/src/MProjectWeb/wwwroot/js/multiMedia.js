@@ -68,15 +68,15 @@ function showFiles(keym, usu, car, type, text) {
 function publicShowFiles(keym, usu, car, type, text) {
     //alert(keym + " usu: " + usu + "   car: " + car + "     typ: " + type);
     $.ajax({
-        url: '/Projects/Files',
+        url: '/Projects/PublicFiles',
         type: 'POST',
         data: { idCar: car, idUsu: usu, keym: keym, type: type, text: text, publicFile: true },
         async: true,
         cache: false,
         beforeSend: function () {
 
-            $("#area").html("");
-            $("#area").html('<img src="/img/ajax-loader.gif" style="position:relative;margin-left:50%;margin-top:20%;height:8%;width:8%;">');
+            //$("#area").html("");
+            //$("#area").html('<img src="/img/ajax-loader.gif" style="position:relative;margin-left:50%;margin-top:20%;height:8%;width:8%;">');
         },
         success: function succ(data) {
             //alert(data);
@@ -202,7 +202,7 @@ function showCharts(keym, usu, car) {
     $.ajax({
         url: '/Projects/Charts',
         type: 'POST',
-        data: { idCar: car, idUsu: usu, keym: keym},
+        data: { keym: keym, idCar: car, idUsu: usu, ori:true},
         async: true,
         cache: false,
         beforeSend: function () {
@@ -226,3 +226,101 @@ function showCharts(keym, usu, car) {
        }
     );
 }
+
+
+//Muestra los Reportes que tienen las caracteristicas
+function showReports(keym, usu, car) {
+
+    $.ajax({
+        url: '/Projects/Reports',
+        type: 'POST',
+        data: { keym: keym, idCar: car, idUsu: usu, ori: true },
+        async: true,
+        cache: false,
+        beforeSend: function () {
+
+            $("#content-opt").html("");
+            $("#content-opt").html('<img src="/img/ajax-loader.gif" style="position:relative;margin-left:50%;margin-top:20%;height:8%;width:8%;">');
+        },
+        success: function succ(data) {
+            //alert(data);
+            if (data != 0) {
+                $("#content-opt").html("");
+                $("#content-opt").html(data);
+            }
+            else {
+                alert("Multimedia=>showCharts:  No se encontraron Reportes relacionados!!!");
+            }
+        }
+    }).fail(
+       function (da) {
+           alert("No se pudo cargar la pagina.");
+       }
+    );
+}
+
+
+//Muestra los Recursos Financieros que tienen las caracteristicas
+function showFinancial(keym, usu, car) {
+
+    $.ajax({
+        url: '/Projects/Financial',
+        type: 'POST',
+        data: { keym: keym, idCar: car, idUsu: usu, ori: true },
+        async: true,
+        cache: false,
+        beforeSend: function () {
+
+            $("#content-opt").html("");
+            $("#content-opt").html('<img src="/img/ajax-loader.gif" style="position:relative;margin-left:50%;margin-top:20%;height:8%;width:8%;">');
+        },
+        success: function succ(data) {
+            //alert(data);
+            if (data != 0) {
+                $("#content-opt").html("");
+                $("#content-opt").html(data);
+            }
+            else {
+                alert("Multimedia=>showCharts:  No se encontraron Reportes relacionados!!!");
+            }
+        }
+    }).fail(
+       function (da) {
+           alert("No se pudo cargar la pagina.");
+       }
+    );
+}
+
+
+//Muestra los Inventario que tienen las caracteristicas
+function showInventory(keym, usu, car) {
+
+    $.ajax({
+        url: '/Projects/Inventory',
+        type: 'POST',
+        data: { keym: keym, idCar: car, idUsu: usu, ori: true },
+        async: true,
+        cache: false,
+        beforeSend: function () {
+
+            $("#content-opt").html("");
+            $("#content-opt").html('<img src="/img/ajax-loader.gif" style="position:relative;margin-left:50%;margin-top:20%;height:8%;width:8%;">');
+        },
+        success: function succ(data) {
+            //alert(data);
+            if (data != 0) {
+                $("#content-opt").html("");
+                $("#content-opt").html(data);
+            }
+            else {
+                alert("Multimedia=>showCharts:  No se encontraron Reportes relacionados!!!");
+            }
+        }
+    }).fail(
+       function (da) {
+           alert("No se pudo cargar la pagina.");
+       }
+    );
+}
+
+

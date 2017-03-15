@@ -13,10 +13,23 @@
 </div>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-fancyBox/source/jquery.fancybox.js"></script>
+<link href="~/css/Index.css" rel="stylesheet" />
+<link href="~/lib/jquery-fancyBox/source/jquery.fancybox.css" rel="stylesheet" />
 
-<div class="row center-block" style="position:relative;width:80%">
-
-    <embed src="http://localhost:82/MP/Mproject-Tesis-Final-09-02-2017.pdf" style="width:100%;height:500px" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">
 
 
-</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $(".word").fancybox({
+            'width': 600, // or whatever
+            'height': 320,
+            'type': 'iframe'
+        }).click();
+
+    });
+</script>
+<a class="word" href="@ViewBag.doc"></a>

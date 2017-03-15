@@ -149,13 +149,16 @@ namespace MProjectWeb.Controllers
                     try
                     {
                         HttpContext.Session.SetString("estReg", "true");
+
+                        #region Envio de correo electronico
                         DBCConfiguracion conf = new DBCConfiguracion();
                         string act = conf.getIpPlatServer() + "account/userActivate?id=" + usu.id_usuario;
 
                         string cont = "Bienvenido: para confirmar su registro a MProject por favor ingrese a: <br>" +
                             "<a href='" + act + "'>Confirmar</a>";
-                        sendEmail(usu.e_mail, cont, "Confirmacion MProject");
-
+                        //sendEmail(usu.e_mail, cont, "Confirmacion MProject");
+                        #endregion
+                        
                         #region Permite cargar la imagen de perfil del usuario a su respectivo repositorio en el servidor
                         IFormFile file = q.file;
                         if (file != null)
@@ -169,8 +172,18 @@ namespace MProjectWeb.Controllers
                             catch
                             {
                                 return RedirectToAction("Index", "Index");
+                                
                             }
 
+                        }
+                        else
+                        {
+                            string path = createDirectory(usu.id_usuario.ToString());
+                            string pathSer = db.configuracion_inicial.Where(x=>x.id==2).First().val_configuracion;
+                            if (usu.genero.Equals("M"))
+                                System.IO.File.Copy(pathSer + "system/images/man.png", path + "/PicProfile-" + usu.id_usuario + ".jpg", true);
+                            else
+                                System.IO.File.Copy(pathSer + "system/images/woman.png", path + "/PicProfile-" + usu.id_usuario + ".jpg", true);
                         }
                         #endregion
 
@@ -236,7 +249,7 @@ namespace MProjectWeb.Controllers
             DBCUsuarios usr = new DBCUsuarios();
             string pass = usr.forgetPassword(email.ToString());//genera nueva clave aleatoria y se guarda en la base de datos
             string cont = "Apreciado/a Su nueva clave para MProject es:   " + pass;
-            sendEmail(email.ToString(), cont, "Recuperacion clave MProject");//envio de correo
+            //sendEmail(email.ToString(), cont, "Recuperacion clave MProject");//envio de correo
             HttpContext.Session.SetString("estPass", "true");
             return Redirect("/Index/Index");
         }

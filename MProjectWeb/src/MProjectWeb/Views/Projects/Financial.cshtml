@@ -1,94 +1,151 @@
-﻿@{
+﻿@using MProjectWeb.Models.Postgres;
+@{
     Layout = null;
+}
+
+@{ 
+    bool st = false, stRes = false, stCos = false;
+    List<presupuesto> lstRes = null;
+    List<costos> lstCos = null;
+    long totRes = 0, totCos = 0, total = 0;
+    try { st = ViewBag.st; } catch { }
+    try { stRes = ViewBag.stRes; lstRes = ViewBag.lstRes; } catch { }
+    try { stCos = ViewBag.stCos; lstCos = ViewBag.lstCos; } catch { }
 }
 
 <div class="asd">
     <h1 class="page-header">
         <!-- Title of page -->
-        Recursos
+        Estado de los Recursos Financieros
         <br />
-        <small>
-            Actualmente cuenta con un total de:   <span style="font-size:25px;color:#0094ff">$ 800000</span>.
-        </small>
+        
+        @{
+            if (st)
+            {
+                <small>
+                    Actualmente cuenta con un total de:   <span id="totCar" style="font-size:25px;color:#0094ff">$ 0</span>.
+                </small>
+
+            }
+            else
+            {
+                <small>
+                    Actualmente este proyecto o actividad no cuenta con recursos o costos.
+                </small>
+            }
+        }
+
+       
     </h1>
 
-    <p>
-        Este proyecto o actividad cuento con los siguientes recursos financieros y costos
-    </p>
+    
 </div>
 
 
+@{
+    if (st)
+    {
+        // -----------------    Recursos Financieros    ---------------------- //
+        if (stRes)
+        {
+            <div class="row center-block" style="width:80%;">
+                <h3 style="text-align:center">Recursos Financieros</h3>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Descriocion del recurso</th>
+                            <th style="text-align:right">Unidades</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
+                        @{
+                            foreach (var x in lstRes)
+                            {
+                                totRes += x.valor;
+                                <tr>
+                                    <th scope="row">@x.nombre</th>
+                                    <td style="text-align:right">@String.Format("{0:C}", x.valor )</td>
+                                </tr>
+                            }
+                            <tr class="success">
+                                <th scope="row" style="font-size:18px;text-align:center">Total </th>
+                                <th style="font-size:18px;text-align:right;">@String.Format("{0:C}", totRes )</th>
+                            </tr>
+                        }
 
-<div class="row center-block" style="width:80%;">
-    <h3 style="text-align:center">Recursos Financieros</h3>
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Descriocion del recurso</th>
-                <th style="text-align:right">Unidades</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">Ingreso Inicial</th>
-                <td style="text-align:right">1000000</td>
-            </tr>
-            <tr>
-                <th scope="row">Ingreso por Publicidad</th>
-                <td style="text-align:right">500000</tdstyle="text-align:right">
-            </tr>
-            <tr class="success">
-                <th scope="row" style="font-size:18px;text-align:center">Total </th>
-                <th style="font-size:18px;text-align:right;">1500000</th>
-            </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br /><br /><hr /><br /><br />
+        }
+        else
+        {
+            <div>
+                <div class="alert alert-warning fade in center-block" style="position:relative;width:100%">
+                    <a class="close" data-dismiss="alert">&times;</a>
+                    No se han encontrado Recursos Financieros relacionados con este proyecto o actividad.
+                </div>
+            </div>
+        }
 
-        </tbody>
-    </table>
-</div>
-<hr />
-<div class="row center-block" style="width:80%;">
-    <h3 style="text-align:center">Costos</h3>
-    <table class="table table-striped table-hover table-responsive">
-        <thead>
-            <tr>
-                <th width="40%">Nombre</th>
-                <th width="20%" style="text-align:right">Unidades</th>
-                <th width="20%" style="text-align:right">Valor Unitario</th>
-                <th width="20%" style="text-align:right">Valor Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td scope="row">Actividad A</td>
-                <td style="text-align:right">1</td>
-                <td style="text-align:right">200000</td>
-                <td style="text-align:right">200000</td>
+        //-----------------          Costos           ----------------------//
+        if (stCos)
+        {
+            <div class="row center-block" style="width:80%;">
+                <h3 style="text-align:center">Costos</h3>
+                <table class="table table-striped table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th width="40%">Nombre</th>
+                            <th width="20%" style="text-align:right">Unidades</th>
+                            <th width="20%" style="text-align:right">Valor Unitario</th>
+                            <th width="20%" style="text-align:right">Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        @{
+                            foreach (var x in lstCos)
+                            {
+                                int val = x.valor * x.cantidad;
+                                totCos += val;
+                                <tr>
+                                    <td scope="row">@x.nombre</td>
+                                    <td style="text-align:right">@x.cantidad.ToString()</td>
+                                    <td style="text-align:right">@String.Format("{0:C}", x.valor)</td>
+                                    <td style="text-align:right">@String.Format("{0:C}", val)</td>
+                                </tr>
+                            }
+                            <tr class="danger">
+                                <th scope="row" colspan="3" style="font-size:18px;text-align:center">Total </th>
+                                <th style="font-size:18px;text-align:right;">@String.Format("{0:C}", totCos)</th>
+                            </tr>
+                            
+                        }
+                       
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div>
+                <div class="alert alert-warning fade in center-block" style="position:relative;width:100%">
+                    <a class="close" data-dismiss="alert">&times;</a>
+                    No se han encontrado Costos relacionados con este proyecto o actividad.
+                </div>
+            </div>
+        }
+        }
+}
 
-            </tr>
-            <tr>
-                <td scope="row">Actividad B</td>
-                <td style="text-align:right">1</td>
-                <td style="text-align:right">200000</td>
-                <td style="text-align:right">200000</td>
-
-            </tr>
-           
-            <tr>
-                <td scope="row">Viaticos Viaje</td>
-                <td style="text-align:right">2</td>
-                <td style="text-align:right">150000</td>
-                <td style="text-align:right">300000</td>
-
-            </tr>
-           
-            <tr class="danger">
-                <th scope="row" colspan="3" style="font-size:18px;text-align:center">Total </th>
-                <th style="font-size:18px;text-align:right;">700000</th>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<br /><br /><br />
+@{
+    total = totRes - totCos; 
+    string cad = String.Format("{0:C}", total);
+}
+<script>
+    
+    document.getElementById("totCar").innerHTML = " @cad ";
+</script>
 

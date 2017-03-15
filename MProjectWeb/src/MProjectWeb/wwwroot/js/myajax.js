@@ -1,8 +1,11 @@
 ﻿function myajax(key, idcar, usu) {
 
-    var src = "http://190.254.4.6:94/Projects/publicprojects?p=" + key + "-" + idcar + "-" + usu;
+    var src = "http://localhost:5000/Projects/publicprojects?p=" + key + "-" + idcar + "-" + usu;
     //alert(src);
-    history.pushState(src,src,src );
+    
+    try {
+        history.pushState(src, src, src);
+    } catch (e) { alert(e);}
 
     $.ajax({
         url: '/Projects/getLinks',
@@ -12,7 +15,7 @@
         crossDomain: true,
         //async: true,
         success: function (e) {
-            //alert("OK");
+            //alert(e);
             try { 
 
                 //document.getElementById("aux").setAttribute("keym", key);
@@ -24,10 +27,17 @@
             try{
                 $("#activityList").html('');
                 $("#scrip").html('');
+                
+                $("#content-opt").html("");
+                $("#content-opt").html('<img src="/img/ajax-loader.gif" style="position:relative;margin-left:50%;margin-top:20%;height:8%;width:8%;">');
+
                 jQuery.each(e, function (i, val) {
-                    var sep = val.split("-");
+                    var sep = val.split("|");
+                    var jsId = sep[0];
+                    for (var i = 0; i < jsId.length; i++) {
+                        jsId = jsId.replace(',', '-');
+                    }
                     var idcom = sep[0].split(",");
-                    //alert(sep[1]);
                     var id = sep[1];
                     for (var i = 0; i < id.length; i++) {
                         id = id.replace(' ', '_');
@@ -36,16 +46,25 @@
                         sep[2] = sep[2].replace(',', '-');
                     }
 
+
                     if (sep[1] == "Atras") {
-                        var ht = '<li class="selItems" id="selBack"><a id="' + id + '">' + sep[1] + '</a></li>';
+                        var ht = '<li class="selItems" id="selBack"><a id="' + jsId + '">' + sep[1] + '</a></li>';
                     }
                     else {
-                        var ht = '<li class="selItems" ><a id="' + id + '">' + sep[1] + '</a></li>';
+                        var ht = '<li class="selItems" ><a id="' + jsId + '">' + sep[1] + '</a></li>';
                     }
                     
-                    var sc = "<script type='text/javascript'> $('#" + id + "').click(function() { myajax('" + idcom[0] + "','" + idcom[1] + "','" + idcom[2] + "'); ";
-                    sc = sc+ " $('#area').load('" + sep[2] + "'); }); <\/script>";
-                
+                    var sc = "<script type='text/javascript'> $('#" + jsId + "').click(function() { myajax('" + idcom[0] + "','" + idcom[1] + "','" + idcom[2] + "'); ";
+                    
+                    //sc = sc + ' alert("KElvin"); </script>';
+                    sc = sc + "$.ajax({url:'" + sep[2] + "' ,error: function () {" +
+                        "$('#area').html('<img style=\"margin:20px;\" src=\"http://localhost:82/mp/system/images/page-not-found.png\" height=\"60%\" width=\"60%\">');"
+                        + "},success: function () { " +
+                        " $('#area').load('" + sep[2] + "');"
+                        +" } }); ";
+                    //sc = sc + " $('#area').load('" + sep[2] + "');";
+                    sc = sc +" }); <\/script>";
+                    
                     $("#activityList").append(ht);
                     $("#scrip").append(sc);
 
@@ -53,7 +72,7 @@
                 
                 });
             } catch (err) {
-                alert(err);
+                //alert("OJO "+err);
             }
             
         }

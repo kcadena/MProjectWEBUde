@@ -47,6 +47,7 @@ namespace MProjectWeb.Controllers
         /// <returns></returns>
         public IActionResult Maps()
         {
+            HttpContext.Session.SetString("stFile", "Y");
             LuceneAct lc = new LuceneAct();
             try
             {

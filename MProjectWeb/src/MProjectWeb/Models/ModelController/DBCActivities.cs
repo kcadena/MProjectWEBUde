@@ -12,7 +12,7 @@ namespace MProjectWeb.Models.ModelController
     public class DBCActivities
     {
 
-        MProjectContext db;
+        public MProjectContext db;
         public List<string> llink = null;
         public DBCActivities()
         {
@@ -165,7 +165,7 @@ namespace MProjectWeb.Models.ModelController
         /// <summary>
         /// trae todos los proyectos y actividades de la base de datos para generar la lista del 1 priemr nivel de los links
         /// </summary>
-        public List<string> getLinks(long key, long idcar, long usu)
+        public List<string> getLinksFromDBActivity(long key, long idcar, long usu)
         {
             llink = new List<string>();
             try
@@ -522,16 +522,23 @@ namespace MProjectWeb.Models.ModelController
                         perComp = (double)x.caracteristicas.porcentaje_cumplido
                     }).ToList();
 
-                var carChi = db.actividades.Where(x => x.caracteristicas.keym == keym && x.caracteristicas.id_usuario == usu && x.caracteristicas.id_caracteristica == car).Select(
-                    x => new datPieChar
-                    {
-                        label = x.nombre,
-                        percent = (double)x.caracteristicas.porcentaje,
-                        perAsig = (double)x.caracteristicas.porcentaje,
-                        perComp = (double)x.caracteristicas.porcentaje_cumplido
-                    }).First();
+                //datPieChar carChi = null ;
+                //try
+                //{
+                //    carChi = db.actividades.Where(x => x.caracteristicas.keym == keym && x.caracteristicas.id_usuario == usu && x.caracteristicas.id_caracteristica == car).Select(
+                //    x => new datPieChar
+                //    {
+                //        label = x.nombre,
+                //        percent = (double)x.caracteristicas.porcentaje,
+                //        perAsig = (double)x.caracteristicas.porcentaje,
+                //        perComp = (double)x.caracteristicas.porcentaje_cumplido
+                //    }).First();
 
-                return convertJsonPieChart(carAct,carChi);
+                //}
+                //catch { }
+
+
+                return convertJsonPieChart(carAct);
             }
             catch
             {
@@ -544,7 +551,7 @@ namespace MProjectWeb.Models.ModelController
         /// </summary>
         /// <param name="lst"></param>
         /// <returns></returns>
-        private Dictionary<string, string> convertJsonPieChart(List<datPieChar> lst, datPieChar par)
+        private Dictionary<string, string> convertJsonPieChart(List<datPieChar> lst)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
@@ -572,7 +579,8 @@ namespace MProjectWeb.Models.ModelController
 
             cadComp = cadComp.Remove(cadComp.Length - 1) + "]";
 
-            string comp = "[{ label:'SI' , value:" + par.perComp.ToString().Replace(',', '.') + "}," + "{ label: 'NO' , value: " + (100 - par.perComp ).ToString().Replace(',', '.') + "}]";
+            //string comp = "[{ label:'SI' , value:" + par.perComp.ToString().Replace(',', '.') + "}," + "{ label: 'NO' , value: " + (100 - par.perComp).ToString().Replace(',', '.') + "}]";
+            string comp = "[{ label:'SI' , value:" + (valComp) + "}," + "{ label: 'NO' , value: " + (100-valComp) + "}]";
 
             dic["perAsig"] = cadAsig;
             dic["perComp"] = cadComp;
@@ -605,6 +613,18 @@ namespace MProjectWeb.Models.ModelController
         }
         public ActivityInfo getInfoAct(string[] pro)
         {
+            var xx = (from x in db.caracteristicas
+                      join y in db.actividades on new { A = x.keym, B = x.id_caracteristica, C = x.id_usuario } equals new { A = y.keym, B = y.id_caracteristica, C = y.id_usuario }
+
+                      where x.keym == Convert.ToInt64(pro[0]) &&
+                           x.id_caracteristica == Convert.ToInt64(pro[1]) &&
+                           x.id_usuario == Convert.ToInt64(pro[2])
+                      select new {
+                          x,
+                          y
+                      }
+                      ).First();
+
             ActivityInfo car = (from x in db.caracteristicas
                                 join y in db.actividades on new { A = x.keym, B = x.id_caracteristica, C = x.id_usuario } equals new { A = y.keym, B = y.id_caracteristica, C = y.id_usuario }
 
@@ -617,7 +637,9 @@ namespace MProjectWeb.Models.ModelController
                                     id_caracteristica = x.id_caracteristica,
                                     id_usuario = x.id_usuario,
                                     nombre = y.nombre,
-                                    ruta_repositorio = y.id_usuarioNavigation.repositorios_usuarios.ruta_repositorio
+                                    ruta_repositorio = y.id_usuarioNavigation.repositorios_usuarios.ruta_repositorio,
+                                    usuario_asignado =x.usuario_asignado
+
                                 }).First();
             return car;
         }
@@ -653,6 +675,8 @@ namespace MProjectWeb.Models.ModelController
             public long id_usuario { get; set; }
             public string nombre { get; set; }
             public string ruta_repositorio { get; set; }
+
+            public long? usuario_asignado { get; set; }
         }
         #endregion
     }

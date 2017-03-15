@@ -34,6 +34,7 @@ namespace MProjectWeb.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
+            HttpContext.Session.SetString("stFile", "Y");
             DBCProjects h = new DBCProjects();
             try
             {
@@ -45,7 +46,7 @@ namespace MProjectWeb.Controllers
             HttpContext.Session.SetString("op", webOptions().ToString());
             return View();
         }
-        
+
         /// <summary>
         /// Llama a la vista que muestra todos los proyectos que posee el usuario
         /// </summary>
@@ -59,7 +60,7 @@ namespace MProjectWeb.Controllers
             HttpContext.Session.SetString("infAct", "");
             return View();
         }
-        
+
         /// <summary>
         /// Llama a la vista que muestra todos los proyectos publicos que exista en la base de datos
         /// </summary>
@@ -67,12 +68,14 @@ namespace MProjectWeb.Controllers
         /// <returns></returns>
         public IActionResult PublicProjects(string p)
         {
+            
             string carAct = HttpContext.Session.GetString("infAct");
             if (carAct != p)
             {
                 DBCActivities dbcAct = new DBCActivities();
                 try
                 {
+                    
                     string[] pro = p.Split('-');
 
                     try
@@ -82,8 +85,27 @@ namespace MProjectWeb.Controllers
                         ViewBag.key = car.keym;
                         ViewBag.idCar = car.id_caracteristica;
                         ViewBag.idUsu = car.id_usuario;
-                        ViewBag.Pagina = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
-                                                                                                                                                //ViewBag.Pagina = car.ruta_repositorio + car.nombre.ToLower().Replace(" ", "_") + ".html";//ruta 
+
+                        string pathRep = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
+                        int pos = pathRep.LastIndexOf("/user");
+                        pathRep = pathRep.Substring(pos + 1);
+
+                        pathRep = dbcAct.db.configuracion_inicial.Where(x => x.id == 2).First().val_configuracion + pathRep;
+
+                        string pathSer = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
+
+                        if (System.IO.File.Exists(pathRep))
+                            ViewBag.Pagina = pathSer;
+                        else
+                        {
+                            pathSer = pathSer.Replace("user" + car.id_usuario, "user" + car.usuario_asignado);
+                            ViewBag.Pagina = pathSer;
+                        }
+
+                        HttpContext.Session.SetString("carAct", car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario);
+
+                        //ViewBag.Pagina = car.ruta_repositorio + car.nombre.ToLower().Replace(" ", "_") + ".html";//ruta 
+
                         return View();
                         #endregion
                     }
@@ -94,21 +116,40 @@ namespace MProjectWeb.Controllers
                         ViewBag.key = car.keym;
                         ViewBag.idCar = car.id_caracteristica;
                         ViewBag.idUsu = car.id_usuario;
-                        ViewBag.Pagina = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
-                                                                                                                                                //ViewBag.Pagina = car.ruta_repositorio + car.nombre.Replace(" ", "_") + ".html";//ruta 
+
+                        string pathRep = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
+                        int pos = pathRep.LastIndexOf("/user");
+                        pathRep = pathRep.Substring(pos + 1);
+
+                        pathRep = dbcAct.db.configuracion_inicial.Where(x => x.id == 2).First().val_configuracion + pathRep;
+
+                        string pathSer = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
+
+                        if (System.IO.File.Exists(pathRep))
+                            ViewBag.Pagina = pathSer;
+                        else
+                        {
+                            pathSer = pathSer.Replace("user" + car.id_usuario, "user" + car.usuario_asignado);
+                            ViewBag.Pagina = pathSer;
+                        }
+                        HttpContext.Session.SetString("carAct", car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario);
+
+                        //ViewBag.Pagina = car.ruta_repositorio + car.nombre.Replace(" ", "_") + ".html";//ruta 
                         return View();
                         #endregion
                     }
                     //ViewBag.Pagina = "http://172.16.10.248/prueba%20web/principal1.html";
+                    ViewBag.stPublicPage = true;
                 }
                 catch
                 {
-
+                    ViewBag.stPublicPage = false;
                 }
                 DBCProjects h = new DBCProjects();
                 ViewBag.projects = h.listPublicProjectsUsers();
                 return View();
             }
+            ViewBag.stPublicPage = true;
             return View();
         }
 
@@ -127,7 +168,7 @@ namespace MProjectWeb.Controllers
             //var s = json.GetValue("id");
             //var ds = json.GetValue("id");
             string x = dat["id"];
-            
+
             ViewBag.id_prj = x;
 
             HttpContext.Session.SetString("id_prj", x);
@@ -144,7 +185,7 @@ namespace MProjectWeb.Controllers
             dynamic dat = Request.Form;
             long id = Convert.ToInt64(dat["id_car"]);
             ViewBag.id_car = id;
-            
+
             return View();
         }
 
@@ -162,11 +203,11 @@ namespace MProjectWeb.Controllers
             try
             {
                 long usuAct = Convert.ToInt64(HttpContext.Session.GetString("idUsu"));
-                ViewBag.usuAct = Convert.ToInt64(HttpContext.Session.GetString("idUsu"));
+                ViewBag.usuAct = usuAct;
                 ViewBag.back = true;
                 ViewBag.st = true;
                 #region No proviene de proyectos o actividades. solo visualiza la caracteristica actual
-                if(opt == 0)
+                if (opt == 0)
                 {
                     try
                     {
@@ -187,8 +228,8 @@ namespace MProjectWeb.Controllers
 
                         #region Obtiene la lista de las actividades correspondientes a la caracteristica
                         DBCActivities actx = new DBCActivities();
-                        
-                        List<ActivityList> act_lstx = actx.getActivityList(keym, idCar, usu, 1,usuAct);
+
+                        List<ActivityList> act_lstx = actx.getActivityList(keym, idCar, usu, 1, usuAct);
                         #endregion
 
                         ViewBag.idCar = act_lstx.First().parCar;
@@ -216,7 +257,7 @@ namespace MProjectWeb.Controllers
                         HttpContext.Session.SetString("actPrj", actCar);
 
                         DBCActivities actx = new DBCActivities();
-                        List<ActivityList> act_lstx = actx.getActivityList(keym, idCar, usu, 1,usuAct);
+                        List<ActivityList> act_lstx = actx.getActivityList(keym, idCar, usu, 1, usuAct);
 
                         ViewBag.idCar = act_lstx.First().parCar;
                         ViewBag.usuCar = act_lstx.First().parUsu;
@@ -233,11 +274,11 @@ namespace MProjectWeb.Controllers
                 }
                 #endregion
                 #region Origen Actividades en este caso    (  opt = 1    o    opt = 2  )
-                else 
+                else
                 {
                     DBCActivities act = new DBCActivities();
-                    
-                    List<ActivityList> act_lst = act.getActivityList(keym,idCar, usu, opt,usuAct);
+
+                    List<ActivityList> act_lst = act.getActivityList(keym, idCar, usu, opt, usuAct);
                     ViewBag.act_lst = act_lst;
                     try
                     {
@@ -265,7 +306,7 @@ namespace MProjectWeb.Controllers
             catch { }
             return View();
         }
-       
+
         /// <summary>
         /// Llama a la vista que muestra todos los archivos publicos
         /// </summary>
@@ -273,7 +314,7 @@ namespace MProjectWeb.Controllers
         /// <param name="text">Es el texto con el cual se realizara la buequeda de los archivos</param>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult PublicFiles(string type,string text)
+        public IActionResult PublicFiles(string type, string text)
         {
             ViewBag.flag = false;
             if (type == null)
@@ -281,7 +322,7 @@ namespace MProjectWeb.Controllers
                 type = "img";
                 ViewBag.flag = true;
             }
-                
+
             if (text == null)
                 text = "";
 
@@ -319,7 +360,7 @@ namespace MProjectWeb.Controllers
                 }
             }
             catch { }
-            
+
             return View();
         }
 
@@ -336,7 +377,7 @@ namespace MProjectWeb.Controllers
                 long idCar;
                 long idUsu;
                 string type;
-                string text="";
+                string text = "";
                 bool pubFil = false;
 
                 try
@@ -367,7 +408,7 @@ namespace MProjectWeb.Controllers
                         cad = HttpContext.Session.GetString("actCar").Split('-');
                     }
                     catch { }
-                    keym = Convert.ToInt64(cad[0]); 
+                    keym = Convert.ToInt64(cad[0]);
                     idCar = Convert.ToInt64(cad[1]);
                     idUsu = Convert.ToInt64(cad[2]);
                     type = "img";
@@ -377,21 +418,21 @@ namespace MProjectWeb.Controllers
                     ViewBag.idUsu = idUsu;
                     ViewBag.type = type;
                 }
-                
+
                 ArchivosMultimedia arc = new ArchivosMultimedia();
-                
-                string car="",usr="";
+
+                string car = "", usr = "";
                 try
                 {
                     car = arc.getCaracteriscaChildren(keym, idUsu, idCar);
                     usr = arc.getUsersCaracteristicas(keym, idUsu, idCar);
                 }
-                catch (Exception err){ }
-                
+                catch (Exception err) { }
+
 
                 LuceneAct lc = new LuceneAct();
 
-                
+
                 ViewBag.pubFil = pubFil;
                 List<Lucene.Net.Search.ScoreDoc> lstDoc;
                 if (!pubFil)
@@ -399,12 +440,12 @@ namespace MProjectWeb.Controllers
                     Dictionary<string, string> dt = new Dictionary<string, string>();
                     dt["usuAct"] = HttpContext.Session.GetString("idUsu");
 
-                    lstDoc = lc.search(dt, text, type, car,usr);
+                    lstDoc = lc.search(dt, text, type, car, usr);
 
                 }
                 else
                 {
-                    lstDoc = lc.publicSearch( text, type, car);
+                    lstDoc = lc.publicSearch(text, type, car);
                 }
                 //Lucene.Net.Documents.Document doc = lc.searcher.Doc(lstDoc.ElementAt(0).Doc);
                 ViewBag.op = "Imagenes";
@@ -433,7 +474,7 @@ namespace MProjectWeb.Controllers
                 catch { }
                 ViewBag.lstDoc = lstDoc;
                 ViewBag.searcher = lc.searcher;
-                if(lc.totSear>0)
+                if (lc.totSear > 0)
                     ViewBag.st = true;
                 else
                     ViewBag.st = false;
@@ -456,44 +497,30 @@ namespace MProjectWeb.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Charts()
+        public IActionResult Charts(long keym, long idCar, long idUsu, bool ori)
         {
-            long keym;
-            long idCar;
-            long idUsu;
-
+            //dynamic dat = Request.Form;//Obtiene los datos que llegan desde la llamada AJAX
             try
             {
-                dynamic dat = Request.Form;//Obtiene los datos que llegan desde la llamada AJAX
-                keym = Convert.ToInt64(dat["keym"]);
-                idCar = Convert.ToInt64(dat["idCar"]);
-                idUsu = Convert.ToInt64(dat["idUsu"]);
-
-                ViewBag.keym = keym;
-                ViewBag.idCar = idCar;
-                ViewBag.idUsu = idUsu;
-            }
-            catch
-            {
-                string[] cad = null;
-                try
+                #region Asignar valores de la caracteristica actual a las variables
+                long usuAct = Convert.ToInt64(HttpContext.Session.GetString("idUsu"));
+                if (!ori)
                 {
-                    cad = HttpContext.Session.GetString("actCar").Split('-');
+                    string[] cad = HttpContext.Session.GetString("actCar").Split('-');
+                    keym = Convert.ToInt64(cad[0]);
+                    idCar = Convert.ToInt64(cad[1]);
+                    idUsu = Convert.ToInt64(cad[2]);
                 }
-                catch { }
-                keym = Convert.ToInt64(cad[0]);
-                idCar = Convert.ToInt64(cad[1]);
-                idUsu = Convert.ToInt64(cad[2]);
-
-                ViewBag.keym = keym;
-                ViewBag.idCar = idCar;
-                ViewBag.idUsu = idUsu;
+                #endregion
             }
-
+            catch { }
+            //ViewBag.keym = keym;
+            //ViewBag.idCar = idCar;
+            //ViewBag.idUsu = idUsu;
             DBCActivities dbAct = new DBCActivities();
             try
             {
-                Dictionary<string,string> x = dbAct.getChildPieChart(keym,idUsu,idCar);
+                Dictionary<string, string> x = dbAct.getChildPieChart(keym, idUsu, idCar);
                 ViewBag.percentAsign = x["perAsig"];
                 ViewBag.percentComplete = x["perComp"];
                 ViewBag.complete = x["comp"];
@@ -507,52 +534,107 @@ namespace MProjectWeb.Controllers
         /// Llama a la vista que muestra el Reporte correspondiente al proyecto o actividades que el usuario logeado tenga activa
         /// </summary>
         /// <returns></returns>
-        public IActionResult Reports()
+        public IActionResult Reports(long keym, long idCar, long idUsu, bool ori)
         {
+
+            #region variables de estado de la vista, sirve para mostrar mensajes en las vista
+            bool st = false;
+            #endregion
+
+            try
+            {
+                #region Asignar valores de la caracteristica actual a las variables
+                long usuAct = Convert.ToInt64(HttpContext.Session.GetString("idUsu"));
+                if (!ori)
+                {
+                    string[] cad = HttpContext.Session.GetString("actCar").Split('-');
+                    keym = Convert.ToInt64(cad[0]);
+                    idCar = Convert.ToInt64(cad[1]);
+                    idUsu = Convert.ToInt64(cad[2]);
+                }
+                #endregion
+
+                #region obtiene la lista de inventario de la tabla caracteristicas
+                DBCReports rep = new DBCReports();
+                string x = rep.getReport(usuAct, keym, idCar, idUsu);
+                x = "http://docs.google.com/gview?url=" + x + "&embedded=true";
+                ViewBag.doc = x;
+                #endregion
+
+                #region Asigna la lista a una variable ViewBag para se usada desde la vista
+
+
+                ViewBag.st = st;
+                #endregion
+            }
+            catch
+            {
+            }
             return View();
+
         }
 
         /// <summary>
         /// Llama a la vista que muestra los recursos financieros correspondientes al proyecto o actividades que el usuario logeado tenga activa
         /// </summary>
         /// <returns></returns>
-        public IActionResult Financial()
+        public IActionResult Financial(long keym, long idCar, long idUsu, bool ori)
         {
+
+            #region variables de estado de la vista, sirve para mostrar mensajes en las vista
+            ViewBag.st = false;
+            #endregion
+
             try
             {
-                #region Variables locales referentes a la asignacion de la caracteristica actual del proyecto o actividad
-                //Creacion de variables locales
-                long keym;
-                long idCar;
-                long idUsu;
 
-                //Cad se le asigna el valor de la caracteristica actual proveniente de una variable local
-                string[] cad = null;
-                try
+                #region Asignar valores de la caracteristica actual a las variables
+                if (!ori)
                 {
-                    cad = HttpContext.Session.GetString("actCar").Split('-');
+                    string[] cad = HttpContext.Session.GetString("actCar").Split('-');
+                    keym = Convert.ToInt64(cad[0]);
+                    idCar = Convert.ToInt64(cad[1]);
+                    idUsu = Convert.ToInt64(cad[2]);
                 }
-                catch { }
-
-                //Asignacion de valores correspondientes a las variables
-                keym = Convert.ToInt64(cad[0]);
-                idCar = Convert.ToInt64(cad[1]);
-                idUsu = Convert.ToInt64(cad[2]);
-
-                ViewBag.keym = keym;
-                ViewBag.idCar = idCar;
-                ViewBag.idUsu = idUsu;
-
                 #endregion
 
 
+                #region obtiene la lista de inventario de la tabla caracteristicas
+                DBCFinancial dbcFin = new DBCFinancial();
+
+                List<presupuesto> lstRes = dbcFin.getResourcesList(keym, idCar, idUsu);
+                List<costos> lstCos = dbcFin.getCostsList(keym, idCar, idUsu);
+                #endregion
+
+                #region Asigna la lista a una variable ViewBag para se usada desde la vista
+
+                //Recursos financieros
+                if (lstRes != null && lstRes.Count == 0)
+                    ViewBag.stRes = false;
+                else
+                {
+                    ViewBag.lstRes = lstRes;
+                    ViewBag.stRes = true;
+                }
+
+                //Costos
+                if (lstCos != null && lstCos.Count == 0)
+                    ViewBag.stCos = false;
+                else
+                {
+                    ViewBag.lstCos = lstCos;
+                    ViewBag.stCos = true;
+                }
+
+
+                ViewBag.st = true;
+                #endregion
 
             }
             catch (Exception err)
             {
-                ViewBag.st = false;
+
             }
-            
             return View();
         }
 
@@ -560,8 +642,46 @@ namespace MProjectWeb.Controllers
         /// Llama a la vista que muestra el inventario correspondiente al proyecto o actividades que el usuario logeado tenga activa
         /// </summary>
         /// <returns></returns>
-        public IActionResult Inventory()
+        public IActionResult Inventory(long keym, long idCar, long idUsu, bool ori)
         {
+            #region variables de estado de la vista, sirve para mostrar mensajes en las vista
+            bool st = false;
+            #endregion
+
+            try
+            {
+
+                #region Asignar valores de la caracteristica actual a las variables
+                if (!ori)
+                {
+                    string[] cad = HttpContext.Session.GetString("actCar").Split('-');
+                    keym = Convert.ToInt64(cad[0]);
+                    idCar = Convert.ToInt64(cad[1]);
+                    idUsu = Convert.ToInt64(cad[2]);
+                }
+                #endregion
+
+                #region obtiene la lista de inventario de la tabla caracteristicas
+                DBCInventory inv = new DBCInventory();
+                List<recursos> lstRes = inv.getInventoryList(keym, idCar, idUsu);
+                #endregion
+
+                #region Asigna la lista a una variable ViewBag para se usada desde la vista
+
+                if (lstRes.Count == 0)
+                    st = false;
+                else
+                    st = true;
+
+
+                ViewBag.lstRes = lstRes;
+                ViewBag.st = st;
+                #endregion
+            }
+            catch
+            {
+                ViewBag.st = st;
+            }
             return View();
         }
 
@@ -590,8 +710,9 @@ namespace MProjectWeb.Controllers
         /// <param name="usu"></param>
         /// <returns></returns>
         [HttpGet]
-        public List<string> getLinks(long key,long idcar,long usu)
+        public List<string> getLinks(long key, long idcar, long usu)
         {
+            HttpContext.Session.SetString("carAct", key + "-" + idcar + "-" + usu);
             try
             {
                 //dynamic dat = Request.Form;
@@ -600,14 +721,15 @@ namespace MProjectWeb.Controllers
                 //long idUsu = Convert.ToInt64(dat["usu"]);
 
                 DBCActivities act = new DBCActivities();
-                List<string> lst = act.getLinks(key,idcar,usu);
+                List<string> lst = act.getLinksFromDBActivity(key, idcar, usu);
                 return lst;
-            }catch
+            }
+            catch
             {
                 return null;
             }
-            
+
         }
-       
+
     }
 }

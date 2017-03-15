@@ -40,83 +40,97 @@
     }
 
 
-    <div style="width:90%" class="center-block">
+    @{
+        bool stPublicProject=false;
+        try { stPublicProject = Convert.ToBoolean(ViewBag.stPublicPage); } catch { }
+        if (st || stPublicProject)
+        {
+            <div style="width:90%" class="center-block">
 
-        <div class="asd">
-            <h1 class="page-header">
-                <!-- Title of page -->
-                Proyectos
-                <small>
-                    <!-- SubTitle of page -->
-                </small>
-            </h1>
-        </div>
+                <div class="asd">
+                    <h1 class="page-header">
+                        <!-- Title of page -->
+                        Proyectos
+                        <small>
+                            <!-- SubTitle of page -->
+                        </small>
+                    </h1>
+                </div>
 
 
-        <div class="row">
-            <div class="col-lg-12">
-                <p class="lead">
-                    Estos son todos los proyectos que poseen publicaciones visibles para todas las personas.<br /><br />
-                    Recuerde que si selecciona uno de ellos o su respectiva subpublicacion, usted podra visualizar los archivos publicos que posea ingresando en la opcion Multimedia ubicada en el menu principal.
-                    <br />
-                    Si usted no se encuentra en un proyecto o subpublicacion la opcion Multimedia le mostrara todos los archivos publicos que se tiene hasta el momento.
-                    <div class="alert alert-warning" id="nota">
-                        <strong>NOTA: </strong>Para acceder a una publicacion solo ingrese seleccionando el proyecto que desee. Recuerde que si desea ingresar a sus subpublicaciones lo podra hacer a traves de la opcion Sitios/Blogs.
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p class="lead">
+                            Estos son todos los proyectos que poseen publicaciones visibles para todas las personas.<br /><br />
+                            Recuerde que si selecciona uno de ellos o su respectiva subpublicacion, usted podra visualizar los archivos publicos que posea ingresando en la opcion Multimedia ubicada en el menu principal.
+                            <br />
+                            Si usted no se encuentra en un proyecto o subpublicacion la opcion Multimedia le mostrara todos los archivos publicos que se tiene hasta el momento.
+                            <div class="alert alert-warning" id="nota">
+                                <strong>NOTA: </strong>Para acceder a una publicacion solo ingrese seleccionando el proyecto que desee. Recuerde que si desea ingresar a sus subpublicaciones lo podra hacer a traves de la opcion Sitios/Blogs.
 
-                    </div>
-                    @{if (!st)
-                        {
-                            <div class="alert alert-danger">
-                                <strong>NOTA: </strong>No se han encontrado proyectos.
                             </div>
-                        }
+                            @{if (!st)
+                                {
+                                    Context.Session.SetString("stFile", "N");
+                                    //  <div class="alert alert-danger">
+                                    //      <strong>NOTA: </strong>No se han encontrado proyectos.
+                                    //  </div>
+                                }
 
-                    }
+                            }
 
-                </p>
-            </div>
-        </div>
-        <div class="row">
-            @{
-                try
-                {
-                    if (ax_lst_prj != null)
-                    {
-                        var lst_prj = ax_lst_prj.ToList();
-                        foreach (var x in lst_prj)
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    @{
+                        try
                         {
-                            <div class="col-lg-4 col-md-6">
-                                <div class="panel panel-primary">
-                                    <div class="panel-heading">
-                                        <div class="row">
-                                            <!--    ---------------------------------   Datos plantilla  --------------------------------                -->
-                                            @{long dat = -1; }
-                                            @{
-                                                dat = (long)x.id_car;
-                                                <div class="row" style="margin-left:10px">@x.valor - @x.desc</div>
-                                            }
-                                            <div class="hidden" id="dat_@dat">@dat</div>
+                            if (ax_lst_prj != null)
+                            {
+                                var lst_prj = ax_lst_prj.ToList();
+                                foreach (var x in lst_prj)
+                                {
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <!--    ---------------------------------   Datos plantilla  --------------------------------                -->
+                                                    @{long dat = -1; }
+                                                    @{
+                                                        dat = (long)x.id_car;
+                                                        <div class="row" style="margin-left:10px">@x.valor - @x.desc</div>
+                                                    }
+                                                    <div class="hidden" id="dat_@dat">@dat</div>
+                                                </div>
+                                            </div>
+                                            <a id="prj_@x.keym-@x.id_car-@x.id_usu" src="@x.ruta">
+                                                <div class="panel-footer prj_op">
+                                                    <span class="pull-left">View Details</span>
+                                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </a>
                                         </div>
                                     </div>
-                                    <a id="prj_@x.keym-@x.id_car-@x.id_usu" src="@x.ruta">
-                                        <div class="panel-footer prj_op">
-                                            <span class="pull-left">View Details</span>
-                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
+                                                                }
+                                                            }
                                                         }
-                                                    }
-                                                }
-                                                catch { }
-            }
+                                                        catch { }
+                    }
 
-            <div class="col-lg-4 col-md-4" id="panel_prj">
+                    <div class="col-lg-4 col-md-4" id="panel_prj">
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        }
+        else
+        {
+            Context.Session.SetString("stFile", "N");
+            <img src="~/img/page-not-found.png" style="margin:20px" height="60%" width="60%"/>
+        }
+    }
+
     <script>
         $(".prj_op").click(function () {
             var s = $(this).parent().attr('id').replace(/prj_/gi, "").split('-');
@@ -148,6 +162,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <script type="text/javascript">
         var s = "@ViewBag.Pagina";
+        //alert(s);
         $("#area").load(s);
         if (window.history.state) {
             var stateObj = { foo: "bar" };
@@ -167,5 +182,6 @@
         document.getElementById("aux").setAttribute("idUsu", dat[2]);
         document.getElementById("aux").setAttribute("idCar", dat[1]);
     } catch (err) { }
+    
     //window.onload = myajax(dat[0],dat[1],dat[2]);
 </script>

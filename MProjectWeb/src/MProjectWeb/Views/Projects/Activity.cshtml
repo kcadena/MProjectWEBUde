@@ -114,8 +114,10 @@
                                                         idCar="@x.idCar" usuCar="@x.usuCar" keym="@x.keym">
                                                         <li><a class="opt_footer_files">Archivos/Documentos</a></li>
                                                         <li><a class="opt_footer_statistics">Estadisticas</a></li>
-                                                        <li role="separator" class="divider"></li>
-                                                        <li><a class="opt_footer_moreInf">Mas Informacion</a></li>
+                                                        <li><a class="opt_footer_reports">Reoportes</a></li>
+                                                        <li><a class="opt_footer_resources">Recursos Financieros</a></li>
+                                                        <li><a class="opt_footer_inventory">Inventario</a></li>
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -182,8 +184,10 @@
                                                         idCar="@x.idCar" usuCar="@x.usuCar" keym="@x.keym">
                                                         <li><a class="opt_footer_files">Archivos/Documentos</a></li>
                                                         <li><a class="opt_footer_statistics">Estadisticas</a></li>
-                                                        <li role="separator" class="divider"></li>
-                                                        <li><a class="opt_footer_moreInf">Mas Informacion</a></li>
+                                                        <li><a class="opt_footer_reports">Reportes</a></li>
+                                                        <li><a class="opt_footer_resources">Recursos Financieros</a></li>
+                                                        <li><a class="opt_footer_inventory">Inventario</a></li>
+                                                       
                                                     </ul>
                                                 </div>
                                             </div>
@@ -199,6 +203,7 @@
 
               
                 <script>
+                    //Archivos
                     $(".opt_footer_files").click(function () {
                         var keym = $(this).parent().parent().attr("keym");
                         var car = $(this).parent().parent().attr("idCar");
@@ -206,17 +211,39 @@
 
                         showFiles(keym, usu , car, "img", ""); //keym,usu,car,type, text=>palabra o frase a buscar
                     });
+                    //Estadisticas
                     $(".opt_footer_statistics").click(function () {
                         var keym = $(this).parent().parent().attr("keym");
                         var car = $(this).parent().parent().attr("idCar");
                         var usu = $(this).parent().parent().attr("usuCar");
                         //var x = "Context.Session.GetString("id_prj")";
-                        showCharts(x[0], usu, car);
+                        showCharts(keym, usu, car);
                     });
-                    $(".opt_footer_moreInf").click(function () {
-                        var id = $(this).parent().parent().attr("idCar");
-                        optionsActivities(id, "ActMoreInfo")
-                                    });
+                    //Reportes
+                    $(".opt_footer_reports").click(function () {
+                        var keym = $(this).parent().parent().attr("keym");
+                        var car = $(this).parent().parent().attr("idCar");
+                        var usu = $(this).parent().parent().attr("usuCar");
+
+                        showReports(keym, usu, car); //keym,usu,car,type, text=>palabra o frase a buscar
+                    });
+                    //Recursos
+                    $(".opt_footer_resources").click(function () {
+                        var keym = $(this).parent().parent().attr("keym");
+                        var car = $(this).parent().parent().attr("idCar");
+                        var usu = $(this).parent().parent().attr("usuCar");
+
+                        showFinancial(keym, usu, car); //keym,usu,car,type, text=>palabra o frase a buscar
+                    });
+                    //Inventario
+                    $(".opt_footer_inventory").click(function () {
+                        var keym = $(this).parent().parent().attr("keym");
+                        var car = $(this).parent().parent().attr("idCar");
+                        var usu = $(this).parent().parent().attr("usuCar");
+
+                        showInventory(keym, usu, car); //keym,usu,car,type, text=>palabra o frase a buscar
+                    });
+                   /****************************************************************************/
                     $(".open-folder").click(function () {
                         var ids = $(this).attr("idCar");
                         var usu = $(this).attr("usuCar");

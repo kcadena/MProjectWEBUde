@@ -18,6 +18,8 @@ namespace MProjectWeb.Controllers
     {
         public IActionResult Index()
         {
+            HttpContext.Session.SetString("stFile", "Y");
+            HttpContext.Session.SetString("carAct","");
             //MProjectDeskSQLITEContext dbMP = new MProjectDeskSQLITEContext();
             ViewBag.errLogin = false;
             try
@@ -46,6 +48,7 @@ namespace MProjectWeb.Controllers
         public IActionResult LogOut()
         {
             HttpContext.Session.Clear();
+            HttpContext.Session.SetString("carAct", "");
             return RedirectToAction("Index", "Index");
         }
         /// <summary>
@@ -70,7 +73,11 @@ namespace MProjectWeb.Controllers
 
             #region Creacion de la estructura JSON para Generar TreeView con javascript desde la vista
             string json = getCadLinks(lst);
-            ViewBag.json = JsonConvert.DeserializeObject(json);
+            try
+            {
+                ViewBag.json = JsonConvert.DeserializeObject(json);
+            }
+            catch { }
             //ViewBag.json = json;
             #endregion
 
@@ -91,6 +98,8 @@ namespace MProjectWeb.Controllers
 
         public IActionResult Help()
         {
+            HttpContext.Session.SetString("stFile", "Y");
+            HttpContext.Session.SetString("carAct", "");
             return View();
         }
 
@@ -108,15 +117,87 @@ namespace MProjectWeb.Controllers
                 src = conf.getIpPlatServer() + "Projects/publicprojects?p=" + lst.First().Split('|')[1].Replace(',', '-');
             }
             catch { }
-            //string json = "[{text: \"" + lst.First().Split('-')[3]+"\" , href:\""+@src+ "\", backColor: \"#ff0000\" }]";
+            //string json = "[{text: \"" + lst.First().Split('-')[3]+"\" , href:\""+@src+ "\", backColor: \"#ff6a00\" }]";
 
             if (lst.Count == 1)
             {
-                json = "[{text: \"" + lst.First().Split('|')[3] + "\" , href:\"" + src + "\" }]";
+                json = "[{text: \"" + lst.First().Split('|')[3] + "\" , selectable: false, highlightSelected:false, multiSelect:false  ";
+
+                #region Asigna la direccion y color del link
+                if (lst.First().Split('|')[0].Equals("Y"))
+                {
+                    string car = lst.First().Split('|')[1].Replace(',', '-');
+                    string xcar = HttpContext.Session.GetString("carAct");
+                    try
+                    {
+                        if (xcar.Equals(car) && xcar != null)
+                        {
+                            json = json + ", backColor: \"#ff6a00\" , color: \"#ffffff\"  ";
+                        }
+                        else
+                        {
+                            json = json + ", color: \"#1ba3fe\"";
+                        }
+                    }
+                    catch
+                    {
+                    }
+                    json = json + ", href:\"" + src + "\"  ";
+                }
+                else
+                {
+                    json = json + ",  state:{ selected: false  } ";
+                }
+                #endregion
+
+               
+
+                json = json + "}]";
+
             }
             if (lst.Count > 1)
             {
-                json = "[{text: \"" + lst.First().Split('|')[3] + "\" , href:\"" + src + "\"";
+                json = "[{text: \"" + lst.First().Split('|')[3] + "\" ,  selectable: false, highlightSelected:false, multiSelect:false ";
+                #region Asigna la direccion y color del link
+                if (lst.First().Split('|')[0].Equals("Y"))
+                {
+                    string ycar = lst.First().Split('|')[1].Replace(',', '-');
+                    string wcar = HttpContext.Session.GetString("carAct");
+                    try
+                    {
+                        if (wcar.Equals(ycar) && wcar != null)
+                        {
+                            json = json + ", color: \"#ffffff\"  ";
+                        }
+                        else
+                        {
+                            json = json + ", color: \"#1ba3fe\"";
+                        }
+                    }
+                    catch
+                    {
+                    }
+                    json = json + ", href:\"" + src + "\" ";
+                }
+                else
+                {
+                    json = json + ",  state:{ selected: false  } ";
+                }
+                #endregion
+
+                string car = lst.First().Split('|')[1].Replace(',', '-');
+                string xcar = HttpContext.Session.GetString("carAct");
+
+                try
+                {
+                    if (xcar.Equals(car))
+                    {
+                        json = json + ", backColor: \"#ff6a00\" ";
+                    }
+                }
+                catch { }
+
+
 
                 if (Convert.ToInt32(lst[0].Split('|')[5]) < Convert.ToInt32(lst[1].Split('|')[5]))
                     json = json + ",nodes:[";
@@ -134,17 +215,14 @@ namespace MProjectWeb.Controllers
                         }
                         #region Variables de la caracteristica
                         string[] xcad = lst[i].Split('|');
-
+                        string idCarStr = xcad[1].Replace(',','-');
                         int n = Convert.ToInt32(xcad[5]), nx = -1;
                         src = conf.getIpPlatServer() + "Projects/publicprojects?p=" + xcad[1].Replace(',', '-');
                         string text = lst[i].Split('|')[3];
                         string srcSta = lst[i].Split('|')[0];
                         #endregion
 
-                        if (text.Equals("A2.1"))
-                        {
-                            string sd = "";
-                        }
+                     
 
                         try
                         {
@@ -156,7 +234,7 @@ namespace MProjectWeb.Controllers
                             if (c != '[')
                                 json = json + ",";
 
-                            json = json + getInfNode(text, src, srcSta) + "}";
+                            json = json + getInfNode(text, src, srcSta, idCarStr) + "}";
                             for (int x = 0; x < n; x++)
                             {
                                 json = json + "]}";
@@ -171,7 +249,7 @@ namespace MProjectWeb.Controllers
                             if (c != '[')
                                 json = json + ",";
 
-                            json = json + getInfNode(text, src, srcSta);
+                            json = json + getInfNode(text, src, srcSta, idCarStr);
 
                             if (n < nx)
                                 json = json + ", nodes:[";
@@ -202,20 +280,43 @@ namespace MProjectWeb.Controllers
         /// <param name="text"></param>
         /// <param name="src"></param>
         /// <returns></returns>
-        private string getInfNode(string text,string src,string srcSta)
+        private string getInfNode(string text,string src,string srcSta, string car)
         {
             string cad = "";
             cad = "{text: \"" + text + "\" , selectable: false, highlightSelected:false, multiSelect:false ";
             string act = HttpContext.Session.GetString("infAct");
-           
+
+            
+
+            #region Asigna la direccion y color del link
             if (srcSta.Equals("Y"))
             {
-                cad = cad + ", href:\"" + src + "\" , color: \"#183691\" ";
+                #region Asigna color para indicar la caracteristica actual
+                try
+                {
+                    string xcad = HttpContext.Session.GetString("carAct");
+                    if (xcad.Equals(car))
+                    {
+                        cad = cad + ", backColor: \"#ff6a00\" , color: \"#ffffff\"";
+                    }
+                    else
+                    {
+                        cad = cad + ", color: \"#1ba3fe\"";
+                    }
+                }
+                catch
+                {
+                    cad = cad + ", color: \"#1ba3fe\"";
+                }
+                #endregion
+                cad = cad + ", href:\"" + src + "\" ";
             }
             else
             {
                 cad = cad + ",  state:{ selected: false  } ";
             }
+            #endregion
+
             return cad;
         }
 

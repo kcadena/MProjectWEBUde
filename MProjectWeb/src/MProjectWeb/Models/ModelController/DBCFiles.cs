@@ -23,16 +23,7 @@ namespace MProjectWeb.Models.ModelController
 
         }
 
-        public file getReportInfo(long keym, long idCar, long idUsu )
-        {
-            
-            return null;
-        }
     }
 
-    public class file
-    {
-
-    }
 
 }

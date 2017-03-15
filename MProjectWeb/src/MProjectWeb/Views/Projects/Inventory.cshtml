@@ -1,6 +1,20 @@
-﻿@{
+﻿@using MProjectWeb.Models.Postgres;
+@{
     Layout = null;
 }
+
+
+@{
+    bool st = false;
+    List<recursos> lstRes = null;
+    try
+    {
+        st = ViewBag.st;
+        lstRes = ViewBag.lstRes;
+    }
+    catch { }
+}
+
 <div class="asd">
     <h1 class="page-header">
         <!-- Title of page -->
@@ -12,117 +26,45 @@
 
 </div>
 
+@{
+    try
+    {
+        if (st)
+        {
 
 
-<div class="row center-block" style="width:80%;">
-    
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Descriocion del recurso</th>
-                <th>Unidades</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td scope="row">Video Beam</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td scope="row">Computador Portatil</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td scope="row">Impresora Laser</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td scope="row">Celulares</td>
-                <td>3</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+            <div class="row center-block" style="width:80%;">
 
-
-
-
-<script>
-    //Corresponde a la informacion de porcentaje asignado que tienen los hijos de una caracteristica
-
-    @{
-        string cadPerAsi = ViewBag.percentAsign;
-    }
-    var x = JSON.stringify(eval(@Json.Serialize(cadPerAsi)));
-    
-    Morris.Donut({
-        element: 'chart-perAsig',
-        data: JSON.parse(x),
-        resize: true,
-        formatter: function (x) { return x + "%" },
-        //backgroundColor: '#ccc',
-        labelColor: '#060',
-        colors: [
-          '#0BA470',
-          '#0BA445',
-          '#39B580',
-          '#67C69D',
-          '#95D7BB'
-        ]
-    });
-</script>
-<script>
-    //Porcentaje cumplido de cada una de las caracteristicas hijas
-    @{
-        string cadPerComp = ViewBag.percentComplete;
-    }
-    var x = JSON.stringify(eval(@Json.Serialize(cadPerComp)));
-    
-    Morris.Bar({
-        element: 'chart-perComp',
-        data: JSON.parse(x),
-        axes: true,
-        resize: true,
-        xkey: 'cumplido',
-        ykeys: ['value'],
-        labels: ['cumplido '],
-        ymax: [100],
-        yLabelFormat: function (x) { return x + "%" },
-        xLabelAngle: 75,
-        gridTextColor: '#000000',
-        gridTextSize: 15,
-        barColors: function (row, series, type) {
-            if (type === 'bar') {
-                var red = Math.ceil(200 * row.y / this.ymax);
-                return 'rgb(' + red + ',0,0)';
-            }
-            else {
-                return '#000';
-            }
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Descriocion del recurso</th>
+                            <th>Unidades</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            foreach (var x in lstRes)
+                            {
+                                <tr>
+                                    <td scope="row">@x.nombre_recurso</td>
+                                    <td>@x.cantidad</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
         }
-    });
-</script>
-
-<script>
-    //Corresponde al porcentaje de cumplimiento del proyecto o actividad actual
-    @{
-        string cadComp = ViewBag.complete;
+        else
+        {
+            <div>
+                <div class="alert alert-warning fade in center-block" style="position:relative;width:100%">
+                    <a class="close" data-dismiss="alert">&times;</a>
+                    No se han encontrado recursos relacionados con este proyecto o actividad.
+                </div>
+            </div>
+        }
     }
-    var x = JSON.stringify(eval(@Json.Serialize(cadComp)));
-    Morris.Donut({
-        element: 'chart-comp',
-        data: JSON.parse(x),
-        resize: true,
-        formatter: function (x) { return x + "%" },
-        //backgroundColor: '#ccc',
-        labelColor: '#060',
-        
-        //colors: [
-        //  '#0BA470',
-        //  '#0BA445',
-        //  '#39B580',
-        //  '#67C69D',
-        //  '#95D7BB'
-        //]
-    });
-</script>
+    catch { }
+}

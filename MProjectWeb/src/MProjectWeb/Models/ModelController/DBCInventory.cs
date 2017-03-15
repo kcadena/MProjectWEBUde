@@ -14,6 +14,15 @@ namespace MProjectWeb.Models.ModelController
         {
             db = new MProjectContext();
         }
+
+        /// <summary>
+        /// Trae la lista del inventario de una caracteristica
+        /// </summary>
+        public List<recursos> getInventoryList(long keym,long idCar, long usu)
+        {
+            var inv = db.recursos.Where(x => x.keym_car == keym && x.id_caracteristica == idCar && x.id_usuario_car == usu).ToList();
+            return inv;
+        }
      
     }
 }
