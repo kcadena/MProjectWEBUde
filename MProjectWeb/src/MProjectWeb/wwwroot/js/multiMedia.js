@@ -68,7 +68,7 @@ function showFiles(keym, usu, car, type, text) {
 function publicShowFiles(keym, usu, car, type, text) {
     //alert(keym + " usu: " + usu + "   car: " + car + "     typ: " + type);
     $.ajax({
-        url: '/Projects/PublicFiles',
+        url: '/Projects/Files',
         type: 'POST',
         data: { idCar: car, idUsu: usu, keym: keym, type: type, text: text, publicFile: true },
         async: true,
@@ -324,3 +324,34 @@ function showInventory(keym, usu, car) {
 }
 
 
+
+//     Esta seccion corresponde a la busqueda de las caracteristicas que tienen publicacion web
+
+function searchWebPage(txt) {
+    $.ajax({
+        url: '/Projects/SearchWebPage',
+        type: 'POST',
+        data: { txt:txt },
+        async: true,
+        cache: false,
+        beforeSend: function () {
+            $("#tabWp").html("");
+            $("#tabWp").html('<img src="/img/ajax-loader.gif" style="position:relative;margin-top:20px;margin-left:50%;height:50px;width:50px">');
+        },
+        success: function succ(data) {
+            //alert(data);
+            if (data != 0) {
+                $("#tabWp").html("");
+                $("#tabWp").html(data);
+            }
+            else {
+                alert("Multimedia=>showCharts:  No se encontraron Reportes relacionados!!!");
+            }
+        }
+    }).fail(
+       function (da) {
+           alert("No se pudo cargar la pagina."+da);
+           $("#tabWp").html("");
+       }
+    );
+}

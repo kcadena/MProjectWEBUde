@@ -202,6 +202,7 @@ namespace MProjectWeb.Models.ModelController
 
                                           //p// Nota: especial atencion
                                           x.id_usuario,
+                                          x.usuario_asignado,
                                           //
 
                                           y.nombre,
@@ -215,7 +216,14 @@ namespace MProjectWeb.Models.ModelController
                             //p//string rutaPadre = carPar.ruta_repositorio + carPar.nombre + ".html";
                             string rutaPadre = carPar.ruta_repositorio + "Web" + idPadre + ".html";
 
-                            llink.Add(idPadre + "|" + "Atras" + "|" + rutaPadre);
+                            if(System.IO.File.Exists(rutaPadre))
+                                llink.Add(idPadre + "|" + "Atras" + "|" + rutaPadre);
+                            else
+                            {
+                                rutaPadre = rutaPadre.Replace("/user" + carPar.id_usuario, "/user" + carPar.usuario_asignado);
+                                llink.Add(idPadre + "|" + "Atras" + "|" + rutaPadre);
+                            }
+
                             st = false;
 
                         }
@@ -246,6 +254,7 @@ namespace MProjectWeb.Models.ModelController
 
                                           //p// Nota: especial atencion
                                           x.id_usuario,
+                                          x.usuario_asignado,
                                           //
 
                                           pro.nombre,
@@ -259,7 +268,15 @@ namespace MProjectWeb.Models.ModelController
                         //p//string rutaPadre = carPar.ruta_repositorio + carPar.nombre + ".html";
                         string rutaPadre = carPar.ruta_repositorio + "Web" + idPadre + ".html";
 
-                        llink.Add(idPadre + "|" + "Atras" + "|" + rutaPadre);
+                        //llink.Add(idPadre + "|" + "Atras" + "|" + rutaPadre);
+
+                        if (System.IO.File.Exists(rutaPadre))
+                            llink.Add(idPadre + "|" + "Atras" + "|" + rutaPadre);
+                        else
+                        {
+                            rutaPadre = rutaPadre.Replace("/user" + carPar.id_usuario, "/user" + carPar.usuario_asignado);
+                            llink.Add(idPadre + "|" + "Atras" + "|" + rutaPadre);
+                        }
                     }
                     catch
                     {
@@ -328,7 +345,13 @@ namespace MProjectWeb.Models.ModelController
                                 //p//string ruta = x.repositorios_usuarios.ruta_repositorio + x.nombre + ".html";
                                 string ruta = x.repositorios_usuarios.ruta_repositorio + "Web" + id + ".html";
 
-                                llink.Add(id + "|" + nombre + "|" + ruta);
+                                if(System.IO.File.Exists(ruta))
+                                    llink.Add(id + "|" + nombre + "|" + ruta);
+                                else
+                                {
+                                    ruta = ruta.Replace("/user"+x.id_usuario,"/user"+x.x.usuario_asignado);
+                                    llink.Add(id + "|" + nombre + "|" + ruta);
+                                }
                             }
                             catch
                             {
@@ -522,6 +545,8 @@ namespace MProjectWeb.Models.ModelController
                         perComp = (double)x.caracteristicas.porcentaje_cumplido
                     }).ToList();
 
+                decimal total = db.caracteristicas.Where( x => x.keym == keym && x.id_usuario == usu && x.id_caracteristica == car).Single().porcentaje_cumplido;
+
                 //datPieChar carChi = null ;
                 //try
                 //{
@@ -538,7 +563,7 @@ namespace MProjectWeb.Models.ModelController
                 //catch { }
 
 
-                return convertJsonPieChart(carAct);
+                return convertJsonPieChart(carAct,total);
             }
             catch
             {
@@ -551,7 +576,7 @@ namespace MProjectWeb.Models.ModelController
         /// </summary>
         /// <param name="lst"></param>
         /// <returns></returns>
-        private Dictionary<string, string> convertJsonPieChart(List<datPieChar> lst)
+        private Dictionary<string, string> convertJsonPieChart(List<datPieChar> lst,decimal total)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
@@ -580,7 +605,11 @@ namespace MProjectWeb.Models.ModelController
             cadComp = cadComp.Remove(cadComp.Length - 1) + "]";
 
             //string comp = "[{ label:'SI' , value:" + par.perComp.ToString().Replace(',', '.') + "}," + "{ label: 'NO' , value: " + (100 - par.perComp).ToString().Replace(',', '.') + "}]";
-            string comp = "[{ label:'SI' , value:" + (valComp) + "}," + "{ label: 'NO' , value: " + (100-valComp) + "}]";
+
+
+            
+
+            string comp = "[{ label:'SI' , value:" + (total).ToString().Replace(",",".") + "}," + "{ label: 'NO' , value: " + (100-total).ToString().Replace(",", ".") + "}]";
 
             dic["perAsig"] = cadAsig;
             dic["perComp"] = cadComp;

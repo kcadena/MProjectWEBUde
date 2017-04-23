@@ -134,7 +134,8 @@ namespace MProjectWeb.Controllers
                     if (st)
                     {
                         //Actualizar los datos en Postgres
-                        
+                        MProjectWeb.Models.ModelController.DBCFiles dbFil = new Models.ModelController.DBCFiles();
+                        dbFil.updatePointGEO(inf);
                     }
                     return true;
                 } catch { }

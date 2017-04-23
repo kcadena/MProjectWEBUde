@@ -1,6 +1,6 @@
 ﻿function myajax(key, idcar, usu) {
 
-    var src = "http://localhost:5000/Projects/publicprojects?p=" + key + "-" + idcar + "-" + usu;
+    var src = "http://http://localhost:20539/Projects/publicprojects?p=" + key + "-" + idcar + "-" + usu;
     //alert(src);
     
     try {
@@ -32,6 +32,7 @@
                 $("#content-opt").html('<img src="/img/ajax-loader.gif" style="position:relative;margin-left:50%;margin-top:20%;height:8%;width:8%;">');
 
                 jQuery.each(e, function (i, val) {
+                    //alert(val);
                     var sep = val.split("|");
                     var jsId = sep[0];
                     for (var i = 0; i < jsId.length; i++) {
@@ -57,11 +58,17 @@
                     var sc = "<script type='text/javascript'> $('#" + jsId + "').click(function() { myajax('" + idcom[0] + "','" + idcom[1] + "','" + idcom[2] + "'); ";
                     
                     //sc = sc + ' alert("KElvin"); </script>';
+                    var ax = "$.ajax({url:'" + sep[2] + "' ,error: function () {" +
+                        "$('#area').html('<img style=\"margin:20px;\" src=\"http://localhost:82/mp/system/images/page-not-found.png\" height=\"60%\" width=\"60%\">');"
+                        + "},success: function () { " +
+                        " $('#area').load('" + sep[2] + "');"
+                        + " } }); ";
+
                     sc = sc + "$.ajax({url:'" + sep[2] + "' ,error: function () {" +
                         "$('#area').html('<img style=\"margin:20px;\" src=\"http://localhost:82/mp/system/images/page-not-found.png\" height=\"60%\" width=\"60%\">');"
                         + "},success: function () { " +
                         " $('#area').load('" + sep[2] + "');"
-                        +" } }); ";
+                        + " } }); ";
                     //sc = sc + " $('#area').load('" + sep[2] + "');";
                     sc = sc +" }); <\/script>";
                     

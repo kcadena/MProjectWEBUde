@@ -19,17 +19,38 @@
 
 
 
+@{ 
 
+    bool st = Convert.ToBoolean(ViewBag.st);
+    if (st)
+    {
+        
+        <script>
+            $(document).ready(function () {
+                $(".word").fancybox({
+                    'width': 600, // or whatever
+                    'height': 320,
+                    'type': 'iframe'
+                }).click();
 
+            });
+        </script>
+        <a class="word" href="@ViewBag.doc"></a>
+        <div>
+            <div class="alert alert-success fade in center-block" style="position:relative;width:100%">
+                <a class="close" data-dismiss="alert">&times;</a>
+                Se ha encontrado un reporte. <a class="word" href="@ViewBag.doc">CLICK AQUI PARA VER.</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div>
+            <div class="alert alert-danger fade in center-block" style="position:relative;width:100%">
+                <a class="close" data-dismiss="alert">&times;</a>
+                No se ha encontrado un reporte correspondiente a este Proyecto / Actividad.
+            </div>
+        </div>
+    }
+}
 
-<script>
-    $(document).ready(function () {
-        $(".word").fancybox({
-            'width': 600, // or whatever
-            'height': 320,
-            'type': 'iframe'
-        }).click();
-
-    });
-</script>
-<a class="word" href="@ViewBag.doc"></a>

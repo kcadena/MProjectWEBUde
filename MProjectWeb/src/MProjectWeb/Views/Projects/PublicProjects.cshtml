@@ -12,39 +12,14 @@
 
 <div id="area" class="row" style="margin-left:0px;margin-right:0px">
 
-
-    @{
-        bool st = false;
-        List<ProjectsUsers> ax_lst_prj = null;
-        try
-        {
-            if (ViewBag.projects != null)
-            {
-                try
-                {
-                    ax_lst_prj = (List<ProjectsUsers>)ViewBag.projects;
-                    st = true;
-                }
-                catch
-                {
-                    <script>
-                        alert("No se pueden cargar los proyectos de esta cuenta.");
-                    </script>
-                }
-
-            }
-
-        }
-        catch { }
-
-    }
-
+    
 
     @{
         bool stPublicProject=false;
         try { stPublicProject = Convert.ToBoolean(ViewBag.stPublicPage); } catch { }
-        if (st || stPublicProject)
+        if (stPublicProject)
         {
+            Context.Session.SetString("stFile", "Y");
             <div style="width:90%" class="center-block">
 
                 <div class="asd">
@@ -61,99 +36,41 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <p class="lead">
-                            Estos son todos los proyectos que poseen publicaciones visibles para todas las personas.<br /><br />
-                            Recuerde que si selecciona uno de ellos o su respectiva subpublicacion, usted podra visualizar los archivos publicos que posea ingresando en la opcion Multimedia ubicada en el menu principal.
+                            En esta seccion podra realizar la busqueda de los proyectos y actividades, que poseen
+                            una publicacion web visible al publico en general.
                             <br />
-                            Si usted no se encuentra en un proyecto o subpublicacion la opcion Multimedia le mostrara todos los archivos publicos que se tiene hasta el momento.
                             <div class="alert alert-warning" id="nota">
-                                <strong>NOTA: </strong>Para acceder a una publicacion solo ingrese seleccionando el proyecto que desee. Recuerde que si desea ingresar a sus subpublicaciones lo podra hacer a traves de la opcion Sitios/Blogs.
+                                <strong>NOTA: </strong>Para acceder a una publicacion, solo ingrese seleccionando el proyecto que desee. 
+                                <br>Recuerde que si desea ingresar a sus subpublicaciones lo podra hacer a traves de la opcion "Paginas Web".
 
                             </div>
-                            @{if (!st)
-                                {
-                                    Context.Session.SetString("stFile", "N");
-                                    //  <div class="alert alert-danger">
-                                    //      <strong>NOTA: </strong>No se han encontrado proyectos.
-                                    //  </div>
-                                }
-
-                            }
-
+                           
                         </p>
                     </div>
                 </div>
-                <div class="row">
-                    @{
-                        try
-                        {
-                            if (ax_lst_prj != null)
-                            {
-                                var lst_prj = ax_lst_prj.ToList();
-                                foreach (var x in lst_prj)
-                                {
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">
-                                                <div class="row">
-                                                    <!--    ---------------------------------   Datos plantilla  --------------------------------                -->
-                                                    @{long dat = -1; }
-                                                    @{
-                                                        dat = (long)x.id_car;
-                                                        <div class="row" style="margin-left:10px">@x.valor - @x.desc</div>
-                                                    }
-                                                    <div class="hidden" id="dat_@dat">@dat</div>
-                                                </div>
-                                            </div>
-                                            <a id="prj_@x.keym-@x.id_car-@x.id_usu" src="@x.ruta">
-                                                <div class="panel-footer prj_op">
-                                                    <span class="pull-left">View Details</span>
-                                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                                                }
-                                                            }
-                                                        }
-                                                        catch { }
-                    }
+                
 
-                    <div class="col-lg-4 col-md-4" id="panel_prj">
+
+                <div class="input-group" style="width:80%;margin-left:20%">
+                    <input placeholder="Buscar..." class="form-control" id="inpTextWp" type="Search">
+                    <div class="input-group-btn">
+                        <button class="btn btn-info" id="btnSearchWp" onclick="searchWebPage(inpTextWp.value)">
+                            <span class="glyphicon glyphicon-search" style="margin-top:3px"></span>
+                        </button>
                     </div>
                 </div>
+
+                <div id="tabWp" style="margin-top:50px;"></div>
+
             </div>
         }
         else
         {
-            Context.Session.SetString("stFile", "N");
+            Context.Session.SetString("stFile", "Y");
             <img src="~/img/page-not-found.png" style="margin:20px" height="60%" width="60%"/>
         }
     }
 
-    <script>
-        $(".prj_op").click(function () {
-            var s = $(this).parent().attr('id').replace(/prj_/gi, "").split('-');
-            var keym = s[0];
-            var car = s[1];
-            var usu = s[2];
-            var src = $(this).parent().attr('src');
-            
-			$.ajax({
-				url: src,
-				dataType: 'html',
-				success: function(data){
-					$('#area').html(data);
-				}
-			});
-
-			if (window.history.state) {
-			    var stateObj = { foo: "bar" };
-			    history.pushState(stateObj, src, src);
-			}
-            myajax(keym, car, usu);
-        });
-    </script>
 </div>
 
 
@@ -184,4 +101,29 @@
     } catch (err) { }
     
     //window.onload = myajax(dat[0],dat[1],dat[2]);
+</script>
+
+
+<script>
+        $(".prj_op").click(function () {
+            var s = $(this).parent().attr('id').replace(/prj_/gi, "").split('-');
+            var keym = s[0];
+            var car = s[1];
+            var usu = s[2];
+            var src = $(this).parent().attr('src');
+
+			$.ajax({
+				url: src,
+				dataType: 'html',
+				success: function(data){
+					$('#area').html(data);
+				}
+			});
+
+			if (window.history.state) {
+			    var stateObj = { foo: "bar" };
+			    history.pushState(stateObj, src, src);
+			}
+            myajax(keym, car, usu);
+        });
 </script>

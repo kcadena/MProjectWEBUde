@@ -5,8 +5,8 @@
 @using Microsoft.AspNet.Http;
 
 @{
-        Layout = "/views/Shared/_LayoutUser.cshtml";
-    }
+    Layout = "/views/Shared/_LayoutUser.cshtml";
+}
 
 @{
     //cambio exitoso de contraseña
@@ -20,7 +20,7 @@
             {
                 <div>
                     <div class="alert alert-success fade in center-block" style="position:relative;width:100%">
-                        <a  class="close" data-dismiss="alert">&times;</a>
+                        <a class="close" data-dismiss="alert">&times;</a>
                         Se ha actualizado con exito tu contraseña.
                     </div>
                 </div>
@@ -40,7 +40,7 @@
             {
                 <div>
                     <div class="alert alert-success fade in center-block" style="position:relative;width:100%">
-                        <a  class="close" data-dismiss="alert">&times;</a>
+                        <a class="close" data-dismiss="alert">&times;</a>
                         Se ha actualizado con exito tu imagen de perfil.
                     </div>
                 </div>
@@ -60,7 +60,7 @@
             {
                 <div>
                     <div class="alert alert-success fade in center-block" style="position:relative;width:100%">
-                        <a  class="close" data-dismiss="alert">&times;</a>
+                        <a class="close" data-dismiss="alert">&times;</a>
                         Se ha actualizado con exito tu Informacion.
                     </div>
                 </div>
@@ -71,32 +71,41 @@
     }
     catch { }
 }
-    
+
 
 <!-- Page Heading -->
-<div  id="asd">
+<div id="asd">
     @*<div class="col-lg-12" id="asd">*@
-        <h1 class="page-header" >
-            <!-- Title of page -->
-            MProject
-            
-            <small>
-                <!-- SubTitle of page -->
-                Bienvenido a MProject.
-            </small>
-        </h1>
+    <h1 class="page-header">
+        <small>
+            <!-- SubTitle of page -->
+            Bienvenido a
+        </small>
+         <!-- Title of page -->
+        MProject
 
-        <h3>
-          
-        </h3>
-        @*<ol class="breadcrumb">
-                <li>
-                    <i class="fa fa-dashboard"></i>  <a href="index.html">Dashboard</a>
-                </li>
-                <li class="active">
-                    <i class="fa fa-file"></i> Blank Page
-                </li>
-            </ol>*@
+        
+    </h1>
+
+    <div style="width:80%;margin-left:10%;font-family:'Adobe Caslon Pro';" class="center-block;">
+        
+        <h2 style="text-align:center;font-size:50px">
+            Construido para gestores de PROYECTOS
+        </h2>
+        <p style="font-family:'Adobe Caslon Pro';font-size:25px;text-align:center">
+            MProject es una plataforma orientada a la gestion de proyectos de ambito general.
+            <br />
+            No solo te ayudara a gestionar proyectos, sino que tambien podras gestionar contenidos multimedia y publicaciones web, permitiendote dar a concer al mundo tus proyectos.
+        </p>
+        <br />
+        <br />
+        <p style="font-family:'Adobe Caslon Pro';font-size:17px;text-align:center">
+            Para poder empezar a crear tus proyectos descarga MProjectDesk desde
+            <a href="http://knower.udenar.edu.co/mp/system/program/Instalador.rar" style="font-size:25px">AQUI</a>
+        </p>
+    </div>
+
+
     @*@*</div>*@
 </div>
 
