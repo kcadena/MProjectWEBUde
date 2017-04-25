@@ -1,0 +1,56 @@
+﻿@{
+    Layout = null;
+}
+<div class="asd">
+    <h1 class="page-header">
+        <!-- Title of page -->
+        Objetivos
+        <small>
+            <!-- SubTitle of page -->
+        </small>
+    </h1>
+
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-fancyBox/source/jquery.fancybox.js"></script>
+<link href="~/css/Index.css" rel="stylesheet" />
+<link href="~/lib/jquery-fancyBox/source/jquery.fancybox.css" rel="stylesheet" />
+
+
+
+@{ 
+
+    bool st = Convert.ToBoolean(ViewBag.st);
+    if (st)
+    {
+        
+        <script>
+            $(document).ready(function () {
+                $(".word").fancybox({
+                    'width': 900, // or whatever
+                    'height': 540,
+                    'type': 'iframe'
+                }).click();
+
+            });
+        </script>
+        <a class="word" href="@ViewBag.doc"></a>
+        <div>
+            <div class="alert alert-success fade in center-block" style="position:relative;width:100%">
+                <a class="close" data-dismiss="alert">&times;</a>
+                Se han encontrado Objetivos. <a class="word" href="@ViewBag.doc">CLICK AQUI PARA VER.</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div>
+            <div class="alert alert-danger fade in center-block" style="position:relative;width:100%">
+                <a class="close" data-dismiss="alert">&times;</a>
+                No se ha encontrado objetivos correspondiente a este Proyecto / Actividad.
+            </div>
+        </div>
+    }
+}
+

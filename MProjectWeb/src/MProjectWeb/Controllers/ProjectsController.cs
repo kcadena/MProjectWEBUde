@@ -68,9 +68,16 @@ namespace MProjectWeb.Controllers
         /// <returns></returns>
         public IActionResult PublicProjects(string p)
         {
+            if (p == null || p.Length == 0)
+            {
+                HttpContext.Session.SetString("infAct", "");
+                HttpContext.Session.SetString("carAct", "");
+                p = "";
+            }
+                
             HttpContext.Session.SetString("stFile", "y");
             string carAct = HttpContext.Session.GetString("infAct");
-            if (carAct != p)
+            if (carAct != p && p.Length>0) 
             {
                 DBCActivities dbcAct = new DBCActivities();
                 try
@@ -190,11 +197,14 @@ namespace MProjectWeb.Controllers
                 }
                 //DBCProjects h = new DBCProjects();
                 //ViewBag.projects = h.listPublicProjectsUsers();
+
                 return View();
             }
 
 
-
+            DBCProjects dbPrj = new DBCProjects();
+            List<ListWebPage> lstWp = dbPrj.seachWebPage();
+            ViewBag.lsWp = lstWp;
 
             ViewBag.stPublicPage = true;
             return View();
@@ -537,8 +547,20 @@ namespace MProjectWeb.Controllers
         public IActionResult SearchWebPage(string txt)
         {
             DBCProjects dbPrj = new DBCProjects();
-            List<ListWebPage> lstWp = dbPrj.seachWebPage(txt);
+            List<ListWebPage> lstWp = null;
+            if (txt != null)
+            {
+                string cad = txt.Trim();
+                if (cad.Length > 0)
+                    lstWp = dbPrj.seachWebPage(txt);
+                else
+                    lstWp = dbPrj.seachWebPage();
+                ViewBag.lsWp = lstWp;
+                
+            }
+            lstWp = dbPrj.seachWebPage();
             ViewBag.lsWp = lstWp;
+
             return View();
         }
 
@@ -742,6 +764,54 @@ namespace MProjectWeb.Controllers
             }
             return View();
         }
+
+        /// <summary>
+        /// Llama a la vista que muestra los objetivos correspondiente al proyecto o actividades
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Goals(long keym, long idCar, long idUsu, bool ori)
+        {
+
+            #region variables de estado de la vista, sirve para mostrar mensajes en las vista
+            bool st = false;
+            #endregion
+
+            try
+            {
+                #region Asignar valores de la caracteristica actual a las variables
+                long usuAct = Convert.ToInt64(HttpContext.Session.GetString("idUsu"));
+                if (!ori)
+                {
+                    string[] cad = HttpContext.Session.GetString("actCar").Split('-');
+                    keym = Convert.ToInt64(cad[0]);
+                    idCar = Convert.ToInt64(cad[1]);
+                    idUsu = Convert.ToInt64(cad[2]);
+                }
+                #endregion
+
+                #region obtiene la lista de inventario de la tabla caracteristicas
+                DBCGoals rep = new DBCGoals();
+                string x = rep.getGoals(usuAct, keym, idCar, idUsu);
+
+                if (x.Length > 0)
+                    st = true;
+                x = "http://docs.google.com/gview?url=" + x + "&embedded=true";
+                ViewBag.doc = x;
+                #endregion
+
+                #region Asigna la lista a una variable ViewBag para ser usada desde la vista
+
+
+                ViewBag.st = st;
+                #endregion
+            }
+            catch
+            {
+            }
+            return View();
+
+        }
+
 
         //=====================================   METODOS/FUNCIONES AUXILIARES   ==========================================//
         /// <summary>

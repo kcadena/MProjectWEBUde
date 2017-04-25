@@ -332,8 +332,8 @@ function searchWebPage(txt) {
         url: '/Projects/SearchWebPage',
         type: 'POST',
         data: { txt:txt },
-        async: true,
-        cache: false,
+        //async: true,
+        //cache: false,
         beforeSend: function () {
             $("#tabWp").html("");
             $("#tabWp").html('<img src="/img/ajax-loader.gif" style="position:relative;margin-top:20px;margin-left:50%;height:50px;width:50px">');

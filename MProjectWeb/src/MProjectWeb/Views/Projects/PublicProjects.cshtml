@@ -60,7 +60,34 @@
                     </div>
                 </div>
 
-                <div id="tabWp" style="margin-top:50px;"></div>
+                <div id="tabWp" style="margin-top:50px;">
+
+                    <table class="multHover table table-striped" style="width:90%;margin-left:5%">
+                        <thead>
+                            <tr style="position:relative;width:100%">
+                                <th>Nombre</th>
+                                <th style="width:20%">tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                List<ListWebPage> lsWp = ViewBag.lsWp;
+                                foreach (var x in lsWp)
+                                {
+
+                                    <tr style="cursor:pointer" class="goDoc">
+                                        <td style="vertical-align:middle">
+                                            <a href="@x.ruta">@x.nombre</a>
+                                        </td>
+                                        <td style="font-size:25px;font-family:'Times New Roman'; font-weight:700">
+                                            @x.tipo.ToUpper()
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
         }
