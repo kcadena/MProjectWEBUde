@@ -28,48 +28,35 @@ namespace MProjectWeb.Models.ModelController
             {
                 string cad = "";
                 string path = "";
-                
-                path = db.configuracion_inicial.Where(x => x.id == 2).First().val_configuracion + "user" + usuAct + "/proyectos/" + keym + "-" + idCar + "-" + usu + "/documentos/objetivos" + keym + "-" + idCar + "-" + usu + ".docx"; ;
+
+                #region realiza la busqueda del proyecto al cual corresponde la caracteristica
+                proyectos ax=null;
+
+                ax = db.proyectos.Where(x=>x.keym_car==keym && x.id_caracteristica==idCar && x.id_usuario_car==usu).Single();
+
+                if(ax==null)
+                    ax = db.proyectos.Where(x => x.keym == keym && x.id_caracteristica == idCar && x.id_usuario_car == usu).Single();
+
+                #endregion
+                #region Asignacion de variables identificadoras para realizar la busqueda de los archivos
+
+                long keym_pry = ax.keym;
+                long id_pry = ax.id_proyecto;
+                long usu_pry = ax.id_usuario;
+
+                #endregion
+
+                path = db.configuracion_inicial.Where(x => x.id == 2).First().val_configuracion + "user" + usu_pry + "/proyectos/" + keym_pry + "-" + id_pry + "-" + usu_pry + "/documentos/objetivos" + keym_pry + "-" + id_pry + "-" + usu_pry + ".docx"; ;
 
                 if (System.IO.File.Exists(path))
                 {
-                    cad = db.configuracion_inicial.Where(x => x.id == 1).First().val_configuracion + "mp/user" + usuAct + "/proyectos/" + keym + "-" + idCar + "-" + usu + "/documentos/objetivos" + keym + "-" + idCar + "-" + usu + ".docx";
+                    cad = db.configuracion_inicial.Where(x => x.id == 1).First().val_configuracion + "mp/user" + usu_pry + "/proyectos/" + keym_pry + "-" + id_pry + "-" + usu_pry + "/documentos/objetivos" + keym_pry + "-" + id_pry + "-" + usu_pry + ".docx";
                     return cad;
                 }
-                    
-                else
-                {
-                    try
-                    {
-                        var dat = db.caracteristicas.Where(x => x.keym == keym && x.id_caracteristica == idCar && x.id_usuario == usu && x.publicacion_reporte == true).First();
-                        long? idUAs = dat.usuario_asignado;
-                        path = db.configuracion_inicial.Where(x => x.id == 2).First().val_configuracion + "user" + usu + "/proyectos/" + keym + "-" + idCar + "-" + usu + "/documentos/objetivos"+ keym + "-" + idCar + "-" + usu + ".docx"; ;
+                return "";
 
-                        if (System.IO.File.Exists(path))
-                        {
-                            cad = db.configuracion_inicial.Where(x => x.id == 1).First().val_configuracion + "mp/user" + usu + "/proyectos/" + keym + "-" + idCar + "-" + usu + "/documentos/objetivos" + keym + "-" + idCar + "-" + usu + ".docx";
-                            return cad;
-                        }
-                            
-                        else
-                        {
-                            path = db.configuracion_inicial.Where(x => x.id == 2).First().val_configuracion + "user" + idUAs + "/proyectos/" + keym + "-" + idCar + "-" + usu + "/documentos/objetivos" + keym + "-" + idCar + "-" + usu + ".docx"; ;
-                            if (System.IO.File.Exists(path))
-                            {
-                                cad = db.configuracion_inicial.Where(x => x.id == 1).First().val_configuracion + "mp/user" + idUAs + "/proyectos/" + keym + "-" + idCar + "-" + usu + "/documentos/objetivos" + keym + "-" + idCar + "-" + usu + ".docx";
-                                return cad;
-                            }
-                                
-                            else
-                                return "";
-                        }
-                            
-                    }
-                    catch (Exception e){ return ""; }
-                }
-                               
             }
-            catch { return ""; }
+            catch(Exception e) { return ""; }
 
         }
 

@@ -324,6 +324,35 @@ function showInventory(keym, usu, car) {
 }
 
 
+// Si una caracteristica tiene Objetivos los muestra
+function showGoals(keym, usu, car) {
+    $.ajax({
+        url: '/Projects/Goals',
+        type: 'POST',
+        data: { keym: keym, idCar: car, idUsu: usu, ori:true },
+        async: true,
+        cache: false,
+        beforeSend: function () {
+
+            $("#content-opt").html("");
+            $("#content-opt").html('<img src="/img/ajax-loader.gif" style="position:relative;margin-left:50%;margin-top:20%;height:8%;width:8%;">');
+        },
+        success: function succ(data) {
+            //alert(data);
+            if (data != 0) {
+                $("#content-opt").html("");
+                $("#content-opt").html(data);
+            }
+            else {
+                alert("Multimedia=>showCharts:  No se encontraron Reportes relacionados!!!");
+            }
+        }
+    }).fail(
+      function (da) {
+          alert("No se pudo cargar la pagina.");
+      }
+   );
+}
 
 //     Esta seccion corresponde a la busqueda de las caracteristicas que tienen publicacion web
 

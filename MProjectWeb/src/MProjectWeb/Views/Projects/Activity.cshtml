@@ -113,10 +113,11 @@
                                                         style="position:relative;width:100%"
                                                         idCar="@x.idCar" usuCar="@x.usuCar" keym="@x.keym">
                                                         <li><a class="opt_footer_files">Archivos/Documentos</a></li>
-                                                        <li><a class="opt_footer_statistics">Estadisticas</a></li>
+                                                        <li><a class="opt_footer_statistics">Estadísticas</a></li>
                                                         <li><a class="opt_footer_reports">Reoportes</a></li>
                                                         <li><a class="opt_footer_resources">Recursos Financieros</a></li>
                                                         <li><a class="opt_footer_inventory">Inventario</a></li>
+                                                        <li><a class="opt_footer_goals">Objetivos</a></li>
 
                                                     </ul>
                                                 </div>
@@ -162,7 +163,7 @@
                                                 <div class="panel-body">
                                                     <div style="margin-left:5px">
                                                         <div class="">
-                                                            Descripcion: <span>@x.desc</span>
+                                                            Descripción: <span>@x.desc</span>
                                                         </div>
                                                         <hr />
                                                         <div class="">
@@ -183,11 +184,11 @@
                                                         style="position:relative;width:100%"
                                                         idCar="@x.idCar" usuCar="@x.usuCar" keym="@x.keym">
                                                         <li><a class="opt_footer_files">Archivos/Documentos</a></li>
-                                                        <li><a class="opt_footer_statistics">Estadisticas</a></li>
+                                                        <li><a class="opt_footer_statistics">Estadísticas</a></li>
                                                         <li><a class="opt_footer_reports">Reportes</a></li>
                                                         <li><a class="opt_footer_resources">Recursos Financieros</a></li>
                                                         <li><a class="opt_footer_inventory">Inventario</a></li>
-                                                       
+                                                        <li><a class="opt_footer_goals">Objetivos</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -211,7 +212,7 @@
 
                         showFiles(keym, usu , car, "img", ""); //keym,usu,car,type, text=>palabra o frase a buscar
                     });
-                    //Estadisticas
+                    //Estadísticas
                     $(".opt_footer_statistics").click(function () {
                         var keym = $(this).parent().parent().attr("keym");
                         var car = $(this).parent().parent().attr("idCar");
@@ -225,7 +226,7 @@
                         var car = $(this).parent().parent().attr("idCar");
                         var usu = $(this).parent().parent().attr("usuCar");
 
-                        showReports(keym, usu, car); //keym,usu,car,type, text=>palabra o frase a buscar
+                        showReports(keym, usu, car); 
                     });
                     //Recursos
                     $(".opt_footer_resources").click(function () {
@@ -233,7 +234,7 @@
                         var car = $(this).parent().parent().attr("idCar");
                         var usu = $(this).parent().parent().attr("usuCar");
 
-                        showFinancial(keym, usu, car); //keym,usu,car,type, text=>palabra o frase a buscar
+                        showFinancial(keym, usu, car); 
                     });
                     //Inventario
                     $(".opt_footer_inventory").click(function () {
@@ -241,7 +242,16 @@
                         var car = $(this).parent().parent().attr("idCar");
                         var usu = $(this).parent().parent().attr("usuCar");
 
-                        showInventory(keym, usu, car); //keym,usu,car,type, text=>palabra o frase a buscar
+                        showInventory(keym, usu, car); 
+                    });
+                    //Objetivos
+                    $(".opt_footer_goals").click(function () {
+                        alert("s");
+                        var keym = $(this).parent().parent().attr("keym");
+                        var car = $(this).parent().parent().attr("idCar");
+                        var usu = $(this).parent().parent().attr("usuCar");
+
+                        showGoals(keym, usu, car); 
                     });
                    /****************************************************************************/
                     $(".open-folder").click(function () {

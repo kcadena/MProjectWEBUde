@@ -558,9 +558,11 @@ namespace MProjectWeb.Controllers
                 ViewBag.lsWp = lstWp;
                 
             }
-            lstWp = dbPrj.seachWebPage();
-            ViewBag.lsWp = lstWp;
-
+            else
+            {
+                lstWp = dbPrj.seachWebPage();
+                ViewBag.lsWp = lstWp;
+            }
             return View();
         }
 
@@ -765,6 +767,7 @@ namespace MProjectWeb.Controllers
             return View();
         }
 
+        
         /// <summary>
         /// Llama a la vista que muestra los objetivos correspondiente al proyecto o actividades
         /// </summary>
@@ -800,8 +803,6 @@ namespace MProjectWeb.Controllers
                 #endregion
 
                 #region Asigna la lista a una variable ViewBag para ser usada desde la vista
-
-
                 ViewBag.st = st;
                 #endregion
             }
