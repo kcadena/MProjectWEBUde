@@ -78,7 +78,7 @@ namespace MProjectWeb.LuceneIR
                     if (text.Equals(""))
                     {
                         if (usr.Length > 0)
-                            query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ") OR ( publicacion:1 AND (" + usr + ")) )");
+                            query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ") OR ( publicacion:2 AND (" + usr + ")) )");
                         else
                             query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ") )");
                     }
@@ -118,7 +118,7 @@ namespace MProjectWeb.LuceneIR
                         }
                         parser.FuzzyMinSim = (float)0.7;
                         if(usr.Length>0)
-                            query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ") OR ( publicacion:1 AND (" + usr + ")) )" + " AND  (\"" + text + "\"~)");
+                            query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ") OR ( publicacion:2 AND (" + usr + ")) )" + " AND  (\"" + text + "\"~)");
                         else
                             query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ")  )" + " AND  (\"" + text + "\"~)");
 
@@ -134,7 +134,7 @@ namespace MProjectWeb.LuceneIR
                             if (text.Length > 1)
                             {
                                 if(usr.Length>0)
-                                    query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ") OR ( publicacion:1 AND (" + usr + ")) )" + " AND (" + text + ")");
+                                    query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ") OR ( publicacion:2 AND (" + usr + ")) )" + " AND (" + text + ")");
                                 else
                                     query = parser.Parse("( " + cars + " ) AND " + typ + " AND (( (publicacion:1 || publicacion:2 || publicacion:3) AND id_usuario_arc:" + dat["usuAct"] + ") OR ( ( publicacion:2 || publicacion:3 ) AND NOT id_usuario_arc:" + dat["usuAct"] + ")  )" + " AND (" + text + ")");
                             }

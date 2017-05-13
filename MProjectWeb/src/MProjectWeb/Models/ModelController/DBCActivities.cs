@@ -636,7 +636,8 @@ namespace MProjectWeb.Models.ModelController
                                     id_caracteristica = x.id_caracteristica,
                                     id_usuario = x.id_usuario,
                                     nombre = y.nombre,
-                                    ruta_repositorio = y.id_usuarioNavigation.repositorios_usuarios.ruta_repositorio
+                                    ruta_repositorio = y.id_usuarioNavigation.repositorios_usuarios.ruta_repositorio,
+                                    stPub=x.publicacion_web
                                 }).First();
             return car;
         }
@@ -667,7 +668,8 @@ namespace MProjectWeb.Models.ModelController
                                     id_usuario = x.id_usuario,
                                     nombre = y.nombre,
                                     ruta_repositorio = y.id_usuarioNavigation.repositorios_usuarios.ruta_repositorio,
-                                    usuario_asignado =x.usuario_asignado
+                                    usuario_asignado =x.usuario_asignado,
+                                    stPub = x.publicacion_web
 
                                 }).First();
             return car;
@@ -704,6 +706,8 @@ namespace MProjectWeb.Models.ModelController
             public long id_usuario { get; set; }
             public string nombre { get; set; }
             public string ruta_repositorio { get; set; }
+
+            public bool? stPub { get; set; }
 
             public long? usuario_asignado { get; set; }
         }

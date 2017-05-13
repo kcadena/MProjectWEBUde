@@ -8,6 +8,10 @@ using Microsoft.AspNet.Http;
 using MProjectWeb.Models.Postgres;
 using MProjectWeb.Models.ModelController;
 
+
+using System.Security.Cryptography;
+using System.Text;
+
 using System.Security.Claims;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
@@ -21,6 +25,7 @@ using System.IO;
 using Microsoft.AspNet.Hosting;
 using System.Runtime.Remoting.Contexts;
 using Microsoft.Net.Http.Headers;
+
 
 
 
@@ -100,7 +105,7 @@ namespace MProjectWeb.Controllers
                 usu.nombre = q.nombre;
                 usu.apellido = q.apellido;
                 usu.e_mail = q.e_mail;
-                usu.pass = q.pass;
+                usu.pass = Hash.getHashSha256(q.pass);
                 usu.genero = q.genero;
                 usu.entidad = q.entidad;
                 usu.cargo = q.cargo;
@@ -156,7 +161,7 @@ namespace MProjectWeb.Controllers
 
                         string cont = "Bienvenido: para confirmar su registro a MProject por favor ingrese a: <br>" +
                             "<a href='" + act + "'>Confirmar</a>";
-                        //sendEmail(usu.e_mail, cont, "Confirmacion MProject");
+                        sendEmail(usu.e_mail, cont, "Confirmacion MProject");
                         #endregion
                         
                         #region Permite cargar la imagen de perfil del usuario a su respectivo repositorio en el servidor
@@ -249,7 +254,7 @@ namespace MProjectWeb.Controllers
             DBCUsuarios usr = new DBCUsuarios();
             string pass = usr.forgetPassword(email.ToString());//genera nueva clave aleatoria y se guarda en la base de datos
             string cont = "Apreciado/a Su nueva clave para MProject es:   " + pass;
-            //sendEmail(email.ToString(), cont, "Recuperacion clave MProject");//envio de correo
+            sendEmail(email.ToString(), cont, "Recuperacion clave MProject");//envio de correo
             HttpContext.Session.SetString("estPass", "true");
             return Redirect("/Index/Index");
         }
@@ -336,25 +341,34 @@ namespace MProjectWeb.Controllers
                 #region actualiza contraseña de usuario
                 else if (usu.passChan != null)
                 {
-                    #region Se asignan los valores a la clase Usuarios del Modelo segun la base de datos provenientes del ViewModel/Usuarios
-                    //id del usuario
-                    axUsu.id_usuario = usr.id_usuario;
-                    //datos actualizables
-                    axUsu.pass = usu.newPass;
-                    //datos no actualizables
-                    axUsu.e_mail = usr.e_mail;
-                    axUsu.nombre = usr.nombre;
-                    axUsu.apellido = usr.apellido;
-                    axUsu.genero = usr.genero;
-                    axUsu.cargo = usr.cargo;
-                    axUsu.telefono = usr.telefono;
-                    axUsu.entidad = usr.entidad;
-                    axUsu.administrador = usr.administrador;
-                    axUsu.imagen = usr.imagen;
-                    axUsu.disponible = usr.disponible;
-                    #endregion
-                    dbUsr.updateUserData(axUsu);
-                    HttpContext.Session.SetString("estPass", "true");
+                    usu.passChan = Hash.getHashSha256(usu.passChan);
+                    if (usu.passChan == usr.pass)
+                    {
+                        #region Se asignan los valores a la clase Usuarios del Modelo segun la base de datos provenientes del ViewModel/Usuarios
+                        //id del usuario
+                        axUsu.id_usuario = usr.id_usuario;
+                        //datos actualizables
+                        axUsu.pass = Hash.getHashSha256(usu.newPass);
+                        //datos no actualizables
+                        axUsu.e_mail = usr.e_mail;
+                        axUsu.nombre = usr.nombre;
+                        axUsu.apellido = usr.apellido;
+                        axUsu.genero = usr.genero;
+                        axUsu.cargo = usr.cargo;
+                        axUsu.telefono = usr.telefono;
+                        axUsu.entidad = usr.entidad;
+                        axUsu.administrador = usr.administrador;
+                        axUsu.imagen = usr.imagen;
+                        axUsu.disponible = usr.disponible;
+                        #endregion
+                        dbUsr.updateUserData(axUsu);
+                        HttpContext.Session.SetString("estPass", "true");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "La clave actual no corresponde a su clave.");
+                        return View(usr);
+                    }                    
                 }
                 #endregion
                 #region actualiza imagen de perfil
@@ -441,7 +455,25 @@ namespace MProjectWeb.Controllers
             }
         }
 
+       
+
     }
 
 
+
+ public class Hash
+    {
+        public static string getHashSha256(string text)
+        {
+            byte[] bytes = Encoding.Unicode.GetBytes(text);
+            SHA256Managed hashstring = new SHA256Managed();
+            byte[] hash = hashstring.ComputeHash(bytes);
+            string hashString = string.Empty;
+            foreach (byte x in hash)
+            {
+                hashString += String.Format("{0:x2}", x);
+            }
+            return hashString;
+        }
+    }
 }

@@ -23,6 +23,7 @@ namespace MProjectWeb.Models.ModelController
         {
             try
             {
+                dic["pass"] = MProjectWeb.Controllers.Hash.getHashSha256(dic["pass"]);
                 usuarios dat = (from x in db.usuarios
                                 where x.e_mail == dic["email"] && x.pass == dic["pass"] && x.disponible == true
                                 select x).First();
@@ -133,7 +134,7 @@ namespace MProjectWeb.Models.ModelController
                     usu.id_usuario = id;
                     usu.imagen = "PicProfile-" + id + ".jpg";
 
-                    usu.disponible = true;
+                    usu.disponible = false;
 
                     db.usuarios.Add(usu);
                     db.SaveChanges();
@@ -179,7 +180,7 @@ namespace MProjectWeb.Models.ModelController
             {
                 string pass = newRandomPassword();
                 var usr = db.usuarios.Where(x => x.e_mail == email && x.disponible == true).First();
-                usr.pass = pass;
+                usr.pass = MProjectWeb.Controllers.Hash.getHashSha256(pass);
                 db.SaveChanges();
                 return pass;
             }

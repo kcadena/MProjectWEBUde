@@ -73,63 +73,75 @@ namespace MProjectWeb.Controllers
                 HttpContext.Session.SetString("infAct", "");
                 HttpContext.Session.SetString("carAct", "");
                 p = "";
+                ViewBag.stPublicPage = false;
             }
-                
+            else
+                ViewBag.stPublicPage = true;
+
             HttpContext.Session.SetString("stFile", "y");
             string carAct = HttpContext.Session.GetString("infAct");
-            if (carAct != p && p.Length>0) 
+            if (carAct != p && p.Length > 0)
             {
                 DBCActivities dbcAct = new DBCActivities();
                 try
                 {
-                    
+
                     string[] pro = p.Split('-');
 
                     try
                     {
                         #region Obtiene la informacion necesaria para mostrar la pagina web basado en proyectos
                         DBCActivities.ActivityInfo car = dbcAct.getInfoPrj(pro);
-                        ViewBag.key = car.keym;
-                        ViewBag.idCar = car.id_caracteristica;
-                        ViewBag.idUsu = car.id_usuario;
-
-                        string pathRep = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
-                        int pos = pathRep.LastIndexOf("/user");
-                        int pos2 = pathRep.LastIndexOf("/Web");
-                        string usr = pathRep.Substring(pos ,pos2-pos+1);
-                        pathRep = pathRep.Substring(pos + 1);
-
-                        pathRep = dbcAct.db.configuracion_inicial.Where(x => x.id == 2).First().val_configuracion + pathRep;
-                        pathRep = pathRep.Replace(@"\", "/");
-                        string pathSer = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
-
-                        if (System.IO.File.Exists(pathRep))
+                        bool stPub = false;
+                        try { stPub = Convert.ToBoolean(car.stPub); } catch { }
+                        if (stPub)
                         {
-                            ViewBag.Pagina = pathSer;
-                            ViewBag.stPublicPage = true;
-                        }
-                        else 
-                        {
-                            pathRep = pathRep.Replace(usr, "/user" + car.usuario_asignado + "/");
+                            ViewBag.key = car.keym;
+                            ViewBag.idCar = car.id_caracteristica;
+                            ViewBag.idUsu = car.id_usuario;
+
+
+                            string pathRep = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
+                            int pos = pathRep.LastIndexOf("/user");
+                            int pos2 = pathRep.LastIndexOf("/Web");
+                            string usr = pathRep.Substring(pos, pos2 - pos + 1);
+                            pathRep = pathRep.Substring(pos + 1);
+
+                            pathRep = dbcAct.db.configuracion_inicial.Where(x => x.id == 2).First().val_configuracion + pathRep;
+                            pathRep = pathRep.Replace(@"\", "/");
+                            string pathSer = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
+
                             if (System.IO.File.Exists(pathRep))
                             {
-                                pathSer = pathSer.Replace("user" + car.id_usuario, "user" + car.usuario_asignado);
                                 ViewBag.Pagina = pathSer;
-                                ViewBag.stPublicPage = true;
+                                //ViewBag.stPublicPage = true;
                             }
                             else
                             {
-                                ViewBag.Pagina = pathSer;
-                                ViewBag.stPublicPage = false;
+                                pathRep = pathRep.Replace(usr, "/user" + car.usuario_asignado + "/");
+                                if (System.IO.File.Exists(pathRep))
+                                {
+                                    pathSer = pathSer.Replace("user" + car.id_usuario, "user" + car.usuario_asignado);
+                                    ViewBag.Pagina = pathSer;
+                                    //ViewBag.stPublicPage = true;
+                                }
+                                else
+                                {
+                                    ViewBag.Pagina = pathSer;
+                                    //ViewBag.stPublicPage = false;
+                                }
+
+
                             }
-                                
-                            
+
+                            HttpContext.Session.SetString("carAct", car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario);
+
+                            //ViewBag.Pagina = car.ruta_repositorio + car.nombre.ToLower().Replace(" ", "_") + ".html";//ruta 
+
                         }
+                       // else
+                           // ViewBag.stPublicPage = false;
 
-                        HttpContext.Session.SetString("carAct", car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario);
-
-                        //ViewBag.Pagina = car.ruta_repositorio + car.nombre.ToLower().Replace(" ", "_") + ".html";//ruta 
-                        
                         return View();
                         #endregion
                     }
@@ -137,63 +149,70 @@ namespace MProjectWeb.Controllers
                     {
                         #region Obtiene la informacion necesaria para mostrar la pagina web basado en actividades
                         DBCActivities.ActivityInfo car = dbcAct.getInfoAct(pro);
-                        ViewBag.key = car.keym;
-                        ViewBag.idCar = car.id_caracteristica;
-                        ViewBag.idUsu = car.id_usuario;
-
-                        string pathRep = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
-                        int pos = pathRep.LastIndexOf("/user");
-                       // pathRep = pathRep.Substring(pos + 1);
-
-                        int pos2 = pathRep.LastIndexOf("/Web");
-                        string usr = pathRep.Substring(pos, pos2 - pos + 1);
-                        pathRep = pathRep.Substring(pos + 1);
-
-                        pathRep = dbcAct.db.configuracion_inicial.Where(x => x.id == 2).First().val_configuracion + pathRep;
-                        pathRep = pathRep.Replace(@"\", "/");
-
-                        string pathSer = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
-
-                        if (System.IO.File.Exists(pathRep))
+                        bool stPub = false;
+                        try { stPub = Convert.ToBoolean(car.stPub); } catch { }
+                        if (stPub)
                         {
-                            ViewBag.Pagina = pathSer;
-                            ViewBag.stPublicPage = true;
-                        }
-                        else
-                        {
-                            //pathSer = pathSer.Replace("user" + car.id_usuario, "user" + car.usuario_asignado);
-                            //ViewBag.Pagina = pathSer;
+                            ViewBag.key = car.keym;
+                            ViewBag.idCar = car.id_caracteristica;
+                            ViewBag.idUsu = car.id_usuario;
 
+                            string pathRep = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
+                            int pos = pathRep.LastIndexOf("/user");
+                            // pathRep = pathRep.Substring(pos + 1);
 
+                            int pos2 = pathRep.LastIndexOf("/Web");
+                            string usr = pathRep.Substring(pos, pos2 - pos + 1);
+                            pathRep = pathRep.Substring(pos + 1);
 
-                            pathRep = pathRep.Replace(usr, "/user" + car.usuario_asignado + "/");
+                            pathRep = dbcAct.db.configuracion_inicial.Where(x => x.id == 2).First().val_configuracion + pathRep;
+                            pathRep = pathRep.Replace(@"\", "/");
+
+                            string pathSer = car.ruta_repositorio + "Web" + car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario + ".html";//ruta 
+
                             if (System.IO.File.Exists(pathRep))
                             {
-                                pathSer = pathSer.Replace("user" + car.id_usuario, "user" + car.usuario_asignado);
                                 ViewBag.Pagina = pathSer;
-                                ViewBag.stPublicPage = true;
+                                //ViewBag.stPublicPage = true;
                             }
                             else
                             {
-                                ViewBag.Pagina = pathSer;
-                                ViewBag.stPublicPage = false;
+                                //pathSer = pathSer.Replace("user" + car.id_usuario, "user" + car.usuario_asignado);
+                                //ViewBag.Pagina = pathSer;
+
+
+
+                                pathRep = pathRep.Replace(usr, "/user" + car.usuario_asignado + "/");
+                                if (System.IO.File.Exists(pathRep))
+                                {
+                                    pathSer = pathSer.Replace("user" + car.id_usuario, "user" + car.usuario_asignado);
+                                    ViewBag.Pagina = pathSer;
+                                    //ViewBag.stPublicPage = true;
+                                }
+                                else
+                                {
+                                    ViewBag.Pagina = pathSer;
+                                    //ViewBag.stPublicPage = false;
+                                }
+
+
                             }
 
-
+                            HttpContext.Session.SetString("carAct", car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario);
+                            //ViewBag.stPublicPage = true;
+                            //ViewBag.Pagina = car.ruta_repositorio + car.nombre.Replace(" ", "_") + ".html";//ruta 
                         }
-                        
-                        HttpContext.Session.SetString("carAct", car.keym + "-" + car.id_caracteristica + "-" + car.id_usuario);
-                        //ViewBag.stPublicPage = true;
-                        //ViewBag.Pagina = car.ruta_repositorio + car.nombre.Replace(" ", "_") + ".html";//ruta 
+                       //// else
+                           // ViewBag.stPublicPage = false;
                         return View();
                         #endregion
                     }
                     //ViewBag.Pagina = "http://172.16.10.248/prueba%20web/principal1.html";
-                    
+
                 }
                 catch
                 {
-                    ViewBag.stPublicPage = false;
+                    //ViewBag.stPublicPage = false;
                 }
                 //DBCProjects h = new DBCProjects();
                 //ViewBag.projects = h.listPublicProjectsUsers();
@@ -206,7 +225,7 @@ namespace MProjectWeb.Controllers
             List<ListWebPage> lstWp = dbPrj.seachWebPage();
             ViewBag.lsWp = lstWp;
 
-            ViewBag.stPublicPage = true;
+            //ViewBag.stPublicPage = true;
             return View();
         }
 
@@ -556,7 +575,7 @@ namespace MProjectWeb.Controllers
                 else
                     lstWp = dbPrj.seachWebPage();
                 ViewBag.lsWp = lstWp;
-                
+
             }
             else
             {
@@ -636,8 +655,8 @@ namespace MProjectWeb.Controllers
                 #region obtiene la lista de inventario de la tabla caracteristicas
                 DBCReports rep = new DBCReports();
                 string x = rep.getReport(usuAct, keym, idCar, idUsu);
-                
-                if (x.Length>0)
+
+                if (x.Length > 0)
                     st = true;
                 x = "http://docs.google.com/gview?url=" + x + "&embedded=true";
                 ViewBag.doc = x;
@@ -767,7 +786,7 @@ namespace MProjectWeb.Controllers
             return View();
         }
 
-        
+
         /// <summary>
         /// Llama a la vista que muestra los objetivos correspondiente al proyecto o actividades
         /// </summary>

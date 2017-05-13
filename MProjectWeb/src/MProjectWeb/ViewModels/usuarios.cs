@@ -31,8 +31,9 @@ namespace MProjectWeb.ViewModels
 
         [Display(Name = "Password")]
         [DataType(DataType.Password)]
-        [Compare("pass", ErrorMessage = "La clave actual no corresponde a su clave")]
+        //[Compare( "pass" , ErrorMessage = "La clave actual no corresponde a su clave")]
         public string passChan { get; set; } //corresponde a la clave actual a ser cambiada
+
 
         [Display(Name = "clave actual")]
         [DataType(DataType.Password)]

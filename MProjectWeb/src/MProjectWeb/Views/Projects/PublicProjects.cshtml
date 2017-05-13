@@ -17,7 +17,7 @@
     @{
         bool stPublicProject=false;
         try { stPublicProject = Convert.ToBoolean(ViewBag.stPublicPage); } catch { }
-        if (stPublicProject)
+        if (!stPublicProject)
         {
             Context.Session.SetString("stFile", "Y");
             <div style="width:90%" class="center-block">
@@ -71,18 +71,24 @@
                         <tbody>
                             @{
                                 List<ListWebPage> lsWp = ViewBag.lsWp;
-                                foreach (var x in lsWp)
+                                try
                                 {
+                                    foreach (var x in lsWp)
+                                    {
 
-                                    <tr style="cursor:pointer" class="goDoc">
-                                        <td style="vertical-align:middle">
-                                            <a href="@x.ruta">@x.nombre</a>
-                                        </td>
-                                        <td style="font-size:25px;font-family:'Times New Roman'; font-weight:700">
-                                            @x.tipo.ToUpper()
-                                        </td>
-                                    </tr>
+                                        <tr style="cursor:pointer" class="goDoc">
+                                            <td style="vertical-align:middle">
+                                                <a href="@x.ruta">@x.nombre</a>
+                                            </td>
+                                            <td style="font-size:25px;font-family:'Times New Roman'; font-weight:700">
+                                                @x.tipo.ToUpper()
+                                            </td>
+                                        </tr>
+                                    }
                                 }
+                                catch (Exception e){ 
+                                    
+                                 }
                             }
                         </tbody>
                     </table>
@@ -92,29 +98,34 @@
         }
         else
         {
-            Context.Session.SetString("stFile", "Y");
-            <img src="~/img/page-not-found.png" style="margin:20px" height="60%" width="60%"/>
+            if (@ViewBag.Pagina != null)
+            {
+                <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+                <script type="text/javascript">
+                    var s = "@ViewBag.Pagina";
+                    //alert(s);
+                    $("#area").load(s);
+                    if (window.history.state) {
+                        var stateObj = { foo: "bar" };
+                        history.pushState(stateObj, s, s);
+                    }
+        
+                    myajax('@ViewBag.key', '@ViewBag.idCar', '@ViewBag.idUsu');
+                </script>
+            }
+            else
+            {
+                Context.Session.SetString("stFile", "Y");
+                <img src="~/img/page-not-found.png" style="margin:20px" height="60%" width="60%"/>
+            }
+            
         }
     }
 
 </div>
 
 
-@if (@ViewBag.Pagina != null)
-{
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <script type="text/javascript">
-        var s = "@ViewBag.Pagina";
-        //alert(s);
-        $("#area").load(s);
-        if (window.history.state) {
-            var stateObj = { foo: "bar" };
-            history.pushState(stateObj, s, s);
-        }
-        
-        myajax('@ViewBag.key', '@ViewBag.idCar', '@ViewBag.idUsu');
-    </script>
-}
+
 
 <script>
     var src = document.URL;

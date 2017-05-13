@@ -115,6 +115,34 @@ namespace MProjectWeb.Models.ModelController
                 NpgsqlConnection conn = new NpgsqlConnection("Server=190.254.4.6; User Id=postgres; " +
                    "Password=NJpost2016;Database=MProjectPru;");
                 conn.Open();
+                txt = txt.Replace('|',' ');
+                txt = txt.Replace('&', ' ');
+                string cad1 = txt.Replace(' ', '|');
+                string cad2 = txt.Replace(' ', '&');
+
+                for(int i = 0; i < cad1.Length; i++)
+                {
+                    try
+                    {
+                        string x = cad1[i].ToString();
+                        if(cad1.ElementAt(i) == cad1.ElementAt(i+1) && cad1.ElementAt(i) == '|')
+                        {
+                            cad1 = cad1.Remove(i, 1);
+                            i--;
+                        }
+                    }
+                    catch { }
+                    try
+                    {
+                        if (cad2.ElementAt(i) == cad2.ElementAt(i + 1) && cad2.ElementAt(i) == '&')
+                        {
+                            cad2 = cad2.Remove(i, 1);
+                            i--;
+                        }
+                    }
+                    catch { }
+                }
+               
 
                 string query = @"
                     select t.keym,t.car,t.usu,t.asig,t.nombre,t.tipo
@@ -125,7 +153,7 @@ namespace MProjectWeb.Models.ModelController
                        on  caracteristicas.keym = actividades.keym_car and
                        caracteristicas.id_caracteristica = actividades.id_caracteristica and
                        caracteristicas.id_usuario = actividades.id_usuario_car
-                       WHERE to_tsvector('spanish', actividades.nombre) @@ to_tsquery('" + txt + @"')
+                       WHERE to_tsvector('spanish', actividades.nombre) @@ to_tsquery('" + cad2 +'|'+cad1 + @"')
                        and caracteristicas.publicacion_web = true
                     )
 
@@ -138,7 +166,7 @@ namespace MProjectWeb.Models.ModelController
                         on  caracteristicas.keym = proyectos.keym_car and
                         caracteristicas.id_caracteristica = proyectos.id_caracteristica and
                         caracteristicas.id_usuario = proyectos.id_usuario_car
-                        WHERE to_tsvector('spanish', proyectos.nombre) @@ to_tsquery('" + txt + @"')
+                        WHERE to_tsvector('spanish', proyectos.nombre) @@ to_tsquery('" + cad2 + '|' + cad1 + @"')
                         and caracteristicas.publicacion_web = true
                     )
                 ) t order by t.tipo;";
@@ -174,7 +202,7 @@ namespace MProjectWeb.Models.ModelController
                 conn.Close();
                 return lst;
             }
-            catch { return null; }
+            catch(Exception e) { return null; }
         }
 
         public List<ListWebPage> seachWebPage()

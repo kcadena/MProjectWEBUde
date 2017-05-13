@@ -379,7 +379,7 @@ function searchWebPage(txt) {
         }
     }).fail(
        function (da) {
-           alert("No se pudo cargar la pagina."+da);
+           //alert("No se pudo cargar la pagina."+da);
            $("#tabWp").html("");
        }
     );

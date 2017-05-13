@@ -1,0 +1,173 @@
+﻿body {
+
+}
+
+
+
+
+
+.PR{
+    
+    height: 105vh;
+    color:white;
+    -webkit-background-size: cover; /* For WebKit*/
+    -moz-background-size: cover; /* Mozilla*/
+    -o-background-size: cover; /* Opera*/
+    background-size: cover; /* Generic*/
+    
+}
+
+#nav-bar {display: none}
+#backColor-div {
+    margin-top: -15px;
+    background-color: #090909;
+}
+
+#P1{
+    background: url('C://MP/img/P12.png') no-repeat center center fixed;
+}
+
+#P2 {
+    background: url('C://MP/img/Bck/Bck6.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P3 {
+    background: url('C://MP/img/Bck/Bck19.jpg') no-repeat center center fixed;
+}
+
+#P4 {
+    background: url('C://MP/img/Bck/Bck1.png') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P5 {
+    background: url('C://MP/img/Bck/Bck2.png') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P6 {
+    background: url('C://MP/img/Bck/Bck8.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P7 {
+    background: url('C://MP/img/Bck/Bck9.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P8 {
+    background: url('C://MP/img/Bck/Bck9.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P9 {
+    background: url('C://MP/img/Bck/Bck9.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P10 {
+    background: url('C://MP/img/Bck/Bck9.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P11 {
+    background: url('C://MP/img/Bck/Bck9.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P12 {
+    background: url('C://MP/img/Bck/Bck9.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P13 {
+    background: url('C://MP/img/Bck/Bck10.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P14 {
+    background: url('C://MP/img/Bck/Bck10.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P15 {
+    background: url('C://MP/img/Bck/Bck10.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P16 {
+    background: url('C://MP/img/Bck/Bck10.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P17 {
+    background: url('C://MP/img/Bck/Bck10.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P18 {
+    background: url('C://MP/img/Bck/Bck10.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P19 {
+    background: url('C://MP/img/Bck/Bck10.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P20 {
+    background: url('C://MP/img/Bck/Bck10.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P21 {
+    background: url('C://MP/img/Bck/Bck12.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P22 {
+    background: url('C://MP/img/Bck/Bck17.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P23 {
+    background: url('C://MP/img/Bck/Bck17.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+#P24 {
+    background: url('C://MP/img/Bck/Bck15.jpg') no-repeat center center fixed;
+    background-size:100% ;
+}
+
+
+
+/*Text*/
+
+.stl-h1{
+    padding-top:40px;
+    text-align:center;
+    font-size:50px;
+    color:white
+}
+
+.cont-pr{
+    margin-top:55px;
+    font-size:30px;
+}
+
+.stl-tx{
+    text-align:center;
+    padding-bottom:20px;
+}
+
+
+:-webkit-full-screen {
+  color: pink;
+  overflow:hidden;
+}
+:-moz-full-screen {
+  color: pink;
+  overflow:hidden;
+}
