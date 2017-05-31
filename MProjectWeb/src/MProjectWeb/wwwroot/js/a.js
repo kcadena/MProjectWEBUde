@@ -197,3 +197,19 @@ $("#allLinks").click(function () {
     }
 });
 
+
+window.onresize = function (e) {
+
+
+    if (screen.height === window.innerHeight) {
+
+        $("html").css("overflow", "hidden");
+        $("tab-nav").style.visibility("hidden");
+    }
+    else {
+
+        $("html").css("overflow", "auto");
+        $("tab-nav").style.visibility("visible");
+        //alert("bad");
+    }
+}
