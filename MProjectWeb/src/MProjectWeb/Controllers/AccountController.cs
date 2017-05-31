@@ -367,7 +367,7 @@ namespace MProjectWeb.Controllers
                     else
                     {
                         ModelState.AddModelError(string.Empty, "La clave actual no corresponde a su clave.");
-                        return View(usr);
+                        //return View(usr);
                     }                    
                 }
                 #endregion
